@@ -70,3 +70,14 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* YOUR CSS STARTS HERE */
+
+label {
+  outline: none !important;
+}
+
+label:active {
+  outline: none !important;
+  border: none;
+}

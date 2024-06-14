@@ -23,13 +23,14 @@ function App() {
   return (
     <main className="flex items-center justify-center">
       <div className="flex flex-col gap-2">
-        <input
-          onChange={(e) => setLyric(e.target.value)}
-          type="text"
-          name="lyric"
-          id="lyric"
-          value={lyric}
-        />
+        <label className="input border-transparent flex items-center gap-2">
+          Lyric:
+          <input
+            onChange={(e) => setLyric(e.target.value)}
+            type="text"
+            className="grow"
+          />
+        </label>
         <button className="btn" onClick={fetchApi}>
           Search
         </button>
@@ -39,5 +40,8 @@ function App() {
 }
 
 export default App;
+
+// !TODO: Should be able to search by Artist & Lyric at the same time
+// TODO: Dropdown should update as user types into the input
 
 // mTODO: Add user feedback if lyric field is empty
