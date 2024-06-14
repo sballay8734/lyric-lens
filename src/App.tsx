@@ -1,31 +1,43 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import "./App.css";
 
 // const BASE_URL = "https://api.genius.com/songs/378195";
 const accessToken = import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
-const query = "i want you to lead me on";
 
 function App() {
+  const [lyric, setLyric] = useState<string>("");
+
   async function fetchApi() {
+    if (lyric.length < 1) return;
+
     const res = await fetch(
       "https://api.genius.com/search?access_token=" +
         accessToken +
         "&q=" +
-        encodeURIComponent(query),
+        encodeURIComponent(lyric),
     );
 
     console.log(res.json());
   }
 
-  useEffect(() => {
-    fetchApi();
-  }, []);
-
   return (
-    <>
-      <div></div>
-    </>
+    <main className="flex items-center justify-center">
+      <div className="flex flex-col gap-2">
+        <input
+          onChange={(e) => setLyric(e.target.value)}
+          type="text"
+          name="lyric"
+          id="lyric"
+          value={lyric}
+        />
+        <button className="btn" onClick={fetchApi}>
+          Search
+        </button>
+      </div>
+    </main>
   );
 }
 
 export default App;
+
+// mTODO: Add user feedback if lyric field is empty
