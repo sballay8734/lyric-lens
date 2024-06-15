@@ -1,0 +1,40 @@
+type Artist = string;
+
+export const artists: Artist[] = [
+  // Custom
+  "Kendrick Lamar",
+  "J. Cole",
+  "Taylor Swift",
+  "Sia",
+  "Marshmello",
+  "Fletcher",
+  "Diplo",
+  // A
+  "A Thousand Horses",
+  "ABBA",
+  "ABC",
+  "Aerosmith",
+  "Agnetha Fältskog",
+  "Alan Jackson",
+  "Albert King",
+  "Alice Cooper",
+  "Alison Krauss",
+  "The All-American Rejects",
+  "The Allman Brothers Band",
+  "Amy Winehouse",
+  "Andre Rieu",
+  "Andrea Bocelli",
+  "Andrew W.K.",
+  "Anthrax",
+  "Antonio Carlos Jobim",
+  "Apache Indian",
+  "Arcade Fire",
+  "Ariana Grande",
+  "Arrested Development",
+  "Ashley Campbell",
+  "Astrud Gilberto",
+  "Aswad",
+  "Atlanta Rhythm Section",
+  "Audioslave",
+  // B
+];
