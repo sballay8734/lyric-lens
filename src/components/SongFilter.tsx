@@ -1,25 +1,25 @@
 import { useEffect, useRef, useState } from "react";
-import { artists } from "../data/mockArtistData";
+import { Song, mockSongs } from "../data/mockSongdata";
 
-type Artist = string;
+type SongTitle = string;
 
-export default function ArtistFilter(): React.JSX.Element {
+export default function SongFilter(): React.JSX.Element {
   const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(false);
-  const [artistQuery, setArtistQuery] = useState<Artist>("");
-  const [selectedArtist, setSelectedArtist] = useState<Artist>("");
+  const [songTitleQuery, setSongTitleQuery] = useState<SongTitle>("");
+  const [selectedSong, setSelectedSong] = useState<string>("");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Handle queryString state change
   useEffect(() => {
     // Prevent filter from running and close dropdown if input is cleared
-    if (artistQuery === "") {
+    if (songTitleQuery === "") {
       setDropdownIsShown(false);
       return;
     }
 
     setDropdownIsShown(true);
-  }, [artistQuery]);
+  }, [songTitleQuery]);
 
   // Handle dropdown state change
   useEffect(() => {
@@ -45,50 +45,50 @@ export default function ArtistFilter(): React.JSX.Element {
     };
   }, [dropdownIsShown]);
 
-  function handleArtistSelect(artistName: Artist) {
-    setSelectedArtist(artistName);
+  function handleSongSelect(song: Song) {
+    const formattedLabel = `${song.artistName}: ${song.songTitle}`;
+
+    setSelectedSong(formattedLabel);
     setDropdownIsShown(false);
-    setArtistQuery("");
+    setSongTitleQuery("");
   }
 
-  function handleArtistRemove() {
+  function handleSongRemove() {
     // mTODO: This needs to eventually be changed to a find() method when state is changed to an Array
 
-    setSelectedArtist("");
+    setSelectedSong("");
   }
 
-  // mTODO: Should they also be sorted alphabetically
-  // FILTER ARTISTS
-  const artistsToShow = artists.filter((a) =>
-    a.toLocaleLowerCase().includes(artistQuery.toLocaleLowerCase()),
-  );
+  // REMOVE: vvvvvvv Testing vvvvvvv
+  const testArtist = "ABBA";
 
-  // SORT ARTISTS
-  const sortedArtists = artistsToShow.sort();
+  const filteredSongs = mockSongs.filter((song) => {
+    return song.artistName === testArtist;
+  });
 
   return (
     <div ref={dropdownRef} className="relative">
       <label className="input bg-neutral outline-0 flex items-center gap-2 w-full">
-        <span className="text-base-content/30">Artist:</span>
+        <span className="text-base-content/30">Song Title:</span>
         <input
-          onChange={(e) => setArtistQuery(e.target.value)}
+          onChange={(e) => setSongTitleQuery(e.target.value)}
           onClick={() => {
             // If user clicks outside while typing, this will reopen the filtered list when they click back in the input
-            if (sortedArtists.length > 0) {
+            if (filteredSongs.length > 0) {
               setDropdownIsShown(true);
             }
           }}
           type="text"
           className={`text-base-content outline-0 placeholder:text-base-content/30 placeholder:self-end`}
           // placeholder={selectedArtist}
-          value={artistQuery}
+          value={songTitleQuery}
         />
-        {selectedArtist !== "" && (
+        {selectedSong !== "" && (
           <span className="ml-auto bg-secondary text-xs px-2 py-1 rounded-sm text-secondary-content flex gap-1 items-center">
-            {selectedArtist}
+            {selectedSong}
             <span
               className="p-1 px-2 bg-error cursor-pointer flex items-center justify-center hover:bg-red-500 transition-colors duration-200 rounded-full"
-              onClick={handleArtistRemove}
+              onClick={handleSongRemove}
             >
               x
             </span>
@@ -102,15 +102,15 @@ export default function ArtistFilter(): React.JSX.Element {
             : "opacity-0 pointer-events-none"
         } transition-opacity duration-200`}
       >
-        {artistQuery.length > 0 &&
-          sortedArtists.map((artist) => {
+        {songTitleQuery.length > 0 &&
+          filteredSongs.map((song) => {
             return (
               <li
-                onClick={() => handleArtistSelect(artist)}
+                onClick={() => handleSongSelect(song)}
                 className="text-left cursor-pointer py-1 px-2 hover:bg-primary/50 active:bg-primary/80 transition-colors duration-100 rounded-sm"
-                key={artist}
+                key={song.songTitle + song.artistName}
               >
-                {artist}
+                {song.songTitle}
               </li>
             );
           })}
@@ -118,10 +118,3 @@ export default function ArtistFilter(): React.JSX.Element {
     </div>
   );
 }
-
-// TODO: Change placeholder style so it's more clear you selected an artist already
-// TODO: Removing the last letter in the input should not flash
-// TODO: Make input case insensitive
-// TODO: Make input ignore certain charcters if it makes sense like "." (MAYBE)
-// TODO: Should you be able to select multiple Artists at the same time?
-// mTODO: use null instead of empty strings for state maybe?
