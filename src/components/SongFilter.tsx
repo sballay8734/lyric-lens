@@ -1,12 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Song, mockSongs } from "../data/mockSongdata";
 
-type SongTitle = string;
+interface Props {
+  songTitleQuery: string;
+  setSongTitleQuery: (songTitle: string) => void;
+  selectedSong: string;
+  setSelectedSong: (songTitle: string) => void;
+}
 
-export default function SongFilter(): React.JSX.Element {
+export default function SongFilter({
+  songTitleQuery,
+  setSongTitleQuery,
+  selectedSong,
+  setSelectedSong,
+}: Props): React.JSX.Element {
   const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(false);
-  const [songTitleQuery, setSongTitleQuery] = useState<SongTitle>("");
-  const [selectedSong, setSelectedSong] = useState<string>("");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -68,7 +76,7 @@ export default function SongFilter(): React.JSX.Element {
 
   return (
     <div ref={dropdownRef} className="relative">
-      <label className="input bg-neutral outline-0 flex items-center gap-2 w-full">
+      <label className="input bg-neutral outline-0 flex items-center gap-2 w-full rounded-sm">
         <span className="text-base-content/30">Song Title:</span>
         <input
           onChange={(e) => setSongTitleQuery(e.target.value)}

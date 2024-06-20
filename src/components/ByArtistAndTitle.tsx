@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Song } from "../data/mockSongdata";
 import ArtistFilter from "./ArtistFilter";
 import SongFilter from "./SongFilter";
 
@@ -12,11 +11,11 @@ export default function ByArtistAndTitle({ show }: Props): React.JSX.Element {
   const [selectedArtist, setSelectedArtist] = useState<string>("");
 
   const [songTitleQuery, setSongTitleQuery] = useState<string>("");
-  const [selectedSong, setSelectedSong] = useState<Song>();
+  const [selectedSong, setSelectedSong] = useState<string>("");
 
   return (
     <div
-      className={`relative flex flex-col gap-2 ${
+      className={`relative flex flex-col gap-2 w-full ${
         show ? "translate-x-[100px] opacity-0" : "translate-x-0 opacity-100"
       } transition-all duration-200`}
     >
@@ -24,7 +23,7 @@ export default function ByArtistAndTitle({ show }: Props): React.JSX.Element {
         artistQuery={artistQuery}
         setArtistQuery={setArtistQuery}
         selectedArtist={selectedArtist}
-        setSelecteArtist={setSelectedArtist}
+        setSelectedArtist={setSelectedArtist}
       />
       <SongFilter
         songTitleQuery={songTitleQuery}

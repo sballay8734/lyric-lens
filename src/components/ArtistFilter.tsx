@@ -3,10 +3,20 @@ import { artists } from "../data/mockArtistData";
 
 type Artist = string;
 
-export default function ArtistFilter(): React.JSX.Element {
+interface Props {
+  artistQuery: string;
+  setArtistQuery: (artist: string) => void;
+  selectedArtist: string;
+  setSelectedArtist: (artist: string) => void;
+}
+
+export default function ArtistFilter({
+  artistQuery,
+  setArtistQuery,
+  selectedArtist,
+  setSelectedArtist,
+}: Props): React.JSX.Element {
   const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(false);
-  const [artistQuery, setArtistQuery] = useState<Artist>("");
-  const [selectedArtist, setSelectedArtist] = useState<Artist>("");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -57,6 +67,13 @@ export default function ArtistFilter(): React.JSX.Element {
     setSelectedArtist("");
   }
 
+  // REMEMBER: Specify React.Something rather than just "Something"
+  function handleEnterKeyPress(e: React.KeyboardEvent, artistName: string) {
+    if (e.key === "Enter") {
+      handleArtistSelect(artistName);
+    }
+  }
+
   // mTODO: Should they also be sorted alphabetically
   // FILTER ARTISTS
   const artistsToShow = artists.filter((a) =>
@@ -68,7 +85,7 @@ export default function ArtistFilter(): React.JSX.Element {
 
   return (
     <div ref={dropdownRef} className="relative">
-      <label className="input bg-neutral outline-0 flex items-center gap-2 w-full">
+      <label className="input bg-neutral outline-0 flex items-center gap-2 w-full rounded-sm">
         <span className="text-base-content/30">Artist:</span>
         <input
           onChange={(e) => setArtistQuery(e.target.value)}
@@ -106,8 +123,10 @@ export default function ArtistFilter(): React.JSX.Element {
           sortedArtists.map((artist) => {
             return (
               <li
+                tabIndex={0}
                 onClick={() => handleArtistSelect(artist)}
-                className="text-left cursor-pointer py-1 px-2 hover:bg-primary/50 active:bg-primary/80 transition-colors duration-100 rounded-sm"
+                onKeyDown={(e) => handleEnterKeyPress(e, artist)}
+                className="text-left cursor-pointer py-1 px-2 border-0 hover:bg-primary/50 active:bg-primary/80 transition-colors duration-200 rounded-sm focus:bg-primary outline-0"
                 key={artist}
               >
                 {artist}
@@ -125,3 +144,4 @@ export default function ArtistFilter(): React.JSX.Element {
 // TODO: Make input ignore certain charcters if it makes sense like "." (MAYBE)
 // TODO: Should you be able to select multiple Artists at the same time?
 // mTODO: use null instead of empty strings for state maybe?
+// !TODO: Items off screen should be ignored in tab index (tabing continuously eventually brings you to the lyric search inputs which are hidden)
