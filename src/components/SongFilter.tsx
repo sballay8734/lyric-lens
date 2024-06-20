@@ -1,33 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 import { Song, mockSongs } from "../data/mockSongdata";
-
-interface Props {
-  songTitleQuery: string;
-  setSongTitleQuery: (songTitle: string) => void;
-  selectedSong: string;
-  setSelectedSong: (songTitle: string) => void;
-}
-
-export default function SongFilter({
-  songTitleQuery,
-  setSongTitleQuery,
-  selectedSong,
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import {
   setSelectedSong,
-}: Props): React.JSX.Element {
+  setSongQuery,
+} from "../store/features/songSearch/songSearchSlice";
+
+export default function SongFilter(): React.JSX.Element {
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(false);
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
+  const songQuery = useAppSelector((state) => state.songSearch.songQuery);
+  const selectedSong = useAppSelector((state) => state.songSearch.selectedSong);
 
   // Handle queryString state change
   useEffect(() => {
     // Prevent filter from running and close dropdown if input is cleared
-    if (songTitleQuery === "") {
+    if (songQuery === "") {
       setDropdownIsShown(false);
       return;
     }
 
     setDropdownIsShown(true);
-  }, [songTitleQuery]);
+  }, [songQuery]);
 
   // Handle dropdown state change
   useEffect(() => {
@@ -56,15 +52,15 @@ export default function SongFilter({
   function handleSongSelect(song: Song) {
     const formattedLabel = `${song.artistName}: ${song.songTitle}`;
 
-    setSelectedSong(formattedLabel);
+    dispatch(setSelectedSong(formattedLabel));
     setDropdownIsShown(false);
-    setSongTitleQuery("");
+    dispatch(setSongQuery(""));
   }
 
   function handleSongRemove() {
     // mTODO: This needs to eventually be changed to a find() method when state is changed to an Array
 
-    setSelectedSong("");
+    dispatch(setSelectedSong(""));
   }
 
   // REMOVE: vvvvvvv Testing vvvvvvv
@@ -79,7 +75,7 @@ export default function SongFilter({
       <label className="input bg-neutral outline-0 flex items-center gap-2 w-full rounded-sm">
         <span className="text-base-content/30">Song Title:</span>
         <input
-          onChange={(e) => setSongTitleQuery(e.target.value)}
+          onChange={(e) => dispatch(setSongQuery(e.target.value))}
           onClick={() => {
             // If user clicks outside while typing, this will reopen the filtered list when they click back in the input
             if (filteredSongs.length > 0) {
@@ -89,7 +85,7 @@ export default function SongFilter({
           type="text"
           className={`text-base-content outline-0 placeholder:text-base-content/30 placeholder:self-end`}
           // placeholder={selectedArtist}
-          value={songTitleQuery}
+          value={songQuery}
         />
         {selectedSong !== "" && (
           <span className="ml-auto bg-secondary text-xs px-2 py-1 rounded-sm text-secondary-content flex gap-1 items-center">
@@ -110,7 +106,7 @@ export default function SongFilter({
             : "opacity-0 pointer-events-none"
         } transition-opacity duration-200`}
       >
-        {songTitleQuery.length > 0 &&
+        {songQuery.length > 0 &&
           filteredSongs.map((song) => {
             return (
               <li

@@ -12,6 +12,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    // !TODO: Add error catch element here
     children: [
       {
         index: true,

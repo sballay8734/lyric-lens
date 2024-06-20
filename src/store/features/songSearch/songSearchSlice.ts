@@ -3,15 +3,21 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 // Define a type for the slice state
 interface SongSearchState {
-  artistName: string;
-  songTitle: string;
+  artistQuery: string;
+  selectedArtist: string;
+
+  songQuery: string;
+  selectedSong: string;
+
   lyrics: string;
 }
 
 // Define the initial state using that type
 const initialState: SongSearchState = {
-  artistName: "",
-  songTitle: "",
+  artistQuery: "",
+  selectedArtist: "",
+  songQuery: "",
+  selectedSong: "",
   lyrics: "",
 };
 
@@ -20,19 +26,30 @@ export const songSearchSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    updateArtistName: (state, action: PayloadAction<string>) => {
-      state.artistName === action.payload;
+    setArtistQuery: (state, action: PayloadAction<string>) => {
+      state.artistQuery = action.payload;
     },
-    updateSongTitle: (state, action: PayloadAction<string>) => {
-      state.songTitle === action.payload;
+    setSelectedArtist: (state, action: PayloadAction<string>) => {
+      state.selectedArtist = action.payload;
     },
-    updateLyrics: (state, action: PayloadAction<string>) => {
-      state.lyrics === action.payload;
+    setSongQuery: (state, action: PayloadAction<string>) => {
+      state.songQuery = action.payload;
+    },
+    setSelectedSong: (state, action: PayloadAction<string>) => {
+      state.selectedSong = action.payload;
+    },
+    setLyrics: (state, action: PayloadAction<string>) => {
+      state.lyrics = action.payload;
     },
   },
 });
 
-export const { updateArtistName, updateSongTitle, updateLyrics } =
-  songSearchSlice.actions;
+export const {
+  setArtistQuery,
+  setSelectedArtist,
+  setSongQuery,
+  setSelectedSong,
+  setLyrics,
+} = songSearchSlice.actions;
 
 export default songSearchSlice.reducer;

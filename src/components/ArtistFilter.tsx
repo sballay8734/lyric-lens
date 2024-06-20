@@ -1,25 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import { artists } from "../data/mockArtistData";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import {
+  setArtistQuery,
+  setSelectedArtist,
+} from "../store/features/songSearch/songSearchSlice";
 // import { IoIosCloseCircle } from "react-icons/io";
 
 type Artist = string;
 
-interface Props {
-  artistQuery: string;
-  setArtistQuery: (artist: string) => void;
-  selectedArtist: string;
-  setSelectedArtist: (artist: string) => void;
-}
-
-export default function ArtistFilter({
-  artistQuery,
-  setArtistQuery,
-  selectedArtist,
-  setSelectedArtist,
-}: Props): React.JSX.Element {
+export default function ArtistFilter(): React.JSX.Element {
+  // LOCAL STATE
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(false);
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  // REDUX STATE
+  const dispatch = useAppDispatch();
+  const artistQuery = useAppSelector((state) => state.songSearch.artistQuery);
+  const selectedArtist = useAppSelector(
+    (state) => state.songSearch.selectedArtist,
+  );
 
   // Handle queryString state change
   useEffect(() => {
@@ -57,9 +57,10 @@ export default function ArtistFilter({
   }, [dropdownIsShown]);
 
   function handleArtistSelect(artistName: Artist) {
-    setSelectedArtist(artistName);
+    // dispatch(setArtistQuery(artistName));
+    dispatch(setSelectedArtist(artistName));
     setDropdownIsShown(false);
-    setArtistQuery("");
+    dispatch(setArtistQuery(""));
   }
 
   // function handleArtistRemove() {
@@ -87,7 +88,7 @@ export default function ArtistFilter({
       <label className="relative input bg-neutral outline-0 flex items-center gap-2 w-full rounded-sm">
         <span className="text-base-content/30">Artist:</span>
         <input
-          onChange={(e) => setArtistQuery(e.target.value)}
+          onChange={(e) => dispatch(setArtistQuery(e.target.value))}
           onClick={() => {
             // If user clicks outside while typing, this will reopen the filtered list when they click back in the input
             if (sortedArtists.length > 0) {
