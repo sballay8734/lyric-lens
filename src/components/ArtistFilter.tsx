@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { artists } from "../data/mockArtistData";
+// import { IoIosCloseCircle } from "react-icons/io";
 
 type Artist = string;
 
@@ -61,11 +62,9 @@ export default function ArtistFilter({
     setArtistQuery("");
   }
 
-  function handleArtistRemove() {
-    // mTODO: This needs to eventually be changed to a find() method when state is changed to an Array
-
-    setSelectedArtist("");
-  }
+  // function handleArtistRemove() {
+  //   setSelectedArtist("");
+  // }
 
   // REMEMBER: Specify React.Something rather than just "Something"
   function handleEnterKeyPress(e: React.KeyboardEvent, artistName: string) {
@@ -85,7 +84,7 @@ export default function ArtistFilter({
 
   return (
     <div ref={dropdownRef} className="relative">
-      <label className="input bg-neutral outline-0 flex items-center gap-2 w-full rounded-sm">
+      <label className="relative input bg-neutral outline-0 flex items-center gap-2 w-full rounded-sm">
         <span className="text-base-content/30">Artist:</span>
         <input
           onChange={(e) => setArtistQuery(e.target.value)}
@@ -101,14 +100,9 @@ export default function ArtistFilter({
           value={artistQuery}
         />
         {selectedArtist !== "" && (
-          <span className="ml-auto bg-secondary text-xs px-2 py-1 rounded-sm text-secondary-content flex gap-1 items-center">
+          <span className="absolute h-5 right-2 bg-secondary text-[8px] px-2 rounded-sm text-secondary-content flex gap-1 items-center justify-center">
             {selectedArtist}
-            <span
-              className="p-1 px-2 bg-error cursor-pointer flex items-center justify-center hover:bg-red-500 transition-colors duration-200 rounded-full"
-              onClick={handleArtistRemove}
-            >
-              x
-            </span>
+            {/* <IoIosCloseCircle className="cursor-pointer text-error bg-black rounded-full" /> */}
           </span>
         )}
       </label>
@@ -137,6 +131,8 @@ export default function ArtistFilter({
     </div>
   );
 }
+// !TODO: Items off screen should be ignored in tab index (tabing continuously eventually brings you to the lyric search inputs which are hidden)
+// !TODO: Artist tags are too small to click (think of another way to remove them)
 
 // TODO: Change placeholder style so it's more clear you selected an artist already
 // TODO: Removing the last letter in the input should not flash
@@ -144,4 +140,3 @@ export default function ArtistFilter({
 // TODO: Make input ignore certain charcters if it makes sense like "." (MAYBE)
 // TODO: Should you be able to select multiple Artists at the same time?
 // mTODO: use null instead of empty strings for state maybe?
-// !TODO: Items off screen should be ignored in tab index (tabing continuously eventually brings you to the lyric search inputs which are hidden)

@@ -12,7 +12,9 @@ export default function LyricFilter({ show }: Props): React.JSX.Element {
   return (
     <div
       className={`relative ${
-        show ? "translate-x-0 opacity-100" : "translate-x-[1000px] opacity-0"
+        show
+          ? "translate-x-0 opacity-100 pointer-events-auto"
+          : "translate-x-[2000px] opacity-0 pointer-events-none"
       } transition-all duration-200`}
     >
       <label className="input bg-neutral outline-0 flex items-center gap-2 rounded-sm">

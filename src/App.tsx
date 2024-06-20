@@ -13,6 +13,8 @@ function App() {
 
 export default App;
 
+// !TODO: Add redux for state management
+
 // !TODO: Artist and Song Title state needs to be moved to context so you can access it globally
 
 // !TODO: Lyric input should not have dropdown
