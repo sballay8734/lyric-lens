@@ -58,7 +58,7 @@ export default function BottomSheet(): React.JSX.Element {
   );
 }
 
-// !TODO: Songs should be fetched and sorted by year as soon as artist is selected
+// !TODO: Song analysis should TECHNICALLY start as soon as the song title is selected (BUT don't show loading spinner until user has clicked analyze - this will give the illusion that it's faster than it is)
 
 // !TODO: Add toggle to switch between song search and word selection
 

@@ -20,6 +20,7 @@ export default function SongInput(): React.JSX.Element {
     return res.json();
   }, []);
 
+  // Function that batches all requests and sends them at the same time
   const fetchSongs = useCallback(
     async (artistId: number) => {
       let artistSongs: SongFromApi[] = [];
@@ -50,6 +51,43 @@ export default function SongInput(): React.JSX.Element {
                 .includes(selectedArtist?.name.toLocaleLowerCase())
             : false,
         );
+
+        // Sort songs for dropdown (most current at top)
+        filteredSongs.sort((a: SongFromApi, b: SongFromApi) => {
+          // Function to safely create a Date object
+          const safeDate = (song: SongFromApi) => {
+            if (
+              song.release_date_components &&
+              song.release_date_components.year &&
+              song.release_date_components.month &&
+              song.release_date_components.day
+            ) {
+              return new Date(
+                song.release_date_components.year,
+                song.release_date_components.month - 1,
+                song.release_date_components.day,
+              );
+            }
+            // Fallback to a very old date if release date is not available
+            return new Date(0);
+          };
+
+          const dateA = safeDate(a);
+          const dateB = safeDate(b);
+
+          // If both dates are valid, sort by date
+          if (dateA.getTime() !== 0 && dateB.getTime() !== 0) {
+            return dateB.getTime() - dateA.getTime(); // For descending order
+          }
+
+          // If only one date is valid, prioritize the song with a valid date
+          if (dateA.getTime() !== 0) return -1;
+          if (dateB.getTime() !== 0) return 1;
+
+          // If neither has a valid date, sort alphabetically by title as a fallback
+          return a.title.localeCompare(b.title);
+        });
+
         // Add filtered songs to the main array
         artistSongs = [...artistSongs, ...filteredSongs];
       }
