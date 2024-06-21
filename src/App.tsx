@@ -18,6 +18,8 @@ export default App;
 // Make custom input component (daisyUI styles are being really annoying)
 // Selecting words should also popover (maybe from top?)
 
+// !TODO: Persist word selections
+
 // !TODO: Search inputs should be a modal that pops up, when a song is selected it should automatically close showing only the graph
 
 // !TODO: Tabing inside of the inputs causes some weird behavior
