@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { MdTitle } from "react-icons/md";
 import { useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
+import { SongFromApi } from "../../types/api";
 
 const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 
@@ -15,7 +16,7 @@ export default function SongInput(): React.JSX.Element {
   // Everytime artist selection changes, clear song list and fetch new songs
   useEffect(() => {
     if (selectedArtist) {
-      fetchSongs(selectedArtist?.artistId);
+      fetchSongs(selectedArtist?.id);
     }
   }, [selectedArtist]);
 
@@ -33,9 +34,12 @@ export default function SongInput(): React.JSX.Element {
       const data = await res.json();
       // console.log(data.response.songs);
 
-      // mTODO: Type the song here                     vvvvvv
-      const filteredSongs = data.response.songs.filter((song) =>
-        song.artist_names.includes(selectedArtist?.artistName),
+      const filteredSongs = data.response.songs.filter((song: SongFromApi) =>
+        selectedArtist
+          ? song.artist_names
+              .toLocaleLowerCase()
+              .includes(selectedArtist?.name.toLocaleLowerCase())
+          : false,
       );
 
       console.log(filteredSongs);

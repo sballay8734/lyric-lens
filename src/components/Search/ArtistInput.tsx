@@ -5,13 +5,8 @@ import {
   setArtistQuery,
   setSelectedArtist,
 } from "../../store/features/songSearch/songSearchSlice";
-import { Hit } from "../../types/api";
-
-interface ArtistFromAPI {
-  artistName: string;
-  artistSlug: string;
-  artistId: number;
-}
+import { ArtistHit } from "../../types/api";
+import { ArtistSimple } from "../../types/api";
 
 export default function ArtistInput(): React.JSX.Element {
   const controllerRef = useRef<AbortController>();
@@ -93,13 +88,15 @@ export default function ArtistInput(): React.JSX.Element {
       const data = await res.json();
       console.log(data);
 
-      const artistsArray = data.response.sections[0].hits.map((item: Hit) => {
-        return {
-          artistName: item.result.name,
-          artistSlug: item.result.slug,
-          artistId: item.result.id,
-        };
-      });
+      const artistsArray = data.response.sections[0].hits.map(
+        (item: ArtistHit) => {
+          return {
+            name: item.result.name,
+            slug: item.result.slug,
+            id: item.result.id,
+          };
+        },
+      );
 
       setArtists(artistsArray);
     } catch (error) {
@@ -116,7 +113,7 @@ export default function ArtistInput(): React.JSX.Element {
   //   console.log("Fetching");
   // }
 
-  function handleArtistSelect(artist: ArtistFromAPI) {
+  function handleArtistSelect(artist: ArtistSimple) {
     // dispatch(setArtistQuery(artistName));
     dispatch(setSelectedArtist(artist));
     setDropdownIsShown(false);
@@ -125,7 +122,7 @@ export default function ArtistInput(): React.JSX.Element {
   }
 
   // REMEMBER: Specify React.Something rather than just "Something"
-  function handleEnterKeyPress(e: React.KeyboardEvent, artist: ArtistFromAPI) {
+  function handleEnterKeyPress(e: React.KeyboardEvent, artist: ArtistSimple) {
     if (e.key === "Enter") {
       handleArtistSelect(artist);
     }
@@ -134,12 +131,10 @@ export default function ArtistInput(): React.JSX.Element {
   // !TODO: still shows all 20 instead of just the names that match
   // FILTER ARTISTS
   const artistsToShow = artists
-    .filter((a: ArtistFromAPI) =>
-      a.artistName
-        .toLocaleLowerCase()
-        .includes(artistQuery.toLocaleLowerCase()),
+    .filter((artist: ArtistSimple) =>
+      artist.name.toLocaleLowerCase().includes(artistQuery.toLocaleLowerCase()),
     )
-    .map((a: ArtistFromAPI) => a);
+    .map((artist: ArtistSimple) => artist);
 
   console.log(artistsToShow);
 
@@ -177,16 +172,16 @@ export default function ArtistInput(): React.JSX.Element {
         } transition-opacity duration-200`}
       >
         {artistQuery.length > 0 &&
-          artistsToShow.map((artist: ArtistFromAPI) => {
+          artistsToShow.map((artist: ArtistSimple) => {
             return (
               <li
                 tabIndex={0}
                 onClick={() => handleArtistSelect(artist)}
                 onKeyDown={(e) => handleEnterKeyPress(e, artist)}
                 className="text-left cursor-pointer py-2 px-2 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 rounded-md focus:bg-primary outline-0"
-                key={artist.artistId}
+                key={artist.id}
               >
-                {artist.artistName}
+                {artist.name}
               </li>
             );
           })}
