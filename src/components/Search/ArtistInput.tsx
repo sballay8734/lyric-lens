@@ -7,8 +7,6 @@ import {
 } from "../../store/features/songSearch/songSearchSlice";
 import { Hit } from "../../types/api";
 
-type Artist = string;
-
 interface ArtistFromAPI {
   artistName: string;
   artistSlug: string;
@@ -118,18 +116,18 @@ export default function ArtistInput(): React.JSX.Element {
   //   console.log("Fetching");
   // }
 
-  function handleArtistSelect(artistName: Artist) {
+  function handleArtistSelect(artist: ArtistFromAPI) {
     // dispatch(setArtistQuery(artistName));
-    dispatch(setSelectedArtist(artistName));
+    dispatch(setSelectedArtist(artist));
     setDropdownIsShown(false);
     dispatch(setArtistQuery(""));
     setArtists([]);
   }
 
   // REMEMBER: Specify React.Something rather than just "Something"
-  function handleEnterKeyPress(e: React.KeyboardEvent, artistName: string) {
+  function handleEnterKeyPress(e: React.KeyboardEvent, artist: ArtistFromAPI) {
     if (e.key === "Enter") {
-      handleArtistSelect(artistName);
+      handleArtistSelect(artist);
     }
   }
 
@@ -141,7 +139,9 @@ export default function ArtistInput(): React.JSX.Element {
         .toLocaleLowerCase()
         .includes(artistQuery.toLocaleLowerCase()),
     )
-    .map((a: ArtistFromAPI) => a.artistName);
+    .map((a: ArtistFromAPI) => a);
+
+  console.log(artistsToShow);
 
   return (
     <div ref={dropdownRef} className="w-full relative rounded-sm">
@@ -177,16 +177,16 @@ export default function ArtistInput(): React.JSX.Element {
         } transition-opacity duration-200`}
       >
         {artistQuery.length > 0 &&
-          artistsToShow.map((artist) => {
+          artistsToShow.map((artist: ArtistFromAPI) => {
             return (
               <li
                 tabIndex={0}
                 onClick={() => handleArtistSelect(artist)}
                 onKeyDown={(e) => handleEnterKeyPress(e, artist)}
                 className="text-left cursor-pointer py-2 px-2 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 rounded-md focus:bg-primary outline-0"
-                key={artist}
+                key={artist.artistId}
               >
-                {artist}
+                {artist.artistName}
               </li>
             );
           })}

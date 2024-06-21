@@ -3,7 +3,7 @@ import { useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
 import { hideBtmSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
 import ArtistInput from "../Search/ArtistInput";
-import SongInput from "../Search/SongInput";
+// import SongInput from "../Search/SongInput";
 import LyricsInput from "../Search/LyricsInput";
 import { LuMicroscope } from "react-icons/lu";
 
@@ -29,7 +29,7 @@ export default function BottomSheet(): React.JSX.Element {
         {/* INPUT GROUP */}
         <div className="w-full flex flex-col gap-2">
           <ArtistInput />
-          <SongInput />
+          {/* <SongInput /> */}
           <div className="divider flex items-center">OR</div>
           <LyricsInput />
         </div>
