@@ -2,6 +2,10 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
 import { hideBtmSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
+import ArtistInput from "../Search/ArtistInput";
+import SongInput from "../Search/SongInput";
+import LyricsInput from "../Search/LyricsInput";
+import { LuMicroscope } from "react-icons/lu";
 
 export default function BottomSheet(): React.JSX.Element {
   const dispatch = useDispatch();
@@ -9,14 +13,38 @@ export default function BottomSheet(): React.JSX.Element {
     (state: RootState) => state.btmSheet.sheetIsVis,
   );
 
-  console.log(sheetIsVis);
-
   return (
     <dialog open={sheetIsVis} className={`modal modal-bottom`}>
       {/* MODAL CONTENT */}
-      <div className="modal-box h-full bg-base-100">
-        <h3 className="font-bold text-lg">This is a headers</h3>
-        <p className="py-4">This is the Content</p>
+      <div className="modal-box h-full bg-base-100 flex flex-col gap-2 pt-3">
+        {/* Sheet header */}
+        <div className="w-full flex justify-end text-error">
+          <button
+            onClick={() => dispatch(hideBtmSheet())}
+            className="p-2 rounded-sm hover:text-error/70 active:text-error/50 transition-colors duration-100"
+          >
+            Close
+          </button>
+        </div>
+        {/* INPUT GROUP */}
+        <div className="w-full flex flex-col gap-2">
+          <ArtistInput />
+          <SongInput />
+          <div className="divider flex items-center">OR</div>
+          <LyricsInput />
+        </div>
+        {/* ANALYZE BUTTON */}
+        <button
+          onClick={() => console.log("Analyzing...")}
+          className="w-full bg-gradient-to-r from-primary to-secondary mt-auto flex items-center relative text-black py-4 rounded-sm hover:opacity-80 active:opacity-70 transition-opacity duration-100"
+        >
+          <LuMicroscope size={20} className="absolute left-4 opacity-80" />
+          <span className="w-full font-bold">ANALYZE</span>
+          <LuMicroscope
+            size={20}
+            className="absolute right-4 opacity-80 scale-x-[-1]"
+          />
+        </button>
       </div>
       {/* OVERLAY TO HANDLE CLOSE CLOSE ON OUTSIDE CLICK */}
       <form
@@ -29,3 +57,11 @@ export default function BottomSheet(): React.JSX.Element {
     </dialog>
   );
 }
+
+// !TODO: Songs should be fetched and sorted by year as soon as artist is selected
+
+// !TODO: Add toggle to switch between song search and word selection
+
+// TODO: Need to somehow communicate that searching only for lyrics is possible or searching for artist and lyrics is possible but that artist and song title will automatically close the modal when the song is selected or when click "analize"
+
+// !TODO: Closing modal should still preserve state (in case user accidentally closes modal it would suck if everything was gone especially if they typed in a lot of lyrics)

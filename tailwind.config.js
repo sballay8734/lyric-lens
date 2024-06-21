@@ -7,7 +7,11 @@ export default {
     fontFamily: {
       fancy: ["Playwrite AU NSW"],
     },
-    extend: {},
+    extend: {
+      colors: {
+        dropdownBg: "#2b3347",
+      },
+    },
   },
   plugins: [daisyui],
   daisyui: {
