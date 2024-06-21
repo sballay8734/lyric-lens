@@ -82,7 +82,7 @@ export default function ArtistFilter(): React.JSX.Element {
     const params = new URLSearchParams({
       // access_token: import.meta.env.VITE_GENIUS_ACCESS_TOKEN,
       q: query,
-      per_page: "20", // Adjust as needed
+      per_page: "5", // Adjust as needed
       page: "1", // Adjust if you want to implement pagination
     });
 
@@ -122,6 +122,7 @@ export default function ArtistFilter(): React.JSX.Element {
     dispatch(setSelectedArtist(artistName));
     setDropdownIsShown(false);
     dispatch(setArtistQuery(""));
+    setArtists([]);
   }
 
   // function handleArtistRemove() {
@@ -137,7 +138,13 @@ export default function ArtistFilter(): React.JSX.Element {
 
   // !TODO: still shows all 20 instead of just the names that match
   // FILTER ARTISTS
-  const artistsToShow = artists.map((a: ArtistFromAPI) => a.artistName);
+  const artistsToShow = artists
+    .filter((a: ArtistFromAPI) =>
+      a.artistName
+        .toLocaleLowerCase()
+        .includes(artistQuery.toLocaleLowerCase()),
+    )
+    .map((a: ArtistFromAPI) => a.artistName);
 
   return (
     <div ref={dropdownRef} className="relative">
@@ -190,6 +197,7 @@ export default function ArtistFilter(): React.JSX.Element {
 }
 // !TODO: Items off screen should be ignored in tab index (tabing continuously eventually brings you to the lyric search inputs which are hidden)
 // !TODO: Artist tags are too small to click (think of another way to remove them)
+// !TODO: Animate input out when an artist is selected and show a card with a "X" button
 
 // TODO: Change placeholder style so it's more clear you selected an artist already
 // TODO: Removing the last letter in the input should not flash
