@@ -3,6 +3,8 @@ import { MdTitle } from "react-icons/md";
 import { useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
 
+const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
+
 export default function SongInput(): React.JSX.Element {
   const selectedArtist = useAppSelector(
     (state: RootState) => state.songSearch.selectedArtist,
@@ -17,17 +19,31 @@ export default function SongInput(): React.JSX.Element {
     }
   }, [selectedArtist]);
 
-  console.log(selectedArtist);
-
-  // fetchSongs by selectedArtist
+  // fetchSongs by selectedArtist (Taylor Swift goes up to 32 sheeeeesh)
   async function fetchSongs(artistId: number) {
-    const getAllSongsQuery = `/proxy/api/artists/${artistId.toString()}/songs`;
+    const getAllSongsQuery = `/official-proxy/artists/${artistId}/songs?sort=popularity&per_page=50&page=1`;
 
     try {
-      const res = await fetch(getAllSongsQuery);
+      const res = await fetch(getAllSongsQuery, {
+        headers: {
+          Authorization: bearer,
+        },
+      });
 
       const data = await res.json();
-      console.log(data);
+      // console.log(data.response.songs);
+
+      // mTODO: Type the song here                     vvvvvv
+      const filteredSongs = data.response.songs.filter((song) =>
+        song.artist_names.includes(selectedArtist?.artistName),
+      );
+
+      console.log(filteredSongs);
+
+      // Loop over data.response.songs
+      // if (artist_names.includes(selectedArtist.artistName)) {
+      //    push it to array
+      // }
       return;
 
       const songsArray = data.response.sections[0].hits.map((item: Hit) => {

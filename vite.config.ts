@@ -14,6 +14,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/proxy/, ""),
       },
+      "/official-proxy": {
+        target: "https://api.genius.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/official-proxy/, ""),
+      },
     },
   },
 });
