@@ -125,10 +125,6 @@ export default function ArtistFilter(): React.JSX.Element {
     setArtists([]);
   }
 
-  // function handleArtistRemove() {
-  //   setSelectedArtist("");
-  // }
-
   // REMEMBER: Specify React.Something rather than just "Something"
   function handleEnterKeyPress(e: React.KeyboardEvent, artistName: string) {
     if (e.key === "Enter") {
@@ -146,9 +142,11 @@ export default function ArtistFilter(): React.JSX.Element {
     )
     .map((a: ArtistFromAPI) => a.artistName);
 
+  // !TODO: Fix borders on active and focus for inputs (daisyUI causing issues)
+
   return (
     <div ref={dropdownRef} className="relative">
-      <label className="relative input bg-neutral outline-0 flex items-center gap-2 w-full rounded-sm">
+      <label className="relative input bg-neutral outline-0 flex items-center gap-2 w-full rounded-sm rounded-b-0 border-b-0">
         <span className="text-base-content/30">Artist:</span>
         <input
           onChange={(e) => fetchArtists(e.target.value)}
@@ -171,7 +169,7 @@ export default function ArtistFilter(): React.JSX.Element {
         )}
       </label>
       <ul
-        className={`dropdown-content bg-base-300 z-[1] absolute w-full h-fit max-h-[300px] bottom-0 rounded-md top-14 overflow-scroll flex flex-col ${
+        className={`dropdown-content bg-base-300 z-[1] absolute w-full h-fit max-h-[300px] bottom-0 rounded-md rounded-t-none top-12 overflow-scroll flex flex-col border-0 ${
           dropdownIsShown
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"

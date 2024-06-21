@@ -13,6 +13,13 @@ function App() {
 
 export default App;
 
+// FRIDAY TODO:
+// Move inputs to modal
+// Make custom input component (daisyUI styles are being really annoying)
+// Selecting words should also popover (maybe from top?)
+
+// !TODO: Search inputs should be a modal that pops up, when a song is selected it should automatically close showing only the graph
+
 // !TODO: Tabing inside of the inputs causes some weird behavior
 
 // !TODO: Lyric input should not have dropdown
