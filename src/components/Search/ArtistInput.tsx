@@ -76,7 +76,7 @@ export default function ArtistInput(): React.JSX.Element {
     const params = new URLSearchParams({
       // access_token: import.meta.env.VITE_GENIUS_ACCESS_TOKEN,
       q: query,
-      per_page: "5", // Adjust as needed
+      per_page: "10", // Adjust as needed
       page: "1", // Adjust if you want to implement pagination
     });
 
@@ -107,11 +107,6 @@ export default function ArtistInput(): React.JSX.Element {
       console.log(error);
     }
   }
-
-  // fetchArtistSongs
-  // async function fetchArtistSongs(artistName: string) {
-  //   console.log("Fetching");
-  // }
 
   function handleArtistSelect(artist: ArtistSimple) {
     // dispatch(setArtistQuery(artistName));
