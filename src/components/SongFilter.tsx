@@ -7,12 +7,19 @@ import {
 } from "../store/features/songSearch/songSearchSlice";
 
 export default function SongFilter(): React.JSX.Element {
+  // LOCAL STATE
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(false);
 
+  // REDUX STATE
   const dispatch = useAppDispatch();
   const songQuery = useAppSelector((state) => state.songSearch.songQuery);
   const selectedSong = useAppSelector((state) => state.songSearch.selectedSong);
+
+  // selectedArtist needed to filter songs
+  const selectedArtist = useAppSelector(
+    (state) => state.songSearch.selectedArtist,
+  );
 
   // Handle queryString state change
   useEffect(() => {
@@ -63,11 +70,8 @@ export default function SongFilter(): React.JSX.Element {
     dispatch(setSelectedSong(""));
   }
 
-  // REMOVE: vvvvvvv Testing vvvvvvv
-  const testArtist = "ABBA";
-
   const filteredSongs = mockSongs.filter((song) => {
-    return song.artistName === testArtist;
+    return song.artistName === selectedArtist;
   });
 
   return (

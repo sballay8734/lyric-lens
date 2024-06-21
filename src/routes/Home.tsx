@@ -2,25 +2,9 @@ import { useState } from "react";
 import ByArtistAndTitle from "../components/ByArtistAndTitle";
 import LyricFilter from "../components/LyricFilter";
 
-// const accessToken = import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
-// const testLyric = "You can kiss 100 boys at bars";
-
 export default function Home(): React.JSX.Element {
   const [byLyric, setByLyric] = useState<boolean>(false);
-  // async function fetchApi() {
-  //   // if (lyricQuery.length < 1) return;
-  //   console.log("HIT");
-  //   return; // REMOVE: REMOVE THIS (JUST FOR TESTING)
 
-  //   const res = await fetch(
-  //     "https://api.genius.com/search?access_token=" +
-  //       accessToken +
-  //       "&q=" +
-  //       encodeURIComponent(testLyric),
-  //   );
-
-  //   console.log(res.json());
-  // }
   return (
     <>
       <div className="flex flex-col justify-between h-full my-4 gap-2 w-full">

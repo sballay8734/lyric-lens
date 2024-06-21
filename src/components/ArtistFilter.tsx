@@ -1,18 +1,27 @@
 import { useEffect, useRef, useState } from "react";
-import { artists } from "../data/mockArtistData";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import {
   setArtistQuery,
   setSelectedArtist,
 } from "../store/features/songSearch/songSearchSlice";
+import { Hit } from "../types/api";
 // import { IoIosCloseCircle } from "react-icons/io";
 
 type Artist = string;
 
+interface ArtistFromAPI {
+  artistName: string;
+  artistSlug: string;
+  artistId: number;
+}
+
 export default function ArtistFilter(): React.JSX.Element {
+  const controllerRef = useRef<AbortController>();
   // LOCAL STATE
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(false);
+  // mTODO: Type artistsArray
+  const [artists, setArtists] = useState([]);
 
   // REDUX STATE
   const dispatch = useAppDispatch();
@@ -56,6 +65,58 @@ export default function ArtistFilter(): React.JSX.Element {
     };
   }, [dropdownIsShown]);
 
+  // fetchArtists by user Query
+  async function fetchArtists(query: string) {
+    dispatch(setArtistQuery(query));
+    if (query.length < 2) return; // Don't search for very short queries
+
+    // abort request if one exists
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+    }
+
+    // start a new request by first setting ref for new AbortController
+    controllerRef.current = new AbortController();
+    const signal = controllerRef.current.signal;
+
+    const params = new URLSearchParams({
+      // access_token: import.meta.env.VITE_GENIUS_ACCESS_TOKEN,
+      q: query,
+      per_page: "20", // Adjust as needed
+      page: "1", // Adjust if you want to implement pagination
+    });
+
+    const artistQuery = `/proxy/api/search/artist?${params}`;
+
+    try {
+      const res = await fetch(artistQuery, { signal });
+
+      const data = await res.json();
+      console.log(data);
+
+      const artistsArray = data.response.sections[0].hits.map((item: Hit) => {
+        return {
+          artistName: item.result.name,
+          artistSlug: item.result.slug,
+          artistId: item.result.id,
+        };
+      });
+
+      setArtists(artistsArray);
+    } catch (error) {
+      if (error instanceof DOMException) {
+        // console.log("Intentional DOMException Error");
+        return;
+      }
+      console.log(error);
+    }
+  }
+
+  // fetchArtistSongs
+  // async function fetchArtistSongs(artistName: string) {
+  //   console.log("Fetching");
+  // }
+
   function handleArtistSelect(artistName: Artist) {
     // dispatch(setArtistQuery(artistName));
     dispatch(setSelectedArtist(artistName));
@@ -74,24 +135,19 @@ export default function ArtistFilter(): React.JSX.Element {
     }
   }
 
-  // mTODO: Should they also be sorted alphabetically
+  // !TODO: still shows all 20 instead of just the names that match
   // FILTER ARTISTS
-  const artistsToShow = artists.filter((a) =>
-    a.toLocaleLowerCase().includes(artistQuery.toLocaleLowerCase()),
-  );
-
-  // SORT ARTISTS
-  const sortedArtists = artistsToShow.sort();
+  const artistsToShow = artists.map((a: ArtistFromAPI) => a.artistName);
 
   return (
     <div ref={dropdownRef} className="relative">
       <label className="relative input bg-neutral outline-0 flex items-center gap-2 w-full rounded-sm">
         <span className="text-base-content/30">Artist:</span>
         <input
-          onChange={(e) => dispatch(setArtistQuery(e.target.value))}
+          onChange={(e) => fetchArtists(e.target.value)}
           onClick={() => {
             // If user clicks outside while typing, this will reopen the filtered list when they click back in the input
-            if (sortedArtists.length > 0) {
+            if (artistsToShow.length > 0) {
               setDropdownIsShown(true);
             }
           }}
@@ -115,7 +171,7 @@ export default function ArtistFilter(): React.JSX.Element {
         } transition-opacity duration-200`}
       >
         {artistQuery.length > 0 &&
-          sortedArtists.map((artist) => {
+          artistsToShow.map((artist) => {
             return (
               <li
                 tabIndex={0}
