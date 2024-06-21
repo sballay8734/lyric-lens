@@ -22,50 +22,49 @@ export default function SongInput(): React.JSX.Element {
 
   // fetchSongs by selectedArtist (Taylor Swift goes up to 32 sheeeeesh)
   async function fetchSongs(artistId: number) {
-    const getAllSongsQuery = `/official-proxy/artists/${artistId}/songs?sort=popularity&per_page=50&page=1`;
+    // !TODO: You need to also track errors that happen during each request
+    let artistSongs: SongFromApi[] = [];
+    let currentPage = 1;
 
-    try {
-      const res = await fetch(getAllSongsQuery, {
-        headers: {
-          Authorization: bearer,
-        },
-      });
+    // keep grabbing songs until an empty array is returned BEFORE filtering
+    while (currentPage < 100) {
+      const getAllSongsQuery = `/official-proxy/artists/${artistId}/songs?sort=popularity&per_page=50&page=${currentPage}`;
 
-      const data = await res.json();
-      // console.log(data.response.songs);
+      // get 50 songs
+      try {
+        const res = await fetch(getAllSongsQuery, {
+          headers: {
+            Authorization: bearer,
+          },
+        });
 
-      const filteredSongs = data.response.songs.filter((song: SongFromApi) =>
-        selectedArtist
-          ? song.artist_names
-              .toLocaleLowerCase()
-              .includes(selectedArtist?.name.toLocaleLowerCase())
-          : false,
-      );
+        // mTODO: Type response here
+        const data = await res.json();
 
-      console.log(filteredSongs);
+        // REMEMBER: This must happen BEFORE you filter the songs
+        // If ...songs.length === 0 then you've reached lastPage + 1
+        if (data.meta.status === 200 && data.response.songs.length === 0) {
+          break;
+        }
 
-      // Loop over data.response.songs
-      // if (artist_names.includes(selectedArtist.artistName)) {
-      //    push it to array
-      // }
-      return;
+        const filteredSongs = data.response.songs.filter((song: SongFromApi) =>
+          selectedArtist
+            ? song.artist_names
+                .toLocaleLowerCase()
+                .includes(selectedArtist?.name.toLocaleLowerCase())
+            : false,
+        );
 
-      const songsArray = data.response.sections[0].hits.map((item: Hit) => {
-        return {
-          artistName: item.result.name,
-          artistSlug: item.result.slug,
-          artistId: item.result.id,
-        };
-      });
-
-      setArtists(artistsArray);
-    } catch (error) {
-      if (error instanceof DOMException) {
-        // console.log("Intentional DOMException Error");
-        return;
+        artistSongs = [...artistSongs, ...filteredSongs];
+      } catch (error) {
+        console.log(error);
       }
-      console.log(error);
+
+      currentPage += 1;
     }
+
+    console.log(artistSongs);
+    return artistSongs;
   }
 
   return (
