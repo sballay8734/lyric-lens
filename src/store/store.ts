@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import songSearchReducer from "./features/songSearch/songSearchSlice";
+import bottomSheetReducer from "./features/bottomSheet/bottomSheetSlice";
 
 export const store = configureStore({
   reducer: {
     songSearch: songSearchReducer,
+    btmSheet: bottomSheetReducer,
   },
 });
 

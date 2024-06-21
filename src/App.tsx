@@ -1,11 +1,15 @@
 import { Outlet } from "react-router-dom";
 import "./App.css";
 import Drawer from "./components/shared/Drawer";
+import BottomSheet from "./components/shared/BottomSheet";
+import FloatingToggle from "./components/shared/FloatingToggle";
 
 function App() {
   return (
     <div className="flex flex-col w-full h-full items-center justify-center pt-[72px] px-4">
       <Drawer />
+      <BottomSheet />
+      <FloatingToggle />
       <Outlet />
     </div>
   );
@@ -17,6 +21,8 @@ export default App;
 // Move inputs to modal
 // Make custom input component (daisyUI styles are being really annoying)
 // Selecting words should also popover (maybe from top?)
+
+// !TODO: Fix theme
 
 // !TODO: Persist word selections
 
