@@ -4,9 +4,13 @@ import { RootState } from "../../store/store";
 import { SongFromApi } from "../../types/api";
 
 import { FaCaretDown } from "react-icons/fa";
+import { CgSpinnerAlt } from "react-icons/cg";
+
 import {
   setLyrics,
+  setLyricsLoading,
   setSelectedSong,
+  setSongsLoading,
 } from "../../store/features/songSearch/songSearchSlice";
 
 const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
@@ -23,6 +27,9 @@ export default function SongInput(): React.JSX.Element {
   );
   const selectedSong = useAppSelector(
     (state: RootState) => state.songSearch.selectedSong,
+  );
+  const songsLoading = useAppSelector(
+    (state: RootState) => state.songSearch.songsLoading,
   );
 
   // !TODO: MOVE BELOW STATE TO REDUX
@@ -41,6 +48,8 @@ export default function SongInput(): React.JSX.Element {
   // Batch all requests and sends them at the same time
   const fetchSongs = useCallback(
     async (artistId: number) => {
+      dispatch(setSongsLoading(true));
+
       let artistSongs: SongFromApi[] = [];
       const pagePromises = [];
 
@@ -111,20 +120,28 @@ export default function SongInput(): React.JSX.Element {
         return a.title.localeCompare(b.title);
       });
 
-      // console.log(artistSongs);
+      // vv need until load states are added (tells you when requests get back)
+      console.log(artistSongs);
+
       setSongList(artistSongs);
+      dispatch(setSongsLoading(false));
     },
-    [selectedArtist, fetchSongsPage],
+    [selectedArtist, fetchSongsPage, dispatch],
   );
 
+  // mTODO: Move parsing logic to separate function
   // Fetch and parses the lyrics
   async function handleSongSelect(song: SongFromApi) {
-    // 1. close dropdown
-    // 1. set song and update placeholder
-    // 2. fetch lyrics from lyricsPath
-    // 3. start analyzing BEFORE user clicks "analyze"
+    // start lyric fetch and parse so set loading to true
+    dispatch(setLyricsLoading(true));
+
+    // clear the songTitle input
     setSongTitle("");
+
+    // update selectedSong in Redux Store
     dispatch(setSelectedSong(song));
+
+    // close the dropdown
     setSongDropdownShown(false);
 
     const lyricsPath = song.url.replace("https://genius.com", "");
@@ -136,7 +153,10 @@ export default function SongInput(): React.JSX.Element {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
+    // get all elements containing lyrics
     const lyricsElements = doc.querySelectorAll("div[data-lyrics-container]");
+
+    // remove tags from markup
     if (lyricsElements.length > 0) {
       let fullLyrics = "";
       lyricsElements.forEach((element) => {
@@ -148,17 +168,16 @@ export default function SongInput(): React.JSX.Element {
           .replace(/<\/b[^>]*>/gi, " ") // Replace closing </b> tags
           .replace(/<a[^>]*>/gi, "") // Replace opening <a> tags
           .replace(/<\/?[^>]+(>|$)/g, ""); // Replace all remaining tags
-        // .replace(/<\/\w+[^>]*>/g, " ") // Replace remaing closing tags
-        // .replace(/\s*\n\s*/g, "\n") // Trim spaces around newlines
-        // .replace(/<\w+[^>]*>/g, "") // Replace opening tags with space
-        // .trim(); // Remove leading and trailing whitespace
-        fullLyrics += formattedLyrics + "\n\n"; // Add two newlines between sections
+
+        fullLyrics += formattedLyrics + "\n\n"; // Add 2 lines between sections
       });
 
-      // console.log(fullLyrics);
+      // update lyrics in Redux Store
       dispatch(setLyrics(fullLyrics));
+      dispatch(setLyricsLoading(false));
     } else {
       // mTODO: Handle errors here (when RTK Query is added)
+      dispatch(setLyricsLoading(false));
       console.log("Lyrics not found");
     }
   }
@@ -222,13 +241,13 @@ export default function SongInput(): React.JSX.Element {
       {/* vv INPUT vv */}
       <label
         className={`flex items-center gap-2 bg-base-300 px-4 py-3 rounded-sm group border-[1px] border-transparent hover:border-primary hover:bg-primary/5 transition-colors duration-200 group h-[58px] ${
-          selectedArtist === null
+          selectedArtist === null || songsLoading
             ? "pointer-events-none opacity-30"
             : "pointer-events-auto opacity-100"
         }`}
       >
         <input
-          disabled={selectedArtist === null}
+          disabled={selectedArtist === null || songsLoading}
           type="text"
           className={`grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50 disabled:group:pointer-events-none ${
             selectedSong?.title
@@ -252,12 +271,17 @@ export default function SongInput(): React.JSX.Element {
           className="pl-3 py-1 rounded-r-sm border-l-2 border-primary/50 text-primary/50 group hover:text-primary hover:border-primary transition-colors duration-200"
           onClick={() => setSongDropdownShown(!songDropdownShown)}
         >
-          <FaCaretDown
-            size={22}
-            className={`transition-colors duration-200 cursor-pointer text-inherit ${
-              songDropdownShown ? "rotate-180" : "rotate-0"
-            } transition-transform duration-300`}
-          />
+          {" "}
+          {songsLoading ? (
+            <CgSpinnerAlt size={22} className="animate-spin" />
+          ) : (
+            <FaCaretDown
+              size={22}
+              className={`transition-colors duration-200 cursor-pointer text-inherit ${
+                songDropdownShown ? "rotate-180" : "rotate-0"
+              } transition-transform duration-300`}
+            />
+          )}
         </button>
       </label>
       {/* vv DROPDOWN vv */}
@@ -348,10 +372,8 @@ export default function SongInput(): React.JSX.Element {
 
 // TODO: maybe provide 50 or so songs quickly so the dropdown can be used or show Loading songs... on song title input or something (idk)
 
-// !TODO: This will be interesting because Song Title input needs to be a dropdown AND a search bar
-
 // REMEMBER: Your internet at home is terribly slow and 35 pages works okay
-// REFERENCE ******************************************************************
+// SONG PAGES REFERENCE ******************************************************
 // Michael Jackson = 34.52 pages            <---------  MOST
 // Drake = 31.22 pages                  <---------  2nd MOST
 

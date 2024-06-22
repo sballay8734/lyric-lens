@@ -9,10 +9,29 @@ import { LuMicroscope } from "react-icons/lu";
 
 export default function BottomSheet(): React.JSX.Element {
   const dispatch = useDispatch();
+
+  // const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
   const sheetIsVis = useAppSelector(
     (state: RootState) => state.btmSheet.sheetIsVis,
   );
-  // const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
+  const lyricsLoading = useAppSelector(
+    (state: RootState) => state.songSearch.lyricsLoading,
+  );
+  const selectedSong = useAppSelector(
+    (state: RootState) => state.songSearch.selectedSong,
+  );
+
+  // lyric analysis already starts automatically when lyrics load into Redux
+  // So the only thing you need to do here is show loading and close the sheet
+  function handleAnalyzeLyrics() {
+    if (lyricsLoading) {
+      // mTODO: show loading spinner
+      console.log("Loading...");
+    } else {
+      // close dropdown
+      dispatch(hideBtmSheet());
+    }
+  }
 
   return (
     <dialog open={sheetIsVis} className={`modal modal-bottom`}>
@@ -36,8 +55,13 @@ export default function BottomSheet(): React.JSX.Element {
         </div>
         {/* ANALYZE BUTTON */}
         <button
-          onClick={() => console.log("Analyzing...")}
-          className="w-full bg-gradient-to-r from-primary to-secondary mt-auto flex items-center relative text-black py-4 rounded-sm hover:opacity-80 active:opacity-70 transition-opacity duration-100"
+          disabled={lyricsLoading || !selectedSong}
+          onClick={handleAnalyzeLyrics}
+          className={`w-full mt-auto flex items-center relative text-black py-4 rounded-sm hover:opacity-80 active:opacity-70 disabled:pointer-events-none ${
+            lyricsLoading || !selectedSong
+              ? "bg-gray-700 opacity-50 text-gray-800"
+              : "bg-gradient-to-r from-primary to-secondary"
+          } transition-opacity duration-200`}
         >
           <LuMicroscope size={20} className="absolute left-4 opacity-80" />
           <span className="w-full font-bold">ANALYZE</span>

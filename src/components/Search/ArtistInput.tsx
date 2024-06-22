@@ -3,7 +3,9 @@ import { MdOutlinePerson } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import {
   setArtistQuery,
+  setLyrics,
   setSelectedArtist,
+  setSelectedSong,
 } from "../../store/features/songSearch/songSearchSlice";
 import { ArtistHit } from "../../types/api";
 import { ArtistSimple } from "../../types/api";
@@ -113,10 +115,24 @@ export default function ArtistInput(): React.JSX.Element {
   }
 
   function handleArtistSelect(artist: ArtistSimple) {
-    // dispatch(setArtistQuery(artistName));
+    // do nothing if user clicks on the artist that is already selected
+    // REVIEW: Do you need to lowercase here vvv did you alredy do that?
+    if (selectedArtist && artist.name === selectedArtist.name) return;
+
+    // clear selected song since new artist = completely different songs
+    dispatch(setSelectedSong(null));
+
+    // clear lyrics
+    dispatch(setLyrics(""));
+
+    // setSelectedArtist to the new selection
     dispatch(setSelectedArtist(artist));
+
+    // close dropdown and clear artist input
     setDropdownIsShown(false);
     dispatch(setArtistQuery(""));
+
+    // clear the array used for filtering <li>s in dropdown
     setArtists([]);
   }
 
