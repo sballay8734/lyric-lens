@@ -120,11 +120,14 @@ export default function Graph(): React.JSX.Element {
   );
 }
 
-// D3 Graphs to check out
-// Zoomable sunburst (main word as primary, variants outside)
-// Circle Packing
-// Bubble Chart
-// Force Graph
+// D3 Graphs to check out ****************************************************
+// FAVORITE: Disjoint foce-directed graph
+// why? Words that are not in the selected songs lyrics should not be attached to the center node which is achievable with this graph below:
+// https://observablehq.com/@d3/disjoint-force-directed-graph/2?intent=fork
+
+// Other possible options: ***************************************************
+// Circle Packing - https://observablehq.com/@d3/bubble-chart/2?intent=fork
+// Bubble Chart -
 
 // const testHtml = () => {
 //   return (
@@ -285,6 +288,10 @@ export default function Graph(): React.JSX.Element {
 //     </>
 //   );
 // };
+
+// TODO: ALL of the user's flagged words should be visible but only the ones in the song should be connected to the graph (the others should be small, faded, and around the edges of the screen)
+
+// TODO: Put overlay at top of screen that shows the current artist and song displayed on the graph
 
 // !TODO: Add a "View full lyrics" option that shows the song formatted by section (verse, chorus, etc...) and highlights the words that were flagged
 
