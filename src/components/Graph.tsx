@@ -30,6 +30,7 @@ interface FlaggedWords extends HashMap {
   [key: string]: number;
 }
 
+// Graph Wrapper
 export default function Graph(): React.JSX.Element {
   const [flaggedWords, setFlaggedWords] = useState<FlaggedWords | null>(null);
 
@@ -118,6 +119,16 @@ export default function Graph(): React.JSX.Element {
       </span>
     </div>
   );
+}
+
+// Graph with d3
+// REMEMBER: Most D3 modules (including d3-scale, d3-array, d3-interpolate, and d3-format) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX for purely declarative visualization.
+
+// REMEMBER: D3 modules that operate on selections (including d3-selection, d3-transition, and d3-axis) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook.
+
+// RESOURCE FOR ABOVE - https://d3js.org/getting-started#d3-in-react
+export function NewGraph(): React.JSX.Element {
+  return <div></div>;
 }
 
 // D3 Graphs to check out ****************************************************
