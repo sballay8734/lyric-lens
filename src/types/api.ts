@@ -41,7 +41,7 @@ export interface SongFromApi {
   id: number;
   lyrics_owner_id: number;
   lyrics_state: string; // possibly "complete" | "incomplete"
-  lyrics_path: string; // change this to lyricPath
+  path: string; // change this to lyric_path
   primary_artist: {
     api_path: string;
     header_image_url: string;

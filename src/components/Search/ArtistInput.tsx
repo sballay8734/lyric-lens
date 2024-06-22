@@ -123,7 +123,6 @@ export default function ArtistInput(): React.JSX.Element {
     }
   }
 
-  // !TODO: still shows all 20 instead of just the names that match
   // FILTER ARTISTS
   const artistsToShow = artists
     .filter((artist: ArtistSimple) =>
@@ -136,7 +135,7 @@ export default function ArtistInput(): React.JSX.Element {
   return (
     <div ref={dropdownRef} className="w-full relative rounded-sm">
       {/* vv INPUT vv */}
-      <label className="flex items-center gap-2 bg-base-300 py-4 px-4 rounded-sm group border-[1px] border-transparent hover:border-primary hover:bg-primary/5 transition-colors duration-200">
+      <label className="flex items-center gap-2 bg-base-300 py-4 px-4 rounded-sm group border-[1px] border-transparent hover:border-primary hover:bg-primary/5 transition-colors duration-200 h-[58px]">
         <input
           type="text"
           className="grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50"
@@ -158,7 +157,7 @@ export default function ArtistInput(): React.JSX.Element {
       </label>
       {/* vv DROPDOWN vv */}
       <ul
-        className={`dropdown-content bg-dropdownBg text-neutral-content z-1 absolute w-full h-fit max-h-[300px] bottom-0 rounded-sm top-16 overflow-scroll flex flex-col border-0 ${
+        className={`dropdown-content bg-dropdownBg text-neutral-content z-10 absolute w-full h-fit max-h-[300px] bottom-0 rounded-sm top-16 overflow-scroll flex flex-col border-0 ${
           artistQuery.length < 1 ? "p-0" : "p-2"
         } ${
           dropdownIsShown

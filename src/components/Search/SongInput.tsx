@@ -1,15 +1,24 @@
-import { useCallback, useEffect } from "react";
-import { MdTitle } from "react-icons/md";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
 import { SongFromApi } from "../../types/api";
 
+import { FaCaretDown } from "react-icons/fa";
+
 const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 
 export default function SongInput(): React.JSX.Element {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [songDropdownShown, setSongDropdownShown] = useState<boolean>(false);
+
   const selectedArtist = useAppSelector(
     (state: RootState) => state.songSearch.selectedArtist,
   );
+
+  // !TODO: MOVE BELOW STATE TO REDUX
+  const [songList, setSongList] = useState<SongFromApi[]>([]);
+  // const [selectedSong, setSelectedSong] = useState<SongFromApi | null>(null);
+  // const [selectedLyrics, setSelectedLyrics] = useState<string | null>(null);
 
   // Function to fetch a single page of songs for an artist
   const fetchSongsPage = useCallback(async (artistId: number, page: number) => {
@@ -92,11 +101,43 @@ export default function SongInput(): React.JSX.Element {
         artistSongs = [...artistSongs, ...filteredSongs];
       }
 
-      console.log(artistSongs);
-      return artistSongs;
+      setSongList(artistSongs);
     },
     [selectedArtist, fetchSongsPage],
   );
+
+  async function handleSongSelect(song: SongFromApi) {
+    // 1. set song in redux
+    // 2. fetch lyrics from lyricsPath
+    // 3. start analyzing BEFORE user clicks "analyze"
+
+    const lyricsPath = song.url.replace("https://genius.com", "");
+    const getLyricsQuery = `/proxy${lyricsPath}`;
+    const res = await fetch(getLyricsQuery);
+    const html = await res.text();
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const lyricsElement =
+      doc.querySelector(".lyrics") ||
+      doc.querySelector("div[data-lyrics-container]");
+    if (lyricsElement) {
+      const lyricsHtml = lyricsElement.innerHTML;
+      const formattedLyrics = lyricsHtml
+        .replace(/<br\s*\/?>/gi, "\n") // Replace <br> tags with newlines
+        .replace(/<(?:.|\n)*?>/gm, ""); // Remove remaining HTML tags
+
+      console.log(formattedLyrics.trim());
+    } else {
+      console.log("Lyrics not found");
+    }
+  }
+
+  function handleEnterKeyPress(e: React.KeyboardEvent, song: SongFromApi) {
+    if (e.key === "Enter") {
+      handleSongSelect(song);
+    }
+  }
 
   // Everytime artist selection changes, clear song list and fetch new songs
   useEffect(() => {
@@ -105,21 +146,71 @@ export default function SongInput(): React.JSX.Element {
     }
   }, [selectedArtist, fetchSongs]);
 
+  console.log(songList);
+
   return (
-    <label className="flex items-center gap-2 bg-base-300 py-4 px-4 rounded-sm group border-[1px] border-transparent hover:border-primary hover:bg-primary/5 transition-colors duration-200">
-      <input
-        type="text"
-        className="grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50"
-        placeholder="Song Title"
-        maxLength={100}
-      />
-      <MdTitle
-        size={18}
-        className="text-neutral-content/50 group-hover:text-primary transition-colors duration-200"
-      />
-    </label>
+    <div ref={dropdownRef} className="w-full relative rounded-sm">
+      {/* vv INPUT vv */}
+      <label
+        className={`flex items-center gap-2 bg-base-300 px-4 py-3 rounded-sm group border-[1px] border-transparent hover:border-primary hover:bg-primary/5 transition-colors duration-200 group h-[58px] ${
+          selectedArtist === null
+            ? "pointer-events-none opacity-30"
+            : "pointer-events-auto opacity-100"
+        }`}
+      >
+        <input
+          disabled={selectedArtist === null}
+          type="text"
+          className="grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50 disabled:group:pointer-events-none"
+          placeholder="Song Title"
+          maxLength={100}
+        />
+        <button
+          className="pl-3 py-1 rounded-r-sm border-l-2 border-primary/50 text-primary/50 group hover:text-primary hover:border-primary transition-colors duration-200"
+          onClick={() => setSongDropdownShown(!songDropdownShown)}
+        >
+          <FaCaretDown
+            size={22}
+            className={`transition-colors duration-200 cursor-pointer text-inherit ${
+              songDropdownShown ? "rotate-180" : "rotate-0"
+            } transition-transform duration-300`}
+          />
+        </button>
+      </label>
+      {/* vv DROPDOWN vv */}
+      <ul
+        className={`dropdown-content bg-dropdownBg text-neutral-content z-10 absolute w-full h-fit max-h-[300px] bottom-0 rounded-sm top-16 overflow-scroll flex flex-col border-0 ${
+          songList.length < 1 ? "p-0" : "p-2"
+        } ${
+          songDropdownShown
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        } transition-opacity duration-200`}
+      >
+        {songList.length > 0 &&
+          songList.map((song: SongFromApi) => {
+            return (
+              <li
+                tabIndex={0}
+                onClick={() => handleSongSelect(song)}
+                onKeyDown={(e) => handleEnterKeyPress(e, song)}
+                className="text-left cursor-pointer py-2 px-2 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 rounded-md focus:bg-primary outline-0"
+                key={song.id}
+              >
+                {song.title_with_featured}
+              </li>
+            );
+          })}
+      </ul>
+    </div>
   );
 }
+
+// TODO: maybe provide 50 or so songs quickly so the dropdown can be used or show Loading songs... on song title input or something (idk)
+
+// TODO: Format song title in dropdown (put year in far right)
+
+// TODO: Add year dividers in dropdown
 
 // !TODO: This will be interesting because Song Title input needs to be a dropdown AND a search bar
 
