@@ -201,11 +201,11 @@ export default function SongInput(): React.JSX.Element {
                 tabIndex={0}
                 onClick={() => handleSongSelect(song)}
                 onKeyDown={(e) => handleEnterKeyPress(e, song)}
-                className="text-left cursor-pointer py-2 px-2 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 rounded-md focus:bg-primary outline-0 flex justify-between"
+                className="text-left cursor-pointer py-2 px-2 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 rounded-md focus:bg-primary outline-0 flex justify-between items-center"
                 key={song.id}
               >
                 <span>{song.title_with_featured}</span>
-                <span className="ml-auto">
+                <span className="ml-auto text-xs text-right text-orange-500/50">
                   {song.release_date_components &&
                   song.release_date_components.year &&
                   song.release_date_for_display
@@ -224,6 +224,7 @@ export default function SongInput(): React.JSX.Element {
 // !TODO: NOT ALL THE LYRICS ARE LOGGING (only like half or 2/3 of them)
 // !TODO: Lyrics are not properly sorted by date
 // TODO: Get redux setup to handle song lyrics
+// TODO: Close song title dropdown on outside click
 // TODO: Close song title dropdown on song select
 // TODO: Close btmSheet when analyze is complete
 // TODO: Add year to right side of song title dropdown
@@ -231,6 +232,8 @@ export default function SongInput(): React.JSX.Element {
 // TODO: Dropdown should ALSO be a search bar
 // TODO: Fix weird padding thing when artist dropdown is loading
 // TODO: Add loading states for LOTS of stuff
+
+// !TODO: OPTIMIZATIONS FOR API REQUESTS
 
 // ^^^^^^^^^^^^^^^^^^^^^ SATURDAY ^^^^^^^^^^^^^^^^^^^^^^^^
 
