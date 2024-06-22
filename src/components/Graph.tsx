@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks/hooks";
 import { RootState } from "../store/store";
 
@@ -8,12 +8,19 @@ const testFlaggedWordsList = [
   "fuCk",
   "kiLl",
   "nigga",
+  "niggas",
   "bitch",
   "bitches",
   "ass",
+  "motherfuck",
+  "motherfucker",
+  "pussy",
+  "shit",
+  "shitll",
+  "jesus",
+  "christ",
+  "hell",
 ];
-// REMEMBER: If none of your flagged words have punctuation, this is fine
-const regex = /[?!.,']/g;
 
 interface HashMap {
   [key: string]: number;
@@ -24,14 +31,18 @@ interface FlaggedWords extends HashMap {
 }
 
 export default function Graph(): React.JSX.Element {
+  const [flaggedWords, setFlaggedWords] = useState<FlaggedWords | null>(null);
+
   const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
   // TODO: This is also where you'll bring in the users list of flagged words
 
   function analyzeLyrics() {
+    if (!lyrics) return null;
+
     const formattedLyrics = lyrics
       .replace(/\[.*?\]/g, "") // removes [Verse 2: ... ] [Chorus: ... ]
       .replace(/\n/g, " ") // replace newlines
-      .replace(regex, "") // replace punctuation (? ! . , ')
+      .replace(/[?!.,'"]/g, "") // replace punctuation (? ! . , ')
       .replace(/ {2,}/g, " ") // replace 2 or more consecutive spaces
       .trim();
 
@@ -55,11 +66,11 @@ export default function Graph(): React.JSX.Element {
       }
     });
 
-    // console.log(hashMap);
-
+    // initialize flaggedWordsObject
     const flaggedWords: FlaggedWords = {};
 
     // check hashMap for flagged words
+    // mTODO: vvvvv use words provided by the user here vvvvv
     testFlaggedWordsList.forEach((word) => {
       const formattedWord = word.toLocaleLowerCase();
 
@@ -68,17 +79,43 @@ export default function Graph(): React.JSX.Element {
       }
     });
 
-    console.log(flaggedWords);
+    return flaggedWords;
+  }
+
+  // REMOVE: Just for testing while you work on graph
+  function formatResponse() {
+    if (!flaggedWords || Object.keys(flaggedWords).length === 0) {
+      return <div>No flagged words found! Song is clean!</div>;
+    }
+
+    return (
+      flaggedWords &&
+      Object.keys(flaggedWords).map((word) => {
+        const desc = flaggedWords[word] === 1 ? "time" : "times";
+        return (
+          <div key={word}>
+            {word} appeared {flaggedWords[word]} {desc}
+          </div>
+        );
+      })
+    );
   }
 
   // run lyric analysis whenever user changes the song
   useEffect(() => {
-    analyzeLyrics();
+    const analysisObject = analyzeLyrics();
+    if (analysisObject) {
+      setFlaggedWords(analysisObject);
+    } else {
+      setFlaggedWords(null);
+    }
   }, [lyrics]);
 
   return (
     <div className="MainGraph flex flex-col justify-center w-full h-full rounded-md bg-base-100 items-center border-[1px] border-transparent group hover:bg-secondary/30 hover:border-secondary/80 transition-colors duration-200">
-      <span>Main Graph</span>
+      <span>
+        {flaggedWords ? formatResponse() : "You need to choose a song"}
+      </span>
     </div>
   );
 }
@@ -248,3 +285,9 @@ export default function Graph(): React.JSX.Element {
 //     </>
 //   );
 // };
+
+// !TODO: Add a "View full lyrics" option that shows the song formatted by section (verse, chorus, etc...) and highlights the words that were flagged
+
+// !TODO: You have to handle words like "shitll" (from "shit'll" but you remove punctuation) unfortunately. This might end up not being that bad. Keeping in the opostrophes or spliting words differently might not be too hard
+
+// !TODO: Add a button to clear all inputs quickly

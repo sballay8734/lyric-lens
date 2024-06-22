@@ -25,6 +25,9 @@ export default function ArtistInput(): React.JSX.Element {
   const selectedArtist = useAppSelector(
     (state: RootState) => state.songSearch.selectedArtist,
   );
+  const songsLoading = useAppSelector(
+    (state: RootState) => state.songSearch.songsLoading,
+  );
 
   // const selectedArtist = useAppSelector(
   //   (state) => state.songSearch.selectedArtist,
@@ -155,8 +158,15 @@ export default function ArtistInput(): React.JSX.Element {
   return (
     <div ref={dropdownRef} className="w-full relative rounded-sm">
       {/* vv INPUT vv */}
-      <label className="flex items-center gap-2 bg-base-300 py-4 px-4 rounded-sm group border-[1px] border-transparent hover:border-primary hover:bg-primary/5 transition-colors duration-200 h-[58px]">
+      <label
+        className={`flex items-center gap-2 bg-base-300 py-4 px-4 rounded-sm group border-[1px] border-transparent hover:border-primary hover:bg-primary/5 transition-colors duration-200 h-[58px] ${
+          songsLoading
+            ? "pointer-events-none opacity-30"
+            : "pointer-events-auto opacity-100"
+        }`}
+      >
         <input
+          disabled={songsLoading}
           type="text"
           className={`grow bg-transparent outline-0 border-0 ${
             selectedArtist?.name

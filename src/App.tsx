@@ -17,33 +17,16 @@ function App() {
 
 export default App;
 
-// FRIDAY TODO:
-// Move inputs to modal
-// Make custom input component (daisyUI styles are being really annoying)
-// Selecting words should also popover (maybe from top?)
-
-// !TODO: Fix theme
-
 // !TODO: Persist word selections
+
+// !TODO: Look into clean vs. explicit versions and how Genius handles them
 
 // !TODO: Search inputs should be a modal that pops up, when a song is selected it should automatically close showing only the graph
 
 // !TODO: Tabing inside of the inputs causes some weird behavior
 
-// !TODO: Lyric input should not have dropdown
-
-// TODO: Song input should also exist that will be updated with only the selected artists songs
-
-// TODO: Dropdown should update as user types into the input
-
-// mTODO: Should you add song title field too?
-
-// mTODO: Add user feedback if lyric field is empty
-
-// NOTE: Search should NOT be case sensitive
-
+// mTODO: Selecting words should also be in sheet (maybe from have a toggle?)
 // MAIN USER FLOW ************************************************************
-
 /*
 Flow 1 (user knows artist and song name)
 1. Can't pull all artists on load so send requests as user is typing in input

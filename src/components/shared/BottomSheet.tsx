@@ -6,11 +6,15 @@ import ArtistInput from "../Search/ArtistInput";
 import SongInput from "../Search/SongInput";
 import LyricsInput from "../Search/LyricsInput";
 import { LuMicroscope } from "react-icons/lu";
+import {
+  setLyrics,
+  setSelectedArtist,
+  setSelectedSong,
+} from "../../store/features/songSearch/songSearchSlice";
 
 export default function BottomSheet(): React.JSX.Element {
   const dispatch = useDispatch();
 
-  // const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
   const sheetIsVis = useAppSelector(
     (state: RootState) => state.btmSheet.sheetIsVis,
   );
@@ -33,6 +37,14 @@ export default function BottomSheet(): React.JSX.Element {
     }
   }
 
+  function handleClearFields() {
+    // REVIEW: double check this won't interrupt requests and mess with loading
+
+    dispatch(setSelectedArtist(null));
+    dispatch(setSelectedSong(null));
+    dispatch(setLyrics(null));
+  }
+
   return (
     <dialog open={sheetIsVis} className={`modal modal-bottom`}>
       {/* MODAL CONTENT */}
@@ -52,6 +64,9 @@ export default function BottomSheet(): React.JSX.Element {
           <SongInput />
           <div className="divider flex items-center">OR</div>
           <LyricsInput />
+          <button onClick={handleClearFields} className="btn text-error">
+            Clear Fields
+          </button>
         </div>
         {/* ANALYZE BUTTON */}
         <button

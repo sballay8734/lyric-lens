@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 import { ArtistSimple, SongFromApi } from "../../../types/api";
 
-// Define a type for the slice state
+// Define type for slice state
 interface SongSearchState {
   artistQuery: string;
   selectedArtist: ArtistSimple | null;
@@ -12,33 +12,39 @@ interface SongSearchState {
   songsLoading: boolean;
   selectedSong: SongFromApi | null;
 
-  lyrics: string;
-  lyricsLoading: boolean;
+  lyricQuery: string; // for searching by lyrics
+
+  lyrics: string | null; // the string returned from lyric fetch & parse
+  lyricsLoading: boolean; // status of fetch & parse
 }
 
-// Define the initial state using that type
+// Define initial state
 const initialState: SongSearchState = {
   artistQuery: "",
   selectedArtist: null,
+
   songQuery: "",
   songsLoading: false,
   selectedSong: null,
-  lyrics: "",
+
+  lyricQuery: "",
+  lyrics: null,
   lyricsLoading: false,
 };
 
 export const songSearchSlice = createSlice({
   name: "songSearch",
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    // ARTIST
     setArtistQuery: (state, action: PayloadAction<string>) => {
       state.artistQuery = action.payload;
     },
-    setSelectedArtist: (state, action: PayloadAction<ArtistSimple>) => {
+    setSelectedArtist: (state, action: PayloadAction<ArtistSimple | null>) => {
       state.selectedArtist = action.payload;
     },
 
+    // SONGS
     setSongQuery: (state, action: PayloadAction<string>) => {
       state.songQuery = action.payload;
     },
@@ -49,7 +55,13 @@ export const songSearchSlice = createSlice({
       state.selectedSong = action.payload;
     },
 
-    setLyrics: (state, action: PayloadAction<string>) => {
+    // LYRIC QUERY
+    setLyricQuery: (state, action: PayloadAction<string>) => {
+      state.lyricQuery = action.payload;
+    },
+
+    // LYRICS
+    setLyrics: (state, action: PayloadAction<string | null>) => {
       state.lyrics = action.payload;
     },
     setLyricsLoading: (state, action: PayloadAction<boolean>) => {
@@ -66,6 +78,7 @@ export const {
   setLyrics,
   setLyricsLoading,
   setSongsLoading,
+  setLyricQuery,
 } = songSearchSlice.actions;
 
 export default songSearchSlice.reducer;
