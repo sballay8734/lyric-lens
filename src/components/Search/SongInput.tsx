@@ -9,7 +9,9 @@ const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 
 export default function SongInput(): React.JSX.Element {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [songDropdownShown, setSongDropdownShown] = useState<boolean>(false);
+  // !TODO: Change this back to false for the default value vvvvvvvvvvvvvv
+  const [songDropdownShown, setSongDropdownShown] = useState<boolean>(true);
+  const [songTitle, setSongTitle] = useState<string>("");
 
   const selectedArtist = useAppSelector(
     (state: RootState) => state.songSearch.selectedArtist,
@@ -20,7 +22,7 @@ export default function SongInput(): React.JSX.Element {
   // const [selectedSong, setSelectedSong] = useState<SongFromApi | null>(null);
   // const [selectedLyrics, setSelectedLyrics] = useState<string | null>(null);
 
-  // Function to fetch a single page of songs for an artist
+  // Fetch a single page of songs for an artist
   const fetchSongsPage = useCallback(async (artistId: number, page: number) => {
     const getAllSongsQuery = `/official-proxy/artists/${artistId}/songs?sort=popularity&per_page=50&page=${page}`;
     const res = await fetch(getAllSongsQuery, {
@@ -29,7 +31,7 @@ export default function SongInput(): React.JSX.Element {
     return res.json();
   }, []);
 
-  // Function that batches all requests and sends them at the same time
+  // Batch all requests and sends them at the same time
   const fetchSongs = useCallback(
     async (artistId: number) => {
       let artistSongs: SongFromApi[] = [];
@@ -53,63 +55,67 @@ export default function SongInput(): React.JSX.Element {
         }
 
         // Filter songs to only include those by the selected artist
+        // We also check pageviews as a method to handle garbage songs
         const filteredSongs = data.response.songs.filter((song: SongFromApi) =>
-          selectedArtist
+          selectedArtist && song.stats.pageviews && song.stats.pageviews >= 1000
             ? song.artist_names
                 .toLocaleLowerCase()
                 .includes(selectedArtist?.name.toLocaleLowerCase())
             : false,
         );
 
-        // Sort songs for dropdown (most current at top)
-        filteredSongs.sort((a: SongFromApi, b: SongFromApi) => {
-          // Function to safely create a Date object
-          const safeDate = (song: SongFromApi) => {
-            if (
-              song.release_date_components &&
-              song.release_date_components.year &&
-              song.release_date_components.month &&
-              song.release_date_components.day
-            ) {
-              return new Date(
-                song.release_date_components.year,
-                song.release_date_components.month - 1,
-                song.release_date_components.day,
-              );
-            }
-            // Fallback to a very old date if release date is not available
-            return new Date(0);
-          };
-
-          const dateA = safeDate(a);
-          const dateB = safeDate(b);
-
-          // If both dates are valid, sort by date
-          if (dateA.getTime() !== 0 && dateB.getTime() !== 0) {
-            return dateB.getTime() - dateA.getTime(); // For descending order
-          }
-
-          // If only one date is valid, prioritize the song with a valid date
-          if (dateA.getTime() !== 0) return -1;
-          if (dateB.getTime() !== 0) return 1;
-
-          // If neither has a valid date, sort alphabetically by title as a fallback
-          return a.title.localeCompare(b.title);
-        });
-
         // Add filtered songs to the main array
         artistSongs = [...artistSongs, ...filteredSongs];
       }
 
+      // Sort songs for dropdown (most current at top)
+      artistSongs.sort((a: SongFromApi, b: SongFromApi) => {
+        // Function to safely create a Date object
+        const safeDate = (song: SongFromApi) => {
+          if (
+            song.release_date_components &&
+            song.release_date_components.year &&
+            song.release_date_components.month &&
+            song.release_date_components.day
+          ) {
+            return new Date(
+              song.release_date_components.year,
+              song.release_date_components.month - 1,
+              song.release_date_components.day,
+            );
+          }
+          // Fallback to a very old date if release date is not available
+          return new Date(0);
+        };
+
+        const dateA = safeDate(a);
+        const dateB = safeDate(b);
+
+        // If both dates are valid, sort by date
+        if (dateA.getTime() !== 0 && dateB.getTime() !== 0) {
+          return dateB.getTime() - dateA.getTime(); // For descending order
+        }
+
+        // If only one date is valid, prioritize the song with a valid date
+        if (dateA.getTime() !== 0) return -1;
+        if (dateB.getTime() !== 0) return 1;
+
+        // If neither has a valid date, sort alphabetically by title as a fallback
+        return a.title.localeCompare(b.title);
+      });
+
+      console.log(artistSongs);
       setSongList(artistSongs);
     },
     [selectedArtist, fetchSongsPage],
   );
 
+  // Fetch and parses the lyrics
   async function handleSongSelect(song: SongFromApi) {
     // 1. set song in redux
     // 2. fetch lyrics from lyricsPath
     // 3. start analyzing BEFORE user clicks "analyze"
+    console.log(song);
 
     const lyricsPath = song.url.replace("https://genius.com", "");
     const getLyricsQuery = `/proxy${lyricsPath}`;
@@ -133,20 +139,60 @@ export default function SongInput(): React.JSX.Element {
     }
   }
 
+  // Accessiblity (select song by pressing the enter key)
   function handleEnterKeyPress(e: React.KeyboardEvent, song: SongFromApi) {
     if (e.key === "Enter") {
       handleSongSelect(song);
     }
   }
 
-  // Everytime artist selection changes, clear song list and fetch new songs
+  // Handle filtering of song title input/dropdown
+  useEffect(() => {
+    // Prevent filter from running and close dropdown if input is cleared
+    if (songTitle === "") {
+      // !TODO: ADD THIS BACK (was removed to keep dropdown open for styles)
+      // setSongDropdownShown(false);
+      return;
+    }
+
+    setSongDropdownShown(true);
+  }, [songTitle]);
+
+  // Handle dropdown state change
+  useEffect(() => {
+    // Function to handle clicks outside the dropdown
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        event.target instanceof HTMLElement &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setSongDropdownShown(false);
+      }
+    };
+
+    // Attach the event listener when the dropdown is shown
+    if (songDropdownShown) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+
+    // Clean up the event listener when the component unmounts or the dropdown is hidden
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [songDropdownShown]);
+
+  // Clear song list and fetch new songs when user changes the artist
   useEffect(() => {
     if (selectedArtist) {
       fetchSongs(selectedArtist?.id);
     }
   }, [selectedArtist, fetchSongs]);
 
-  console.log(songList);
+  // Filter dropdown items based on input
+  const songsToShow = songList.filter((song: SongFromApi) =>
+    song.title.toLocaleLowerCase().includes(songTitle.toLocaleLowerCase()),
+  );
 
   return (
     <div ref={dropdownRef} className="w-full relative rounded-sm">
@@ -164,6 +210,13 @@ export default function SongInput(): React.JSX.Element {
           className="grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50 disabled:group:pointer-events-none"
           placeholder="Song Title"
           maxLength={100}
+          onChange={(e) => setSongTitle(e.target.value)}
+          onClick={() => {
+            // If user clicks outside while typing, this will reopen the filtered list when they click back in the input
+            if (songsToShow.length > 0) {
+              setSongDropdownShown(true);
+            }
+          }}
         />
         <button
           className="pl-3 py-1 rounded-r-sm border-l-2 border-primary/50 text-primary/50 group hover:text-primary hover:border-primary transition-colors duration-200"
@@ -180,17 +233,15 @@ export default function SongInput(): React.JSX.Element {
       {/* vv DROPDOWN vv */}
       <ul
         className={`dropdown-content bg-dropdownBg text-neutral-content z-10 absolute w-full h-fit max-h-[300px] bottom-0 rounded-sm top-16 overflow-scroll flex flex-col border-0 ${
-          songList.length < 1 ? "p-0" : "p-2"
+          songsToShow.length < 1 ? "p-0" : "p-2"
         } ${
           songDropdownShown
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         } transition-opacity duration-200`}
       >
-        {songList.length > 0 &&
-          songList.map((song: SongFromApi) => {
-            // TODO: Move month conversion to helper function
-            // FORMAT MONTH HERE
+        {songsToShow.length > 0 &&
+          songsToShow.map((song: SongFromApi) => {
             const releaseMonth =
               (song.release_date_for_display &&
                 song.release_date_for_display.split(" ")[0]) ||
@@ -204,13 +255,21 @@ export default function SongInput(): React.JSX.Element {
                 className="text-left cursor-pointer py-2 px-2 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 rounded-md focus:bg-primary outline-0 flex justify-between items-center"
                 key={song.id}
               >
-                <span>{song.title_with_featured}</span>
-                <span className="ml-auto text-xs text-right text-orange-500/50">
+                <div className="flex gap-1 items-center overflow-hidden flex-grow mr-2">
+                  <span className="shrink-0">{song.title}</span>
+                  <span className="italic text-neutral-content/50 shrink-0">
+                    -
+                  </span>
+                  <span className="italic text-neutral-content/50 text-xs align-baseline mt-[1px] overflow-hidden whitespace-nowrap text-ellipsis">
+                    {song.artist_names}
+                  </span>
+                </div>
+                <span className="ml-auto text-xs text-right text-orange-500/50 shrink-0">
                   {song.release_date_components &&
                   song.release_date_components.year &&
                   song.release_date_for_display
                     ? `${releaseMonth}, ${song.release_date_components.year}`
-                    : "-"}
+                    : "UNRELEASED"}
                 </span>
               </li>
             );
@@ -221,16 +280,14 @@ export default function SongInput(): React.JSX.Element {
 }
 
 // ************************** TODO FOR SATURDAY ***************************
-// !TODO: NOT ALL THE LYRICS ARE LOGGING (only like half or 2/3 of them)
-// !TODO: Lyrics are not properly sorted by date
-// TODO: Get redux setup to handle song lyrics
-// TODO: Close song title dropdown on outside click
-// TODO: Close song title dropdown on song select
-// TODO: Close btmSheet when analyze is complete
-// TODO: Add year to right side of song title dropdown
 // TODO: Add year dividers in dropdown
-// TODO: Dropdown should ALSO be a search bar
 // TODO: Fix weird padding thing when artist dropdown is loading
+// !TODO: NOT ALL THE LYRICS ARE LOGGING (only like half or 2/3 of them)
+
+// TODO: Close song title dropdown on song select (and start analysis)
+// TODO: Close btmSheet when analyze is complete
+
+// TODO: Get redux setup to handle song lyrics
 // TODO: Add loading states for LOTS of stuff
 
 // !TODO: OPTIMIZATIONS FOR API REQUESTS

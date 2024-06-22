@@ -130,7 +130,7 @@ export default function ArtistInput(): React.JSX.Element {
     )
     .map((artist: ArtistSimple) => artist);
 
-  console.log(artistsToShow);
+  // console.log(artistsToShow);
 
   return (
     <div ref={dropdownRef} className="w-full relative rounded-sm">
