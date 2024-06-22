@@ -6,7 +6,7 @@ export default function LyricsInput(): React.JSX.Element {
       <textarea
         rows={8}
         maxLength={300}
-        className="text-area grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50"
+        className="text-area grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50 resize-none"
         placeholder="Lyrics"
       />
       <MdOutlineLyrics className="mt-[5px] text-neutral-content/50 group-hover:text-primary transition-colors duration-200" />

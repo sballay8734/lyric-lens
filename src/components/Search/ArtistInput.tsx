@@ -7,6 +7,7 @@ import {
 } from "../../store/features/songSearch/songSearchSlice";
 import { ArtistHit } from "../../types/api";
 import { ArtistSimple } from "../../types/api";
+import { RootState } from "../../store/store";
 
 export default function ArtistInput(): React.JSX.Element {
   const controllerRef = useRef<AbortController>();
@@ -19,6 +20,9 @@ export default function ArtistInput(): React.JSX.Element {
   // REDUX STATE
   const dispatch = useAppDispatch();
   const artistQuery = useAppSelector((state) => state.songSearch.artistQuery);
+  const selectedArtist = useAppSelector(
+    (state: RootState) => state.songSearch.selectedArtist,
+  );
 
   // const selectedArtist = useAppSelector(
   //   (state) => state.songSearch.selectedArtist,
@@ -138,8 +142,12 @@ export default function ArtistInput(): React.JSX.Element {
       <label className="flex items-center gap-2 bg-base-300 py-4 px-4 rounded-sm group border-[1px] border-transparent hover:border-primary hover:bg-primary/5 transition-colors duration-200 h-[58px]">
         <input
           type="text"
-          className="grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50"
-          placeholder="Artist"
+          className={`grow bg-transparent outline-0 border-0 ${
+            selectedArtist?.name
+              ? "placeholder:text-white placeholder:font-bold"
+              : "placeholder:text-neutral-content/50"
+          }`}
+          placeholder={selectedArtist?.name ? selectedArtist.name : "Artist"}
           maxLength={100}
           value={artistQuery}
           onChange={(e) => fetchArtists(e.target.value)}

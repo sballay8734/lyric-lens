@@ -70,13 +70,3 @@ label {
 label:active {
   outline: none !important;
 }
-
-.customInput {
-  /* outline: none; */
-  height: 3rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 1rem;
-  font-size: 1rem;
-  border-radius: var(--rounded-btn, 0.5rem);
-}

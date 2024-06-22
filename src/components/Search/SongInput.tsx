@@ -112,28 +112,34 @@ export default function SongInput(): React.JSX.Element {
 
   // Fetch and parses the lyrics
   async function handleSongSelect(song: SongFromApi) {
-    // 1. set song in redux
+    // 1. close dropdown
+    // 1. set song and update placeholder
     // 2. fetch lyrics from lyricsPath
     // 3. start analyzing BEFORE user clicks "analyze"
-    console.log(song);
+    // console.log(song);
 
     const lyricsPath = song.url.replace("https://genius.com", "");
     const getLyricsQuery = `/proxy${lyricsPath}`;
+
     const res = await fetch(getLyricsQuery);
     const html = await res.text();
 
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
-    const lyricsElement =
-      doc.querySelector(".lyrics") ||
-      doc.querySelector("div[data-lyrics-container]");
-    if (lyricsElement) {
-      const lyricsHtml = lyricsElement.innerHTML;
-      const formattedLyrics = lyricsHtml
-        .replace(/<br\s*\/?>/gi, "\n") // Replace <br> tags with newlines
-        .replace(/<(?:.|\n)*?>/gm, ""); // Remove remaining HTML tags
 
-      console.log(formattedLyrics.trim());
+    const lyricsElements = doc.querySelectorAll("div[data-lyrics-container]");
+    if (lyricsElements.length > 0) {
+      let fullLyrics = "";
+      lyricsElements.forEach((element) => {
+        const lyricsHtml = element.innerHTML;
+        const formattedLyrics = lyricsHtml
+          .replace(/<br\s*\/?>/gi, "\n") // Replace <br> tags with newlines
+          .replace(/<(?:.|\n)*?>/gm, ""); // Remove remaining HTML tags
+        fullLyrics += formattedLyrics.trim() + "\n\n"; // Add two newlines between sections
+      });
+
+      console.log(fullLyrics.trim());
+      // You can now use fullLyrics as needed (e.g., set it to state, display it, etc.)
     } else {
       console.log("Lyrics not found");
     }
@@ -150,8 +156,7 @@ export default function SongInput(): React.JSX.Element {
   useEffect(() => {
     // Prevent filter from running and close dropdown if input is cleared
     if (songTitle === "") {
-      // !TODO: ADD THIS BACK (was removed to keep dropdown open for styles)
-      // setSongDropdownShown(false);
+      setSongDropdownShown(false);
       return;
     }
 
@@ -232,8 +237,8 @@ export default function SongInput(): React.JSX.Element {
       </label>
       {/* vv DROPDOWN vv */}
       <ul
-        className={`dropdown-content bg-dropdownBg text-neutral-content z-10 absolute w-full h-fit max-h-[300px] bottom-0 rounded-sm top-16 overflow-scroll flex flex-col border-0 ${
-          songsToShow.length < 1 ? "p-0" : "p-2"
+        className={`dropdown-content bg-dropdownBg text-neutral-content z-10 absolute w-full h-fit max-h-[300px] bottom-0 rounded-sm top-16 overflow-y-scroll flex flex-col border-0 ${
+          songsToShow.length < 1 ? "p-0" : "pb-2 pt-0"
         } ${
           songDropdownShown
             ? "opacity-100 pointer-events-auto"
@@ -241,18 +246,37 @@ export default function SongInput(): React.JSX.Element {
         } transition-opacity duration-200`}
       >
         {songsToShow.length > 0 &&
-          songsToShow.map((song: SongFromApi) => {
+          songsToShow.reduce<React.JSX.Element[]>((acc, song, index) => {
+            const currentYear =
+              song.release_date_components?.year || "Unreleased";
+            const prevYear =
+              index > 0
+                ? songsToShow[index - 1].release_date_components?.year ||
+                  "Unreleased"
+                : null;
+
+            if (currentYear !== prevYear) {
+              acc.push(
+                <li
+                  key={`${song.full_title}`}
+                  className="text-lg font-bold py-2 sticky top-0 bg-dropdownBgDarker z-10"
+                >
+                  {currentYear}
+                </li>,
+              );
+            }
+
             const releaseMonth =
               (song.release_date_for_display &&
                 song.release_date_for_display.split(" ")[0]) ||
               "";
 
-            return (
+            acc.push(
               <li
                 tabIndex={0}
                 onClick={() => handleSongSelect(song)}
                 onKeyDown={(e) => handleEnterKeyPress(e, song)}
-                className="text-left cursor-pointer py-2 px-2 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 rounded-md focus:bg-primary outline-0 flex justify-between items-center"
+                className="text-left cursor-pointer py-2 pr-2 pl-4 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 focus:bg-primary outline-0 flex justify-between items-center"
                 key={song.id}
               >
                 <div className="flex gap-1 items-center overflow-hidden flex-grow mr-2">
@@ -271,22 +295,26 @@ export default function SongInput(): React.JSX.Element {
                     ? `${releaseMonth}, ${song.release_date_components.year}`
                     : "UNRELEASED"}
                 </span>
-              </li>
+              </li>,
             );
-          })}
+
+            return acc;
+          }, [])}
       </ul>
     </div>
   );
 }
 
 // ************************** TODO FOR SATURDAY ***************************
-// TODO: Add year dividers in dropdown
-// TODO: Fix weird padding thing when artist dropdown is loading
 // !TODO: NOT ALL THE LYRICS ARE LOGGING (only like half or 2/3 of them)
 
+// TODO: Fix weird padding thing when artist dropdown is loading
 // TODO: Close song title dropdown on song select (and start analysis)
 // TODO: Close btmSheet when analyze is complete
+// TODO: Make sure inputs clearing properly and/or poulating from state on load
+// TODO: Add selected artist somewhere so user knows one is still selected
 
+// TODO: Clear old artist and old songs immediately when new artist is selected
 // TODO: Get redux setup to handle song lyrics
 // TODO: Add loading states for LOTS of stuff
 

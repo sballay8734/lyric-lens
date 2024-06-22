@@ -10,6 +10,7 @@ export default {
     extend: {
       colors: {
         dropdownBg: "#2b3347",
+        dropdownBgDarker: "#1e263b",
       },
     },
   },
