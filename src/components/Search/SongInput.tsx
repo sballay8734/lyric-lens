@@ -189,15 +189,29 @@ export default function SongInput(): React.JSX.Element {
       >
         {songList.length > 0 &&
           songList.map((song: SongFromApi) => {
+            // TODO: Move month conversion to helper function
+            // FORMAT MONTH HERE
+            const releaseMonth =
+              (song.release_date_for_display &&
+                song.release_date_for_display.split(" ")[0]) ||
+              "";
+
             return (
               <li
                 tabIndex={0}
                 onClick={() => handleSongSelect(song)}
                 onKeyDown={(e) => handleEnterKeyPress(e, song)}
-                className="text-left cursor-pointer py-2 px-2 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 rounded-md focus:bg-primary outline-0"
+                className="text-left cursor-pointer py-2 px-2 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 rounded-md focus:bg-primary outline-0 flex justify-between"
                 key={song.id}
               >
-                {song.title_with_featured}
+                <span>{song.title_with_featured}</span>
+                <span className="ml-auto">
+                  {song.release_date_components &&
+                  song.release_date_components.year &&
+                  song.release_date_for_display
+                    ? `${releaseMonth}, ${song.release_date_components.year}`
+                    : "-"}
+                </span>
               </li>
             );
           })}
@@ -206,11 +220,21 @@ export default function SongInput(): React.JSX.Element {
   );
 }
 
-// TODO: maybe provide 50 or so songs quickly so the dropdown can be used or show Loading songs... on song title input or something (idk)
-
-// TODO: Format song title in dropdown (put year in far right)
-
+// ************************** TODO FOR SATURDAY ***************************
+// !TODO: NOT ALL THE LYRICS ARE LOGGING (only like half or 2/3 of them)
+// !TODO: Lyrics are not properly sorted by date
+// TODO: Get redux setup to handle song lyrics
+// TODO: Close song title dropdown on song select
+// TODO: Close btmSheet when analyze is complete
+// TODO: Add year to right side of song title dropdown
 // TODO: Add year dividers in dropdown
+// TODO: Dropdown should ALSO be a search bar
+// TODO: Fix weird padding thing when artist dropdown is loading
+// TODO: Add loading states for LOTS of stuff
+
+// ^^^^^^^^^^^^^^^^^^^^^ SATURDAY ^^^^^^^^^^^^^^^^^^^^^^^^
+
+// TODO: maybe provide 50 or so songs quickly so the dropdown can be used or show Loading songs... on song title input or something (idk)
 
 // !TODO: This will be interesting because Song Title input needs to be a dropdown AND a search bar
 
