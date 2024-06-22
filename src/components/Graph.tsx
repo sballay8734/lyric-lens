@@ -2,9 +2,26 @@ import { useEffect } from "react";
 import { useAppSelector } from "../hooks/hooks";
 import { RootState } from "../store/store";
 
-const testFlaggedWordsList = ["god", "sex", "fuck", "I"];
-// REMEMBER: If none of your flagged words have punctuation, this will work just find
+const testFlaggedWordsList = [
+  "GOd",
+  "sex",
+  "fuCk",
+  "kiLl",
+  "nigga",
+  "bitch",
+  "bitches",
+  "ass",
+];
+// REMEMBER: If none of your flagged words have punctuation, this is fine
 const regex = /[?!.,']/g;
+
+interface HashMap {
+  [key: string]: number;
+}
+
+interface FlaggedWords extends HashMap {
+  [key: string]: number;
+}
 
 export default function Graph(): React.JSX.Element {
   const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
@@ -13,17 +30,45 @@ export default function Graph(): React.JSX.Element {
   function analyzeLyrics() {
     const formattedLyrics = lyrics
       .replace(/\[.*?\]/g, "") // removes [Verse 2: ... ] [Chorus: ... ]
-      .replace(/\n{2,}/g, "\n\n")
-      .replace(regex, "");
-    // .replace(/ {2,}/g, " ");
+      .replace(/\n/g, " ") // replace newlines
+      .replace(regex, "") // replace punctuation (? ! . , ')
+      .replace(/ {2,}/g, " ") // replace 2 or more consecutive spaces
+      .trim();
 
-    console.log("FINAL: ", formattedLyrics);
+    console.log("FINAL:", formattedLyrics);
 
     // split lyrics into array
+    const wordArray: string[] = formattedLyrics.split(" ");
 
     // initialize hash map
+    const hashMap: HashMap = {};
 
     // loop through lyrics
+    wordArray.forEach((word) => {
+      const formattedWord = word.toLocaleLowerCase();
+      // increment count if word exists
+      if (hashMap[formattedWord]) {
+        hashMap[formattedWord] += 1;
+        // add word to hashMap if it isn't in there already
+      } else {
+        hashMap[formattedWord] = 1;
+      }
+    });
+
+    // console.log(hashMap);
+
+    const flaggedWords: FlaggedWords = {};
+
+    // check hashMap for flagged words
+    testFlaggedWordsList.forEach((word) => {
+      const formattedWord = word.toLocaleLowerCase();
+
+      if (hashMap[formattedWord]) {
+        flaggedWords[formattedWord] = hashMap[formattedWord];
+      }
+    });
+
+    console.log(flaggedWords);
   }
 
   // run lyric analysis whenever user changes the song

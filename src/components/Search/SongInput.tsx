@@ -111,7 +111,7 @@ export default function SongInput(): React.JSX.Element {
         return a.title.localeCompare(b.title);
       });
 
-      console.log(artistSongs);
+      // console.log(artistSongs);
       setSongList(artistSongs);
     },
     [selectedArtist, fetchSongsPage],
@@ -141,7 +141,7 @@ export default function SongInput(): React.JSX.Element {
       let fullLyrics = "";
       lyricsElements.forEach((element) => {
         const lyricsHtml = element.innerHTML;
-        console.log(lyricsHtml);
+        // console.log(lyricsHtml);
         const formattedLyrics = lyricsHtml
           .replace(/<br\s*\/?>/gi, "\n") // Replace <br> tags with newlines
           .replace(/<\/a[^>]*>/gi, "") // Replace closing </a> tags
@@ -338,7 +338,8 @@ export default function SongInput(): React.JSX.Element {
 // TODO: Close btmSheet when analyze is complete
 // TODO: Make sure inputs clearing properly and/or poulating from state on load
 
-// TODO: Clear old songs immediately when new artist is selected
+// TODO: Clear old songs and selectedSong and songTitle input immediately when new artist is selected
+
 // TODO: Add loading states for LOTS of stuff
 
 // !TODO: OPTIMIZATIONS FOR API REQUESTS
