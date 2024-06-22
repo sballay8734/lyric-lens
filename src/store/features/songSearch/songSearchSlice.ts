@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-import { ArtistSimple } from "../../../types/api";
+import { ArtistSimple, SongFromApi } from "../../../types/api";
 
 // Define a type for the slice state
 interface SongSearchState {
@@ -9,7 +9,7 @@ interface SongSearchState {
   selectedArtist: ArtistSimple | null;
 
   songQuery: string;
-  selectedSong: string;
+  selectedSong: SongFromApi | null;
 
   lyrics: string;
 }
@@ -19,7 +19,7 @@ const initialState: SongSearchState = {
   artistQuery: "",
   selectedArtist: null,
   songQuery: "",
-  selectedSong: "",
+  selectedSong: null,
   lyrics: "",
 };
 
@@ -37,7 +37,7 @@ export const songSearchSlice = createSlice({
     setSongQuery: (state, action: PayloadAction<string>) => {
       state.songQuery = action.payload;
     },
-    setSelectedSong: (state, action: PayloadAction<string>) => {
+    setSelectedSong: (state, action: PayloadAction<SongFromApi>) => {
       state.selectedSong = action.payload;
     },
     setLyrics: (state, action: PayloadAction<string>) => {

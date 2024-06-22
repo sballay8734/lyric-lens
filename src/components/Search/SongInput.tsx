@@ -1,26 +1,33 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
 import { SongFromApi } from "../../types/api";
 
 import { FaCaretDown } from "react-icons/fa";
+import {
+  setLyrics,
+  setSelectedSong,
+} from "../../store/features/songSearch/songSearchSlice";
 
 const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 
 export default function SongInput(): React.JSX.Element {
+  const dispatch = useAppDispatch();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  // !TODO: Change this back to false for the default value vvvvvvvvvvvvvv
-  const [songDropdownShown, setSongDropdownShown] = useState<boolean>(true);
+
+  const [songDropdownShown, setSongDropdownShown] = useState<boolean>(false);
   const [songTitle, setSongTitle] = useState<string>("");
 
   const selectedArtist = useAppSelector(
     (state: RootState) => state.songSearch.selectedArtist,
   );
+  const selectedSong = useAppSelector(
+    (state: RootState) => state.songSearch.selectedSong,
+  );
 
   // !TODO: MOVE BELOW STATE TO REDUX
   const [songList, setSongList] = useState<SongFromApi[]>([]);
   // const [selectedSong, setSelectedSong] = useState<SongFromApi | null>(null);
-  // const [selectedLyrics, setSelectedLyrics] = useState<string | null>(null);
 
   // Fetch a single page of songs for an artist
   const fetchSongsPage = useCallback(async (artistId: number, page: number) => {
@@ -116,7 +123,9 @@ export default function SongInput(): React.JSX.Element {
     // 1. set song and update placeholder
     // 2. fetch lyrics from lyricsPath
     // 3. start analyzing BEFORE user clicks "analyze"
-    // console.log(song);
+    setSongTitle("");
+    dispatch(setSelectedSong(song));
+    setSongDropdownShown(false);
 
     const lyricsPath = song.url.replace("https://genius.com", "");
     const getLyricsQuery = `/proxy${lyricsPath}`;
@@ -132,15 +141,24 @@ export default function SongInput(): React.JSX.Element {
       let fullLyrics = "";
       lyricsElements.forEach((element) => {
         const lyricsHtml = element.innerHTML;
+        console.log(lyricsHtml);
         const formattedLyrics = lyricsHtml
           .replace(/<br\s*\/?>/gi, "\n") // Replace <br> tags with newlines
-          .replace(/<(?:.|\n)*?>/gm, ""); // Remove remaining HTML tags
-        fullLyrics += formattedLyrics.trim() + "\n\n"; // Add two newlines between sections
+          .replace(/<\/a[^>]*>/gi, "") // Replace closing </a> tags
+          .replace(/<\/b[^>]*>/gi, " ") // Replace closing </b> tags
+          .replace(/<a[^>]*>/gi, "") // Replace opening <a> tags
+          .replace(/<\/?[^>]+(>|$)/g, ""); // Replace all remaining tags
+        // .replace(/<\/\w+[^>]*>/g, " ") // Replace remaing closing tags
+        // .replace(/\s*\n\s*/g, "\n") // Trim spaces around newlines
+        // .replace(/<\w+[^>]*>/g, "") // Replace opening tags with space
+        // .trim(); // Remove leading and trailing whitespace
+        fullLyrics += formattedLyrics + "\n\n"; // Add two newlines between sections
       });
 
-      console.log(fullLyrics.trim());
-      // You can now use fullLyrics as needed (e.g., set it to state, display it, etc.)
+      // console.log(fullLyrics);
+      dispatch(setLyrics(fullLyrics));
     } else {
+      // mTODO: Handle errors here (when RTK Query is added)
       console.log("Lyrics not found");
     }
   }
@@ -212,8 +230,14 @@ export default function SongInput(): React.JSX.Element {
         <input
           disabled={selectedArtist === null}
           type="text"
-          className="grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50 disabled:group:pointer-events-none"
-          placeholder="Song Title"
+          className={`grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50 disabled:group:pointer-events-none ${
+            selectedSong?.title
+              ? "placeholder:text-white placeholder:font-bold"
+              : "placeholder:text-neutral-content/50"
+          }`}
+          placeholder={
+            selectedSong?.title ? `"${selectedSong.title}"` : "Song Title"
+          }
           maxLength={100}
           onChange={(e) => setSongTitle(e.target.value)}
           onClick={() => {
@@ -222,6 +246,7 @@ export default function SongInput(): React.JSX.Element {
               setSongDropdownShown(true);
             }
           }}
+          value={songTitle}
         />
         <button
           className="pl-3 py-1 rounded-r-sm border-l-2 border-primary/50 text-primary/50 group hover:text-primary hover:border-primary transition-colors duration-200"
@@ -306,16 +331,14 @@ export default function SongInput(): React.JSX.Element {
 }
 
 // ************************** TODO FOR SATURDAY ***************************
-// !TODO: NOT ALL THE LYRICS ARE LOGGING (only like half or 2/3 of them)
+// mTODO: Lyrics aren't quite formatting properly due to inconsitencies of the html markup so you might have to get creative eventually but for now it's not an issue at all
 
+// TODO: Song title input should not be enabled until the song list is available
 // TODO: Fix weird padding thing when artist dropdown is loading
-// TODO: Close song title dropdown on song select (and start analysis)
 // TODO: Close btmSheet when analyze is complete
 // TODO: Make sure inputs clearing properly and/or poulating from state on load
-// TODO: Add selected artist somewhere so user knows one is still selected
 
-// TODO: Clear old artist and old songs immediately when new artist is selected
-// TODO: Get redux setup to handle song lyrics
+// TODO: Clear old songs immediately when new artist is selected
 // TODO: Add loading states for LOTS of stuff
 
 // !TODO: OPTIMIZATIONS FOR API REQUESTS

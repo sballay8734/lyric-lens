@@ -1,11 +1,11 @@
+import Graph from "../components/Graph";
+
 export default function Home(): React.JSX.Element {
   return (
     <>
       <div className="flex flex-col justify-between h-full my-4 gap-2 w-full">
         {/* GRAPH */}
-        <div className="MainGraph flex flex-col justify-center w-full h-full rounded-md bg-base-100 items-center border-[1px] border-transparent group hover:bg-secondary/30 hover:border-secondary/80 transition-colors duration-200">
-          <span>Main Graph</span>
-        </div>
+        <Graph />
       </div>
     </>
   );

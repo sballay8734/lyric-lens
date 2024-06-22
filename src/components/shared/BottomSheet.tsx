@@ -12,6 +12,7 @@ export default function BottomSheet(): React.JSX.Element {
   const sheetIsVis = useAppSelector(
     (state: RootState) => state.btmSheet.sheetIsVis,
   );
+  // const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
 
   return (
     <dialog open={sheetIsVis} className={`modal modal-bottom`}>
