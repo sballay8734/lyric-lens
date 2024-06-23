@@ -401,7 +401,7 @@ export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
 
 // TODO: Clicking root node (middle circle) should do SOMETHING
 
-// TODO: flagged words that aren't in song should be pushed to edge of screen and faded out.
+// TODO: flagged words that aren't in song should be pushed to edge of screen, faded out, and all made the same size
 
 // TODO: Deal with the "any" types in the code above
 
