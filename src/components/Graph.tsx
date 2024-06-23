@@ -399,6 +399,8 @@ export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
 
 // TODO: Find a good way to display clean/not-clean status (maybe blurred border around the entire page)
 
+// TODO: Clicking root node (middle circle) should do SOMETHING
+
 // TODO: flagged words that aren't in song should be pushed to edge of screen and faded out.
 
 // TODO: Deal with the "any" types in the code above
