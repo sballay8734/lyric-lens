@@ -95,7 +95,7 @@ export default function Graph(): React.JSX.Element {
   }, [lyrics]);
 
   return (
-    <div className="MainGraph flex flex-col justify-center w-full h-full bg-base-300 items-center group transition-colors duration-200">
+    <div className="MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200">
       {/* <span>
         {flaggedWords ? formatResponse() : "You need to choose a song"}
       </span> */}
@@ -141,7 +141,7 @@ export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
         "link",
         d3.forceLink(links).id((d) => (d as GraphNode | RootNode).id),
       )
-      .force("charge", d3.forceManyBody().strength(-500))
+      .force("charge", d3.forceManyBody().strength(-700))
       .force("center", d3.forceCenter(centerX, centerY))
       .force(
         "collision",
@@ -185,19 +185,19 @@ export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
           : color((d as GraphNode).category?.[0] || ""),
       )
       .attr("stroke", "#fff")
-      .attr("stroke-width", 1.5);
+      .attr("stroke-width", 0.5);
 
     const nodeGroup = svg.append("g").selectAll("g").data(nodes).join("g");
 
-    const text = nodeGroup
+    nodeGroup
       .append("text")
-      .text((d) => (d as GraphNode).word || "Center")
+      .text((d) => (d as GraphNode).word || "")
       .attr("text-anchor", "middle")
       .attr("dy", ".35em")
       .attr("font-size", (d) => `${(d as GraphNode | RootNode).radius / 3}px`)
       .attr("fill", "black");
 
-    node.append("title").text((d) => (d as GraphNode).word || "Center");
+    node.append("title").text((d) => (d as GraphNode).word || "");
 
     // REVIEW: Used "!" here vv I don't see how x or y would ever be undefined
     simulation.on("tick", () => {
@@ -396,6 +396,10 @@ export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
 // TODO: Actually use user flagged list and song lyrics to render nodes (you're just using mock data now)
 
 // TODO: Add label to top of screen that shows current song and artist
+
+// TODO: Find a good way to display clean/not-clean status (maybe blurred border around the entire page)
+
+// TODO: flagged words that aren't in song should be pushed to edge of screen and faded out.
 
 // TODO: Deal with the "any" types in the code above
 

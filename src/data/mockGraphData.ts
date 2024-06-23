@@ -58,7 +58,7 @@ export const mockGraphData: { nodes: GraphNode[]; centerNode: RootNode } = {
     wordCount: null, // might be able to make this equal to total curse words
     vulgarityLvl: null,
     category: null,
-    radius: 20, // should get bigger with more curse words
+    radius: 45, // should get bigger with more curse words
 
     // vvv Or whereever the center is for fx and fy vvv
     fx: centerX,
