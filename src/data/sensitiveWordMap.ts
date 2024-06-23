@@ -1,7 +1,11 @@
-type SensitiveWordCategory = "racial" | "sexual" | "religious" | "general";
-type VulgarityLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+export type SensitiveWordCategory =
+  | "racial"
+  | "sexual"
+  | "religious"
+  | "general";
+export type VulgarityLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
-interface SensitiveWordsMap {
+export interface SensitiveWordsMap {
   [word: string]: {
     vulgarityLvl: VulgarityLevel;
     category: SensitiveWordCategory[];
@@ -67,3 +71,23 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
   sucker: { vulgarityLvl: 2, category: ["general"] },
   sucking: { vulgarityLvl: 3, category: ["sexual"] },
 };
+
+export const testFlaggedWordsList = [
+  "GOd",
+  "sex",
+  "fuCk",
+  "kiLl",
+  "nigga",
+  "niggas",
+  "bitch",
+  "bitches",
+  "ass",
+  "motherfuck",
+  "motherfucker",
+  "pussy",
+  "shit",
+  "shitll",
+  "jesus",
+  "christ",
+  "hell",
+];
