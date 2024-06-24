@@ -217,5 +217,3 @@ export default function ArtistInput(): React.JSX.Element {
     </div>
   );
 }
-
-// !TODO: Add loading spinner to show when query request is loading which will also fix slight visual bug where padding is added to ul while the first fetch request is happening

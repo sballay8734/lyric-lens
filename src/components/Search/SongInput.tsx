@@ -354,25 +354,6 @@ export default function SongInput(): React.JSX.Element {
   );
 }
 
-// ************************** TODO FOR SATURDAY ***************************
-// mTODO: Lyrics aren't quite formatting properly due to inconsitencies of the html markup so you might have to get creative eventually but for now it's not an issue at all
-
-// TODO: Song title input should not be enabled until the song list is available
-// TODO: Fix weird padding thing when artist dropdown is loading
-// TODO: Close btmSheet when analyze is complete
-// TODO: Make sure inputs clearing properly and/or poulating from state on load
-
-// TODO: Clear old songs and selectedSong and songTitle input immediately when new artist is selected
-
-// TODO: Add loading states for LOTS of stuff
-
-// !TODO: OPTIMIZATIONS FOR API REQUESTS
-
-// ^^^^^^^^^^^^^^^^^^^^^ SATURDAY ^^^^^^^^^^^^^^^^^^^^^^^^
-
-// TODO: maybe provide 50 or so songs quickly so the dropdown can be used or show Loading songs... on song title input or something (idk)
-
-// REMEMBER: Your internet at home is terribly slow and 35 pages works okay
 // SONG PAGES REFERENCE ******************************************************
 // Michael Jackson = 34.52 pages            <---------  MOST
 // Drake = 31.22 pages                  <---------  2nd MOST

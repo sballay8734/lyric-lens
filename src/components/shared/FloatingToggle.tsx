@@ -11,7 +11,6 @@ export default function FloatingToggle(): React.JSX.Element {
     (state: RootState) => state.btmSheet.sheetIsVis,
   );
 
-  // TODO: Make this a pretty gradient background
   return (
     <button
       onClick={() => dispatch(showBtmSheet())}

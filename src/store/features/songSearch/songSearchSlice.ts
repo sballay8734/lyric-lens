@@ -82,5 +82,3 @@ export const {
 } = songSearchSlice.actions;
 
 export default songSearchSlice.reducer;
-
-// TODO: You will probably need to track if the current lyric has already been analyzed or not. This will make it easier to handle certain state related to the UI in the btmSheet

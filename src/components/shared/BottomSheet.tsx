@@ -97,11 +97,3 @@ export default function BottomSheet(): React.JSX.Element {
     </dialog>
   );
 }
-
-// !TODO: Song analysis should TECHNICALLY start as soon as the song title is selected (BUT don't show loading spinner until user has clicked analyze - this will give the illusion that it's faster than it is)
-
-// !TODO: Add toggle to switch between song search and word selection
-
-// TODO: Need to somehow communicate that searching only for lyrics is possible or searching for artist and lyrics is possible but that artist and song title will automatically close the modal when the song is selected or when click "analize"
-
-// !TODO: Closing modal should still preserve state (in case user accidentally closes modal it would suck if everything was gone especially if they typed in a lot of lyrics)
