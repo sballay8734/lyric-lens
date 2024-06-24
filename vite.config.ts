@@ -1,12 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import dns from "dns";
+import eslint from "vite-plugin-eslint";
+// import dns from "dns";
 
-dns.setDefaultResultOrder("verbatim");
+// dns.setDefaultResultOrder("verbatim");
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [eslint(), react()],
   server: {
     proxy: {
       "/proxy": {
@@ -22,3 +23,5 @@ export default defineConfig({
     },
   },
 });
+
+// !TODO: ESLint not working

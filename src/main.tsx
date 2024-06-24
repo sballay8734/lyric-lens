@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import TestRoute from "./routes/TestRoute.tsx";
 import Home from "./routes/Home.tsx";
 import App from "./App.tsx";
 import { store } from "./store/store.ts";
 import { Provider } from "react-redux";
+import ManageFlags from "./routes/ManageFlags.tsx";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/test",
-        element: <TestRoute />,
+        element: <ManageFlags />,
       },
     ],
   },
