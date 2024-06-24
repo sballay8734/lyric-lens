@@ -28,6 +28,7 @@ a:hover {
 html {
   width: 100%;
   height: 100svh;
+  /* overflow: hidden; */
 }
 
 body {
@@ -36,6 +37,7 @@ body {
   place-items: center;
   min-width: 320px;
   width: 100%;
+  /* overflow: hidden; */
 }
 
 @media (prefers-color-scheme: light) {

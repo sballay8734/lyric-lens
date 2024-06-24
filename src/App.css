@@ -3,5 +3,6 @@
   margin: 0;
   text-align: center;
   background-color: oklch(var(--b3));
-  overflow: hidden;
+  overflow: auto;
+  height: 100svh;
 }

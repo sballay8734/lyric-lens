@@ -9,8 +9,8 @@ const routes = [
     new: false,
   },
   {
-    url: "/test",
-    text: "Test Route",
+    url: "/manage-flags",
+    text: "Manage Flags",
     new: false,
   },
 ];

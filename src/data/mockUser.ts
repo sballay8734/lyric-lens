@@ -4,7 +4,7 @@ export const mockUser: User = {
   id: "U00001",
   presets: [
     {
-      presetId: "PRE001",
+      id: "PRE001",
       presetName: "Teenager Filter",
       flaggedWords: {
         SW001: "nigger",
@@ -17,7 +17,7 @@ export const mockUser: User = {
       },
     },
     {
-      presetId: "PRE002",
+      id: "PRE002",
       presetName: "5-Year-Old Filter",
       flaggedWords: {
         SW001: "nigger",

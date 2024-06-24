@@ -46,7 +46,10 @@ export default function BottomSheet(): React.JSX.Element {
   }
 
   return (
-    <dialog open={sheetIsVis} className={`modal modal-bottom`}>
+    <dialog
+      open={sheetIsVis}
+      className={`modal modal-bottom ${sheetIsVis ? "visible" : "invisible"}`}
+    >
       {/* MODAL CONTENT */}
       <div className="modal-box h-full bg-base-100 flex flex-col gap-2 pt-3">
         {/* Sheet header */}

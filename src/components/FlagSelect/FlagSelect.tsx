@@ -1,9 +1,10 @@
-import { SensitiveWordsMap } from "../../data/sensitiveWordMap";
+import { sensitiveWordsMap } from "../../data/sensitiveWordMap";
+import WordToggleBtn from "./WordToggleBtn";
 
 type Word = string;
 
 type Preset = {
-  presetId: string;
+  id: string;
   presetName: string;
   flaggedWords: {
     [wordId: string]: Word;
@@ -15,8 +16,33 @@ export interface User {
   presets: Preset[];
 }
 
-export default function FlagSelect(user: User): React.JSX.Element {
-  return <div></div>;
+interface Props {
+  user: User | null;
+}
+
+const testPresetId = "PRE001";
+
+export default function FlagSelect({ user }: Props): React.JSX.Element {
+  // render all words
+  return (
+    <div className="h-full pb-20">
+      <div className="flex flex-wrap gap-2 items-center justify-center">
+        {Object.entries(sensitiveWordsMap).map(([word, data]) => {
+          const activePreset = user?.presets.find(
+            (preset) => preset.id === testPresetId,
+          );
+          return (
+            <WordToggleBtn
+              key={data.id}
+              word={word}
+              data={data}
+              isActive={!!activePreset?.flaggedWords[data.id]}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 // mTODO: This can be optimized but for now this is fine
