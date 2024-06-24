@@ -15,9 +15,7 @@ export interface User {
   presets: Preset[];
 }
 
-type Props = User;
-
-export default function FlagSelect({ user }: Props): React.JSX.Element {
+export default function FlagSelect(user: User): React.JSX.Element {
   return <div></div>;
 }
 
