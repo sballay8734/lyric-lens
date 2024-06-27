@@ -6,9 +6,11 @@ import {
   VulgarityLevel,
 } from "../../../data/sensitiveWordMap";
 
-export type Word = {
+export type WordObject = {
   [word: string]: {
     id: string;
+    word: string;
+    occurances: number;
     vulgarityLvl: VulgarityLevel;
     category: SensitiveWordCategory[];
     family: string;
@@ -16,56 +18,38 @@ export type Word = {
   };
 };
 
-type WordOccurance = {
-  [word: string]: number;
-};
-
 interface FlagManagerState {
-  flaggedWords: Word[];
-  flaggedWordOccurance: WordOccurance;
+  flaggedWords: WordObject;
 }
 
 const initialState: FlagManagerState = {
-  flaggedWords: [],
-  flaggedWordOccurance: {},
+  flaggedWords: {},
 };
 
 export const flagManagerSlice = createSlice({
   name: "flagManager",
   initialState,
   reducers: {
-    addFlaggedWord: (state, action: PayloadAction<Word>) => {
+    addFlaggedWord: (state, action: PayloadAction<WordObject>) => {
       const wordToAdd = action.payload;
-      state.flaggedWords.push(wordToAdd);
-    },
-    removeFlaggedWord: (state, action: PayloadAction<Word>) => {
-      const wordToRemoveFamily = action.payload.family;
+      const [[word, wordData]] = Object.entries(wordToAdd);
 
-      // remove word and all related words
-      const updatedWords = state.flaggedWords.filter(
-        (word) => word.family !== wordToRemoveFamily,
-      );
+      if (state.flaggedWords[word]) return;
+      state.flaggedWords[word] = wordData;
+    },
 
-      state.flaggedWords = updatedWords;
-    },
-    addFlaggedWordOccurance: (state, action: PayloadAction<string>) => {
-      state.flaggedWordOccurance[action.payload] = 1;
-    },
-    incrementOccuranceCount: (state, action: PayloadAction<string>) => {
-      state.flaggedWordOccurance[action.payload] += 1;
-    },
-    clearFlaggedWords: (state) => {
-      state.flaggedWordOccurance = {};
+    // removeFlaggedWord
+    setOccurances: (
+      state,
+      action: PayloadAction<{ word: string; occurances: number }>,
+    ) => {
+      const { word, occurances } = action.payload;
+
+      state.flaggedWords[word].occurances = occurances;
     },
   },
 });
 
-export const {
-  addFlaggedWord,
-  removeFlaggedWord,
-  addFlaggedWordOccurance,
-  incrementOccuranceCount,
-  clearFlaggedWords,
-} = flagManagerSlice.actions;
+export const { addFlaggedWord, setOccurances } = flagManagerSlice.actions;
 
 export default flagManagerSlice.reducer;

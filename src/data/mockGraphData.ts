@@ -8,7 +8,7 @@ import {
 export type GraphNode = SimulationNodeDatum & {
   id: string;
   word: string;
-  wordCount: number; // if wordCount === 0 don't connect to center
+  occurances: number; // if occurances === 0 don't connect to center
   vulgarityLvl: VulgarityLevel;
   category: SensitiveWordCategory[];
   radius: number;
@@ -17,7 +17,7 @@ export type GraphNode = SimulationNodeDatum & {
 export type RootNode = SimulationNodeDatum & {
   id: string;
   word: null;
-  wordCount: null;
+  occurances: null;
   vulgarityLvl: null;
   category: null;
   radius: number;
@@ -42,7 +42,7 @@ export const mockNodes: GraphNode[] = Object.keys(sensitiveWordsMap).map(
     return {
       id: flaggedWord,
       word: flaggedWord,
-      wordCount: mockWordCount,
+      occurances: mockWordCount,
       vulgarityLvl: sensitiveWordsMap[flaggedWord].vulgarityLvl,
       category: sensitiveWordsMap[flaggedWord].category,
       radius: mockWordCount / 1.4,
@@ -55,7 +55,7 @@ export const mockGraphData: { nodes: GraphNode[]; centerNode: RootNode } = {
   centerNode: {
     id: "root",
     word: null,
-    wordCount: null, // might be able to make this equal to total curse words
+    occurances: null, // might be able to make this equal to total curse words
     vulgarityLvl: null,
     category: null,
     radius: 45, // should get bigger with more curse words
@@ -65,3 +65,7 @@ export const mockGraphData: { nodes: GraphNode[]; centerNode: RootNode } = {
     fy: centerY,
   },
 };
+
+// usersProfile OR default flagged words
+
+// just use one object and set all word occurances to 0 when new lyrics

@@ -10,12 +10,12 @@ import {
   RootNode,
   mockGraphData,
 } from "../data/mockGraphData";
-import {
-  addFlaggedWordOccurance,
-  incrementOccuranceCount,
-} from "../store/features/flagManager/flagManagerSlice";
 
 import { mockUser } from "../data/mockUser";
+import {
+  incrementOccurances,
+  setOccurances,
+} from "../store/features/flagManager/flagManagerSlice";
 
 const mockUsersProf = mockUser;
 const profileId = "39282";
@@ -27,26 +27,20 @@ export default function Graph(): React.JSX.Element {
   const flaggedWords = useAppSelector(
     (state: RootState) => state.flagManager.flaggedWords,
   );
-  const flaggedWordOccurance = useAppSelector(
-    (state: RootState) => state.flagManager.flaggedWordOccurance,
-  );
 
   const [nodes, setNodes] = useState<GraphNode[]>();
 
   function analyzeLyrics() {
     if (!lyrics) return null;
 
-    // REMOVE: Just for testing
-    const presetWords = mockUsersProf.presets[0].flaggedWords;
-
     const formattedLyrics = lyrics
       .replace(/\[.*?\]/g, "") // removes [Verse 2: ... ] [Chorus: ... ]
       .replace(/\n/g, " ") // replace newlines
-      .replace(/[?!.,'"]/g, "") // replace punctuation (? ! . , ')
+      .replace(/[?!.,'")()]/g, "") // replace punctuation (? ! . , ')
       .replace(/ {2,}/g, " ") // replace 2 or more consecutive spaces
       .trim();
 
-    // console.log("FINAL:", formattedLyrics);
+    console.log("FINAL:", formattedLyrics);
 
     // split lyrics into array
     const wordArray: string[] = formattedLyrics.split(" ");
@@ -65,37 +59,21 @@ export default function Graph(): React.JSX.Element {
         hashMap[formattedWord] = 1;
       }
     });
+    console.log(hashMap);
 
-    // check hashMap for flagged words
-    Object.keys(presetWords).forEach((word) => {
-      const formattedWord = word.toLowerCase();
+    // check users flagged words against lyrics hashMap
+    Object.keys(flaggedWords).forEach((word) => {
+      // if word is NOT in song just skip
+      if (!hashMap[word]) return null;
 
-      // if flagged word is in song && !in flaggedWordOccurance
-      if (hashMap[formattedWord] && !flaggedWordOccurance[word]) {
-        dispatch(addFlaggedWordOccurance(word));
-      } else if (hashMap[formattedWord] && flaggedWordOccurance[word]) {
-        dispatch(incrementOccuranceCount(word));
-      }
+      dispatch(setOccurances({ word: word, occurances: hashMap[word] }));
     });
   }
 
   // run lyric analysis whenever user changes the song
   useEffect(() => {
-    // set usersFlaggedWords to current profile
-    console.log("Running");
-
     analyzeLyrics();
-  }, [lyrics, profileId]);
-
-  // format nodes
-  useEffect(() => {
-    let nodeArray = Object.entries(flaggedWords).map(([word, data]) => {
-      // if word isn't in flaggedWordOccurance, do nothing
-      if (!flaggedWordOccurance[word]) return;
-
-      // otherwise, create a node
-    });
-  }, []);
+  }, [lyrics, analyzeLyrics]);
 
   return (
     <div className="MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200">
