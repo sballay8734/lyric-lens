@@ -6,7 +6,7 @@ import {
   VulgarityLevel,
 } from "../../../data/sensitiveWordMap";
 
-export type WordObject = {
+export type FlaggedWordsObject = {
   [word: string]: {
     id: string;
     word: string;
@@ -19,7 +19,7 @@ export type WordObject = {
 };
 
 interface FlagManagerState {
-  flaggedWords: WordObject;
+  flaggedWords: FlaggedWordsObject;
 }
 
 const initialState: FlagManagerState = {
@@ -30,7 +30,7 @@ export const flagManagerSlice = createSlice({
   name: "flagManager",
   initialState,
   reducers: {
-    addFlaggedWord: (state, action: PayloadAction<WordObject>) => {
+    addFlaggedWord: (state, action: PayloadAction<FlaggedWordsObject>) => {
       const wordToAdd = action.payload;
       const [[word, wordData]] = Object.entries(wordToAdd);
 

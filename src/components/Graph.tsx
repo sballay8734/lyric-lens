@@ -1,24 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { RootState } from "../store/store";
 import * as d3 from "d3";
 
 import { HashMap } from "../types/graph";
-import {
-  GraphDataType,
-  GraphNode,
-  RootNode,
-  mockGraphData,
-} from "../data/mockGraphData";
+import { GraphNode, RootNode } from "../data/mockGraphData";
 
-import { mockUser } from "../data/mockUser";
 import {
-  incrementOccurances,
+  FlaggedWordsObject,
   setOccurances,
 } from "../store/features/flagManager/flagManagerSlice";
-
-const mockUsersProf = mockUser;
-const profileId = "39282";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
@@ -27,8 +18,6 @@ export default function Graph(): React.JSX.Element {
   const flaggedWords = useAppSelector(
     (state: RootState) => state.flagManager.flaggedWords,
   );
-
-  const [nodes, setNodes] = useState<GraphNode[]>();
 
   function analyzeLyrics() {
     if (!lyrics) return null;
@@ -63,8 +52,11 @@ export default function Graph(): React.JSX.Element {
 
     // check users flagged words against lyrics hashMap
     Object.keys(flaggedWords).forEach((word) => {
-      // if word is NOT in song just skip
-      if (!hashMap[word]) return null;
+      // if word is NOT in song, reset occurances
+      if (!hashMap[word]) {
+        dispatch(setOccurances({ word: word, occurances: 0 }));
+        return null;
+      }
 
       dispatch(setOccurances({ word: word, occurances: hashMap[word] }));
     });
@@ -81,7 +73,7 @@ export default function Graph(): React.JSX.Element {
         {flaggedWords ? formatResponse() : "You need to choose a song"}
       </span> */}
       {flaggedWords ? (
-        <ForceDirectedGraph data={mockGraphData} />
+        <ForceDirectedGraph lyrics={lyrics} flaggedWords={flaggedWords} />
       ) : (
         "You need to choose a song"
       )}
@@ -96,26 +88,57 @@ export default function Graph(): React.JSX.Element {
 
 // RESOURCE FOR ABOVE - https://d3js.org/getting-started#d3-in-react
 
-export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
-  data,
-}) => {
+export const ForceDirectedGraph: React.FC<{
+  lyrics: string | null;
+  flaggedWords: FlaggedWordsObject;
+}> = ({ lyrics, flaggedWords }) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
 
   useEffect(() => {
-    if (!data || !svgRef.current) return () => {};
+    if (!flaggedWords || !svgRef.current) return () => {};
 
     const width = window.innerWidth;
     const height = window.innerHeight;
     const centerX = width / 2;
     const centerY = height / 2;
 
+    const formattedNodes: GraphNode[] = Object.keys(flaggedWords).map((w) => {
+      const { id, word, occurances, vulgarityLvl, category } = flaggedWords[w];
+      return {
+        id,
+        word,
+        occurances,
+        vulgarityLvl,
+        category,
+        radius: 20 + occurances * 2,
+      };
+    });
+
+    const centerNode: RootNode = {
+      id: "root",
+      word: null,
+      occurances: null,
+      vulgarityLvl: null,
+      category: null,
+      radius: 45, // should get bigger with more curse words
+
+      fx: centerX,
+      fy: centerY,
+    };
+
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    const nodes = [data.centerNode, ...data.nodes];
-    const links = data.nodes
-      .filter((node) => node.wordCount > 0)
-      .map((node) => ({ source: data.centerNode, target: node }));
+    const nodes = [centerNode, ...formattedNodes];
+    const links = formattedNodes
+      .filter((node) => node.occurances > 0)
+      .map((node) => ({ source: centerNode, target: node }));
+
+    // Create a set of connected node IDs
+    const connectedNodeIds = new Set<string>();
+    links.forEach((link) => {
+      connectedNodeIds.add((link.source as GraphNode | RootNode).id);
+      connectedNodeIds.add((link.target as GraphNode | RootNode).id);
+    });
 
     const simulation = d3
       .forceSimulation(nodes)
@@ -133,18 +156,22 @@ export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
         "x",
         d3
           .forceX(centerX)
-          .strength((d) => ((d as GraphNode).wordCount > 0 ? 0.1 : 0.01)),
+          .strength((d) => ((d as GraphNode).occurances > 0 ? 0.1 : 0.01)),
       )
       .force(
         "y",
         d3
           .forceY(centerY)
-          .strength((d) => ((d as GraphNode).wordCount > 0 ? 0.1 : 0.01)),
+          .strength((d) => ((d as GraphNode).occurances > 0 ? 0.1 : 0.01)),
       );
 
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove(); // Clear previous content
-    svg.attr("viewBox", [0, 0, width, height]);
+    svg
+      .attr("viewBox", [0, 0, width, height])
+      .attr("width", width)
+      .attr("height", height)
+      .attr("style", "max-width: 100%; height: auto;");
 
     const link = svg
       .append("g")
@@ -160,20 +187,31 @@ export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
       .selectAll("circle")
       .data(nodes)
       .join("circle")
-      .attr("r", (d) => (d as GraphNode | RootNode).radius)
+      .attr("r", (d) =>
+        connectedNodeIds.has((d as GraphNode | RootNode).id)
+          ? (d as GraphNode | RootNode).radius
+          : (d as GraphNode | RootNode).radius * 0.7,
+      )
       .attr("fill", (d) =>
-        (d as GraphNode | RootNode).id === "center"
-          ? "#ccc"
-          : color((d as GraphNode).category?.[0] || ""),
+        connectedNodeIds.has((d as GraphNode | RootNode).id)
+          ? color((d as GraphNode).category?.[0] || "")
+          : "#ccc",
       )
       .attr("stroke", "#fff")
-      .attr("stroke-width", 0.5);
+      .attr("stroke-width", 0.5)
+      .attr("opacity", (d) =>
+        connectedNodeIds.has((d as GraphNode | RootNode).id) ? 1 : 0.5,
+      );
 
     const nodeGroup = svg.append("g").selectAll("g").data(nodes).join("g");
 
     nodeGroup
       .append("text")
-      .text((d) => (d as GraphNode).word || "")
+      .text((d) =>
+        (d as GraphNode).occurances === 0
+          ? d.word
+          : `${d.word} (${d.occurances})` || "",
+      )
       .attr("text-anchor", "middle")
       .attr("dy", ".35em")
       .attr("font-size", (d) => `${(d as GraphNode | RootNode).radius / 3}px`)
@@ -181,7 +219,6 @@ export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
 
     node.append("title").text((d) => (d as GraphNode).word || "");
 
-    // REVIEW: Used "!" here vv I don't see how x or y would ever be undefined
     simulation.on("tick", () => {
       link
         .attr("x1", (d) => (d.source as any).x)
@@ -189,7 +226,20 @@ export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
         .attr("x2", (d) => (d.target as any).x)
         .attr("y2", (d) => (d.target as any).y);
 
-      node.attr("cx", (d) => (d as any).x).attr("cy", (d) => (d as any).y);
+      node
+        .attr("cx", (d) => {
+          const r = (d as GraphNode | RootNode).radius;
+          const padding = -10; // Adjust the padding value as needed
+          d.x = Math.max(r + padding, Math.min(width - r - padding, d.x!));
+          return d.x!;
+        })
+        .attr("cy", (d) => {
+          const r = (d as GraphNode | RootNode).radius;
+          const padding = 20; // Adjust the padding value as needed
+          d.y = Math.max(r + padding, Math.min(height - r - padding, d.y!));
+          return d.y!;
+        });
+
       nodeGroup.attr(
         "transform",
         (d) => `translate(${(d as any).x},${(d as any).y})`,
@@ -200,7 +250,7 @@ export const ForceDirectedGraph: React.FC<{ data: GraphDataType }> = ({
       simulation.stop();
       svg.selectAll("*").remove(); // Clean up on unmount
     };
-  }, [data, lyrics]);
+  }, [flaggedWords, lyrics]);
 
   return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
 };
