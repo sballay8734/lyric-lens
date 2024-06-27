@@ -11,9 +11,12 @@ import {
   setSelectedArtist,
   setSelectedSong,
 } from "../../store/features/songSearch/songSearchSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function BottomSheet(): React.JSX.Element {
   const dispatch = useDispatch();
+  let location = useLocation();
+  const navigate = useNavigate();
 
   const sheetIsVis = useAppSelector(
     (state: RootState) => state.btmSheet.sheetIsVis,
@@ -34,6 +37,11 @@ export default function BottomSheet(): React.JSX.Element {
     } else {
       // close dropdown
       dispatch(hideBtmSheet());
+
+      // if not on home page, navigate there
+      if (location.pathname !== "/") {
+        navigate("/");
+      }
     }
   }
 

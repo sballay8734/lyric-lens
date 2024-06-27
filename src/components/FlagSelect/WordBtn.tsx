@@ -21,7 +21,7 @@ export default function WordBtn({
 }: Props): React.JSX.Element {
   const [active, setActive] = useState<boolean>(isActive);
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <button

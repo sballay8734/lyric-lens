@@ -7,8 +7,7 @@ import {
   setSelectedArtist,
   setSelectedSong,
 } from "../../store/features/songSearch/songSearchSlice";
-import { ArtistHit } from "../../types/api";
-import { ArtistSimple } from "../../types/api";
+import { ArtistHit, ArtistSimple } from "../../types/api";
 import { RootState } from "../../store/store";
 
 export default function ArtistInput(): React.JSX.Element {

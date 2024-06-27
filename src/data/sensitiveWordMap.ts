@@ -314,6 +314,173 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "suck",
     isRootWord: false,
   },
+
+  // "bitch" & variations (Baseline 6) *********************************
+  bitch: {
+    id: "SW041",
+    vulgarityLvl: 7,
+    category: ["general", "sexual"],
+    family: "bitch",
+    isRootWord: true,
+  },
+  bitches: {
+    id: "SW042",
+    vulgarityLvl: 7,
+    category: ["general", "sexual"],
+    family: "bitch",
+    isRootWord: false,
+  },
+  bitchin: {
+    id: "SW043",
+    vulgarityLvl: 6,
+    category: ["general"],
+    family: "bitch",
+    isRootWord: false,
+  },
+
+  // "whore" & variations (Baseline 8) *********************************
+  whore: {
+    id: "SW044",
+    vulgarityLvl: 8,
+    category: ["sexual"],
+    family: "whore",
+    isRootWord: true,
+  },
+  whores: {
+    id: "SW045",
+    vulgarityLvl: 8,
+    category: ["sexual"],
+    family: "whore",
+    isRootWord: false,
+  },
+
+  // "dick" & variations (Baseline 6) *********************************
+  dick: {
+    id: "SW046",
+    vulgarityLvl: 6,
+    category: ["sexual"],
+    family: "dick",
+    isRootWord: true,
+  },
+  dicks: {
+    id: "SW047",
+    vulgarityLvl: 6,
+    category: ["sexual"],
+    family: "dick",
+    isRootWord: false,
+  },
+
+  // "pussy" & variations (Baseline 7) *********************************
+  pussy: {
+    id: "SW048",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "pussy",
+    isRootWord: true,
+  },
+  pussies: {
+    id: "SW049",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "pussy",
+    isRootWord: false,
+  },
+
+  // "damn" & variations (Baseline 3) *********************************
+  damn: {
+    id: "SW050",
+    vulgarityLvl: 3,
+    category: ["general"],
+    family: "damn",
+    isRootWord: true,
+  },
+  damned: {
+    id: "SW051",
+    vulgarityLvl: 3,
+    category: ["general"],
+    family: "damn",
+    isRootWord: false,
+  },
+
+  // "hell" & variations (Baseline 2) *********************************
+  hell: {
+    id: "SW052",
+    vulgarityLvl: 2,
+    category: ["general"],
+    family: "hell",
+    isRootWord: true,
+  },
+  hellish: {
+    id: "SW053",
+    vulgarityLvl: 2,
+    category: ["general"],
+    family: "hell",
+    isRootWord: false,
+  },
+
+  // "bastard" & variations (Baseline 5) *********************************
+  bastard: {
+    id: "SW054",
+    vulgarityLvl: 5,
+    category: ["general"],
+    family: "bastard",
+    isRootWord: true,
+  },
+  bastards: {
+    id: "SW055",
+    vulgarityLvl: 5,
+    category: ["general"],
+    family: "bastard",
+    isRootWord: false,
+  },
+
+  // "crap" & variations (Baseline 1) *********************************
+  crap: {
+    id: "SW056",
+    vulgarityLvl: 1,
+    category: ["general"],
+    family: "crap",
+    isRootWord: true,
+  },
+  crappy: {
+    id: "SW057",
+    vulgarityLvl: 1,
+    category: ["general"],
+    family: "crap",
+    isRootWord: false,
+  },
+
+  // "slut" & variations (Baseline 8) *********************************
+  slut: {
+    id: "SW058",
+    vulgarityLvl: 8,
+    category: ["sexual"],
+    family: "slut",
+    isRootWord: true,
+  },
+  sluts: {
+    id: "SW059",
+    vulgarityLvl: 8,
+    category: ["sexual"],
+    family: "slut",
+    isRootWord: false,
+  },
+
+  // "piss" & variations (Baseline 3) *********************************
+  piss: {
+    id: "SW060",
+    vulgarityLvl: 3,
+    category: ["general"],
+    family: "piss",
+    isRootWord: true,
+  },
+  pissed: {
+    id: "SW061",
+    vulgarityLvl: 3,
+    category: ["general"],
+    family: "piss",
+    isRootWord: false,
+  },
 };
 
 export const wordFamilies: { [key: string]: string[] } = {
@@ -336,6 +503,16 @@ export const wordFamilies: { [key: string]: string[] } = {
   sex: ["sex", "sexy", "sexual", "sexually", "sexuality"],
   ass: ["ass", "assmunch", "arsehole", "asshole"],
   suck: ["suck", "sucker", "sucking"],
+  bitch: ["bitch", "bitches", "bitchin"],
+  whore: ["whore", "whores"],
+  dick: ["dick", "dicks"],
+  pussy: ["pussy", "pussies"],
+  damn: ["damn", "damned"],
+  hell: ["hell", "hellish"],
+  bastard: ["bastard", "bastards"],
+  crap: ["crap", "crappy"],
+  slut: ["slut", "sluts"],
+  piss: ["piss", "pissed"],
 };
 
 export const testFlaggedWordsList = [
