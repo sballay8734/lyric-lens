@@ -1,4 +1,4 @@
-import { User } from "../components/FlagSelect/FlagSelect";
+import { User } from "../routes/ManageFlags";
 
 export const mockUser: User = {
   id: "U00001",

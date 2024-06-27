@@ -14,12 +14,14 @@ export interface Props {
   isActive: boolean;
 }
 
-export default function WordToggleBtn({
+export default function WordBtn({
   word,
   data,
   isActive,
 }: Props): React.JSX.Element {
   const [active, setActive] = useState<boolean>(isActive);
+
+  console.log(data);
 
   return (
     <button
@@ -30,6 +32,8 @@ export default function WordToggleBtn({
     </button>
   );
 }
+
+// TODO: Users should be able to edit related words as well (They may want to allow the word "sucks" for example since it's not always used sexually)
 
 // TODO: Flag state needs to be moved to redux to it can persist if the user changes the route
 
