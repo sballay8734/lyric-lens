@@ -6,7 +6,7 @@ import { ArtistSimple, SongFromApi } from "../../../types/api";
 export type AnalysisResult = {
   result: "pass" | "fail";
   totalFlaggedWords: number;
-};
+} | null;
 
 // Define type for slice state
 interface SongSearchState {

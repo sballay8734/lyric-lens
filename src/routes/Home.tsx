@@ -5,8 +5,12 @@ import { sensitiveWordsMap } from "../data/sensitiveWordMap";
 import { useDispatch } from "react-redux";
 import SongArtistOverlay from "../components/Graph/SongArtistOverlay";
 
+interface FlaggedWords {
+  [id: string]: string;
+}
+
 const testUser = false;
-const testData = {
+const defaultFlags = {
   id: "PRE001",
   presetName: "Teenager Filter",
   flaggedWords: {
@@ -24,6 +28,32 @@ const testData = {
   },
 };
 
+const defaultProfile = {
+  id: "DEFAULT",
+  presetName: "Default",
+  flaggedWords: generateDefaultFlaggedWordsObject(),
+};
+
+function generateDefaultFlaggedWordsObject() {
+  const flaggedWords: FlaggedWords = {};
+  const unFlaggedWords: FlaggedWords = {};
+
+  Object.keys(sensitiveWordsMap).forEach((word, index) => {
+    const { vulgarityLvl, isRootWord } = sensitiveWordsMap[word];
+
+    if (isRootWord && vulgarityLvl > 2) {
+      flaggedWords[`SW${index}`] = word;
+    } else if (isRootWord && vulgarityLvl <= 2) {
+      unFlaggedWords[`SW${index}`] = word;
+    }
+  });
+
+  console.log(flaggedWords, unFlaggedWords);
+  return flaggedWords;
+}
+
+generateDefaultFlaggedWordsObject();
+
 export default function Home(): React.JSX.Element {
   const dispatch = useDispatch();
 
@@ -31,7 +61,7 @@ export default function Home(): React.JSX.Element {
     if (!testUser) {
       // set words to default object if there is no user
       // TODO: Replace with default words
-      Object.values(testData.flaggedWords).forEach((word) => {
+      Object.values(defaultProfile.flaggedWords).forEach((word) => {
         const wordToAdd = {
           id: sensitiveWordsMap[word].id,
           word: word,

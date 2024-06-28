@@ -1,4 +1,5 @@
 import { SimulationNodeDatum } from "d3";
+
 import {
   SensitiveWordCategory,
   VulgarityLevel,
