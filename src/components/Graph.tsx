@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { RootState } from "../store/store";
@@ -65,14 +66,14 @@ export default function Graph(): React.JSX.Element {
   // run lyric analysis whenever user changes the song
   useEffect(() => {
     analyzeLyrics();
-  }, [lyrics, analyzeLyrics]);
+  }, [lyrics]);
 
   // REMOVE: FOR BORDER TESTING
   const isSongClean = false;
 
   return (
     <div
-      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200 ${isSongClean ? "shadow-[inset_0_0_10px_1px_rgba(34,197,94,0.5)]" : "shadow-[inset_0_0_10px_1px_rgba(235,64,52,0.5)]"}`}
+      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200 ${isSongClean ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
     >
       {/* <span>
         {flaggedWords ? formatResponse() : "You need to choose a song"}

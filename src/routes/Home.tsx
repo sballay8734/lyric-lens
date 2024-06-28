@@ -57,7 +57,7 @@ export default function Home(): React.JSX.Element {
 }
 
 // TODO FOR FRIDAY
-// 1. make border pulse (do NOT animate entire div - border ONLY - performance)
+// 1. btmSheet should NOT close automatically (user may have misclicked)
 // 2. style center nodes
 // 3. use markers instead of (10) for word counts (Maybe dots on the edge of the circle)
-// 4.
+// 4. Add "Preview Lyrics" btn to songs dropdown
