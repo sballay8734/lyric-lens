@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { MdOutlinePerson } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import {
+  setAnalysisResult,
   setArtistQuery,
   setLyrics,
   setSelectedArtist,
@@ -27,10 +28,6 @@ export default function ArtistInput(): React.JSX.Element {
   const songsLoading = useAppSelector(
     (state: RootState) => state.songSearch.songsLoading,
   );
-
-  // const selectedArtist = useAppSelector(
-  //   (state) => state.songSearch.selectedArtist,
-  // );
 
   // Handle queryString state change
   useEffect(() => {
@@ -93,7 +90,7 @@ export default function ArtistInput(): React.JSX.Element {
       const res = await fetch(artistQuery, { signal });
 
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
 
       const artistsArray = data.response.sections[0].hits.map(
         (item: ArtistHit) => {
@@ -124,7 +121,10 @@ export default function ArtistInput(): React.JSX.Element {
     dispatch(setSelectedSong(null));
 
     // clear lyrics
-    dispatch(setLyrics(""));
+    dispatch(setLyrics(null));
+
+    // clear old analysis result
+    dispatch(setAnalysisResult(null));
 
     // setSelectedArtist to the new selection
     dispatch(setSelectedArtist(artist));

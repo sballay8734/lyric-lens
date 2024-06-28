@@ -1,26 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface BtmSheetState {
-  sheetIsVis: boolean;
+  searchSheetIsVis: boolean;
+  lyricsSheetIsVis: boolean;
 }
 
 const initialState: BtmSheetState = {
-  sheetIsVis: false,
+  searchSheetIsVis: false,
+  lyricsSheetIsVis: false,
 };
 
 export const btmSheetSlice = createSlice({
   name: "btmSheet",
   initialState,
   reducers: {
-    hideBtmSheet: (state) => {
-      state.sheetIsVis = false;
+    hideSearchSheet: (state) => {
+      state.searchSheetIsVis = false;
     },
-    showBtmSheet: (state) => {
-      state.sheetIsVis = true;
+    showSearchSheet: (state) => {
+      state.searchSheetIsVis = true;
+    },
+
+    hideLyricsSheet: (state) => {
+      state.lyricsSheetIsVis = false;
+    },
+    showLyricsSheet: (state) => {
+      state.lyricsSheetIsVis = true;
     },
   },
 });
 
-export const { hideBtmSheet, showBtmSheet } = btmSheetSlice.actions;
+export const {
+  hideSearchSheet,
+  showSearchSheet,
+  hideLyricsSheet,
+  showLyricsSheet,
+} = btmSheetSlice.actions;
 
 export default btmSheetSlice.reducer;

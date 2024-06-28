@@ -122,7 +122,7 @@ export default function SongInput(): React.JSX.Element {
       });
 
       // vv need until load states are added (tells you when requests get back)
-      console.log(artistSongs);
+      // console.log(artistSongs);
 
       setSongList(artistSongs);
       dispatch(setSongsLoading(false));

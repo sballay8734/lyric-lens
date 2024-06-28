@@ -15,6 +15,7 @@ import {
   AnalysisResult,
   setAnalysisResult,
 } from "../store/features/songSearch/songSearchSlice";
+import LyricsSheet from "./shared/LyricsSheet";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
@@ -60,7 +61,7 @@ export default function Graph(): React.JSX.Element {
         hashMap[formattedWord] = 1;
       }
     });
-    console.log(hashMap);
+    // console.log(hashMap);
 
     let totalFlaggedWords = 0;
     // check users flagged words against lyrics hashMap
@@ -116,6 +117,7 @@ export default function Graph(): React.JSX.Element {
       ) : (
         "You need to choose a song"
       )}
+      <LyricsSheet />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
-import { hideBtmSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
+import { hideSearchSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
 import ArtistInput from "../Search/ArtistInput";
 import SongInput from "../Search/SongInput";
 import LyricsInput from "../Search/LyricsInput";
@@ -18,8 +18,8 @@ export default function BottomSheet(): React.JSX.Element {
   let location = useLocation();
   const navigate = useNavigate();
 
-  const sheetIsVis = useAppSelector(
-    (state: RootState) => state.btmSheet.sheetIsVis,
+  const searchSheetIsVis = useAppSelector(
+    (state: RootState) => state.btmSheet.searchSheetIsVis,
   );
   const lyricsLoading = useAppSelector(
     (state: RootState) => state.songSearch.lyricsLoading,
@@ -36,7 +36,7 @@ export default function BottomSheet(): React.JSX.Element {
       console.log("Loading...");
     } else {
       // close dropdown
-      dispatch(hideBtmSheet());
+      dispatch(hideSearchSheet());
 
       // if not on home page, navigate there
       if (location.pathname !== "/") {
@@ -55,15 +55,15 @@ export default function BottomSheet(): React.JSX.Element {
 
   return (
     <dialog
-      open={sheetIsVis}
-      className={`modal modal-bottom ${sheetIsVis ? "visible" : "invisible"}`}
+      open={searchSheetIsVis}
+      className={`modal modal-bottom ${searchSheetIsVis ? "visible" : "invisible"}`}
     >
       {/* MODAL CONTENT */}
       <div className="modal-box h-full bg-base-100 flex flex-col gap-2 pt-3">
         {/* Sheet header */}
         <div className="w-full flex justify-end text-error">
           <button
-            onClick={() => dispatch(hideBtmSheet())}
+            onClick={() => dispatch(hideSearchSheet())}
             className="p-2 rounded-sm hover:text-error/70 active:text-error/50 transition-colors duration-100"
           >
             Close
@@ -99,7 +99,7 @@ export default function BottomSheet(): React.JSX.Element {
       </div>
       {/* OVERLAY TO HANDLE CLOSE CLOSE ON OUTSIDE CLICK */}
       <form
-        onClick={() => dispatch(hideBtmSheet())}
+        onClick={() => dispatch(hideSearchSheet())}
         method="dialog"
         className="modal-backdrop bg-black/50"
       >

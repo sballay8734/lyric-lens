@@ -9,24 +9,8 @@ interface FlaggedWords {
   [id: string]: string;
 }
 
+// REMOVE:
 const testUser = false;
-const defaultFlags = {
-  id: "PRE001",
-  presetName: "Teenager Filter",
-  flaggedWords: {
-    SW001: "nigger",
-    SW003: "nigga",
-    SW005: "coon",
-    SW013: "rape",
-    SW017: "fuck",
-    SW021: "shit",
-    SW036: "asshole",
-    SW041: "bitch",
-    SW046: "dick",
-    SW048: "pussy",
-    SW049: "slut",
-  },
-};
 
 const defaultProfile = {
   id: "DEFAULT",

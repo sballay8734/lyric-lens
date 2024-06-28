@@ -19,6 +19,7 @@ interface SongSearchState {
 
   lyricQuery: string; // for searching by lyrics
 
+  unFormattedLyrics: string | null;
   lyrics: string | null; // the string returned from lyric fetch & parse
   lyricsLoading: boolean; // status of fetch & parse
 
@@ -35,6 +36,8 @@ const initialState: SongSearchState = {
   selectedSong: null,
 
   lyricQuery: "",
+
+  unFormattedLyrics: null,
   lyrics: null,
   lyricsLoading: false,
 
