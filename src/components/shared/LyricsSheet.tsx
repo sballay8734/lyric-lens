@@ -25,14 +25,14 @@ export default function LyricsSheet(): React.JSX.Element {
       const songLines = section.split("\n");
 
       return (
-        <div key={sectionIndex}>
+        <span key={sectionIndex}>
           {songLines.map((line, lineIndex) => (
             <span className="text-xs" key={lineIndex}>
               {line}
               <br />
             </span>
           ))}
-        </div>
+        </span>
       );
     });
   }

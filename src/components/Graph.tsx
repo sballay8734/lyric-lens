@@ -249,13 +249,23 @@ export const ForceDirectedGraph: React.FC<{
       )
       .attr("fill", (d) =>
         (d as GraphNode | RootNode).id === "root"
-          ? "#1d232a" // Root node color
+          ? analysisResult && analysisResult.result === "pass"
+            ? "#22c55e"
+            : "#a82f27" // Root node color
           : connectedNodeIds.has((d as GraphNode | RootNode).id)
             ? color((d as GraphNode).category?.[0] || "")
             : "#fff",
       )
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 0.5)
+      .attr("stroke", (d) =>
+        (d as GraphNode | RootNode).id === "root"
+          ? analysisResult && analysisResult.result === "pass"
+            ? "#2bff79"
+            : "#f73b2f" // Root node color
+          : connectedNodeIds.has((d as GraphNode | RootNode).id)
+            ? color((d as GraphNode).category?.[0] || "")
+            : "blue",
+      )
+      .attr("stroke-width", 5)
       .attr("opacity", (d) =>
         connectedNodeIds.has((d as GraphNode | RootNode).id) ? 1 : 0.5,
       );
@@ -327,7 +337,7 @@ export const ForceDirectedGraph: React.FC<{
       simulation.stop();
       svg.selectAll("*").remove(); // Clean up on unmount
     };
-  }, [flaggedWords, lyrics]);
+  }, [flaggedWords, lyrics, analysisResult?.totalFlaggedWords]);
 
   return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
 };
