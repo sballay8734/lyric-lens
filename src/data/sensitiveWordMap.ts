@@ -1,3 +1,7 @@
+import { racialWords } from "./SensitiveWordFiles/racialWords";
+
+// !TODO: LEFT OFF @ "Lust" - https://medium.com/musixmatch-blog/profanity-in-lyrics-most-used-swear-words-and-their-usage-by-popular-genres-d8a12c776713
+
 export type SensitiveWordCategory =
   | "racial"
   | "sexual"
@@ -15,97 +19,19 @@ export interface SensitiveWordsMap {
   };
 }
 
+export interface WordMap {
+  [word: string]: {
+    id: string;
+    vulgarityLvl: VulgarityLevel;
+    category: SensitiveWordCategory[];
+    family: string;
+    isRootWord: boolean; // is the word the main word of the family
+  };
+}
+
 // TODO: Start with the worst ones and work your way down
 export const sensitiveWordsMap: SensitiveWordsMap = {
-  // "nigger" & variations (Baseline 10) *****************************
-  nigger: {
-    id: "SW001",
-    vulgarityLvl: 10,
-    category: ["racial"],
-    family: "nigger",
-    isRootWord: true,
-  },
-  niggers: {
-    id: "SW002",
-    vulgarityLvl: 10,
-    category: ["racial"],
-    family: "nigger",
-    isRootWord: false,
-  },
-  nigga: {
-    id: "SW003",
-    vulgarityLvl: 9,
-    category: ["racial"],
-    family: "nigger",
-    isRootWord: false,
-  },
-  niggas: {
-    id: "SW004",
-    vulgarityLvl: 9,
-    category: ["racial"],
-    family: "nigger",
-    isRootWord: false,
-  },
-
-  // "coon" & variations (Baseline 10) *****************************
-  coon: {
-    id: "SW005",
-    vulgarityLvl: 10,
-    category: ["racial"],
-    family: "coon",
-    isRootWord: true,
-  },
-  coons: {
-    id: "SW006",
-    vulgarityLvl: 10,
-    category: ["racial"],
-    family: "coon",
-    isRootWord: false,
-  },
-
-  // "jigaboo" & variations (Baseline 10) *****************************
-  jigaboo: {
-    id: "SW007",
-    vulgarityLvl: 10,
-    category: ["racial"],
-    family: "jigaboo",
-    isRootWord: true,
-  },
-  jiggaboo: {
-    id: "SW008",
-    vulgarityLvl: 10,
-    category: ["racial"],
-    family: "jigaboo",
-    isRootWord: false,
-  },
-  jiggerboo: {
-    id: "SW009",
-    vulgarityLvl: 10,
-    category: ["racial"],
-    family: "jigaboo",
-    isRootWord: false,
-  },
-  jigaboos: {
-    id: "SW010",
-    vulgarityLvl: 10,
-    category: ["racial"],
-    family: "jigaboo",
-    isRootWord: false,
-  },
-  jiggaboos: {
-    id: "SW011",
-    vulgarityLvl: 10,
-    category: ["racial"],
-    family: "jigaboo",
-    isRootWord: false,
-  },
-  jiggerboos: {
-    id: "SW012",
-    vulgarityLvl: 10,
-    category: ["racial"],
-    family: "jigaboo",
-    isRootWord: false,
-  },
+  ...racialWords,
 
   // "rape" & variations (Baseline 9) *****************************
   rape: {
@@ -145,6 +71,20 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "fuck",
     isRootWord: true,
   },
+  fucks: {
+    id: "SW017a",
+    vulgarityLvl: 8,
+    category: ["sexual", "general"],
+    family: "fuck",
+    isRootWord: false,
+  },
+  fucked: {
+    id: "SW017aa",
+    vulgarityLvl: 8,
+    category: ["sexual", "general"],
+    family: "fuck",
+    isRootWord: false,
+  },
   fuckin: {
     id: "SW018",
     vulgarityLvl: 8,
@@ -166,6 +106,20 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "fuck",
     isRootWord: false,
   },
+  motherfucker: {
+    id: "SW020a",
+    vulgarityLvl: 8,
+    category: ["sexual", "general"],
+    family: "fuck",
+    isRootWord: false,
+  },
+  motherfuckers: {
+    id: "SW020aa",
+    vulgarityLvl: 8,
+    category: ["sexual", "general"],
+    family: "fuck",
+    isRootWord: false,
+  },
 
   // "shit" & variations (Baseline 8) ********************************
   shit: {
@@ -174,6 +128,13 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     category: ["general"],
     family: "shit",
     isRootWord: true,
+  },
+  shits: {
+    id: "SW021a",
+    vulgarityLvl: 7,
+    category: ["general"],
+    family: "shit",
+    isRootWord: false,
   },
   shitin: {
     id: "SW022",
@@ -184,6 +145,13 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
   },
   shiting: {
     id: "SW023",
+    vulgarityLvl: 7,
+    category: ["general"],
+    family: "shit",
+    isRootWord: false,
+  },
+  shitting: {
+    id: "SW023a",
     vulgarityLvl: 7,
     category: ["general"],
     family: "shit",
@@ -263,6 +231,13 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "ass",
     isRootWord: true,
   },
+  asses: {
+    id: "SW033a",
+    vulgarityLvl: 4,
+    category: ["general", "sexual"],
+    family: "ass",
+    isRootWord: false,
+  },
   assmunch: {
     id: "SW034",
     vulgarityLvl: 4,
@@ -337,6 +312,13 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "bitch",
     isRootWord: false,
   },
+  bitching: {
+    id: "SW043a",
+    vulgarityLvl: 6,
+    category: ["general"],
+    family: "bitch",
+    isRootWord: false,
+  },
 
   // "whore" & variations (Baseline 8) *********************************
   whore: {
@@ -369,6 +351,27 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "dick",
     isRootWord: false,
   },
+  dickhead: {
+    id: "SW047a",
+    vulgarityLvl: 6,
+    category: ["sexual"],
+    family: "dick",
+    isRootWord: false,
+  },
+  dickless: {
+    id: "SW047aa",
+    vulgarityLvl: 6,
+    category: ["sexual"],
+    family: "dick",
+    isRootWord: false,
+  },
+  dickhole: {
+    id: "SW047aaa",
+    vulgarityLvl: 6,
+    category: ["sexual"],
+    family: "dick",
+    isRootWord: false,
+  },
 
   // "pussy" & variations (Baseline 7) *********************************
   pussy: {
@@ -377,6 +380,20 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     category: ["sexual"],
     family: "pussy",
     isRootWord: true,
+  },
+  pussys: {
+    id: "SW048a",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "pussy",
+    isRootWord: false,
+  },
+  puss: {
+    id: "SW048aa",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "pussy",
+    isRootWord: false,
   },
   pussies: {
     id: "SW049",
@@ -481,8 +498,64 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "piss",
     isRootWord: false,
   },
+  pissing: {
+    id: "SW062",
+    vulgarityLvl: 3,
+    category: ["general"],
+    family: "piss",
+    isRootWord: false,
+  },
+  pisses: {
+    id: "SW063",
+    vulgarityLvl: 3,
+    category: ["general"],
+    family: "piss",
+    isRootWord: false,
+  },
+
+  // "anal" & variations (Baseline 8) *********************************
+  anal: {
+    id: "SW064",
+    vulgarityLvl: 8,
+    category: ["sexual"],
+    family: "anal",
+    isRootWord: true,
+  },
+  anus: {
+    id: "SW064",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "anal",
+    isRootWord: false,
+  },
+
+  // "naked" & variations (Baseline 4) *********************************
+  naked: {
+    id: "SW065",
+    vulgarityLvl: 4,
+    category: ["sexual"],
+    family: "naked",
+    isRootWord: true,
+  },
+
+  // "beaner" & variations (Baseline 9) *********************************
+  beaner: {
+    id: "SW066",
+    vulgarityLvl: 9,
+    category: ["racial"],
+    family: "beaner",
+    isRootWord: true,
+  },
+  beaners: {
+    id: "SW067",
+    vulgarityLvl: 9,
+    category: ["racial"],
+    family: "beaner",
+    isRootWord: false,
+  },
 };
 
+// !TODO: You haven't added new words to the families
 export const wordFamilies: { [key: string]: string[] } = {
   nigger: ["nigger", "niggers", "nigga", "niggas"],
   coon: ["coon", "coons"],
@@ -514,23 +587,3 @@ export const wordFamilies: { [key: string]: string[] } = {
   slut: ["slut", "sluts"],
   piss: ["piss", "pissed"],
 };
-
-export const testFlaggedWordsList = [
-  "GOd",
-  "sex",
-  "fuCk",
-  "kiLl",
-  "nigga",
-  "niggas",
-  "bitch",
-  "bitches",
-  "ass",
-  "motherfuck",
-  "motherfucker",
-  "pussy",
-  "shit",
-  "shitll",
-  "jesus",
-  "christ",
-  "hell",
-];

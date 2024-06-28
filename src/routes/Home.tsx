@@ -48,11 +48,10 @@ function generateDefaultFlaggedWordsObject() {
     }
   });
 
-  console.log(flaggedWords, unFlaggedWords);
+  console.log("FLAGGED:", flaggedWords);
+  console.log("OKAY:", unFlaggedWords);
   return flaggedWords;
 }
-
-generateDefaultFlaggedWordsObject();
 
 export default function Home(): React.JSX.Element {
   const dispatch = useDispatch();
@@ -94,3 +93,4 @@ export default function Home(): React.JSX.Element {
 // 3. use markers instead of (10) for word counts (Maybe dots on the edge of the circle)
 // 4. Add "Preview Lyrics" btn to songs dropdown
 // 5. Add loading feedback when song is changed and lyrics are loading
+// 6. Words above around lvl 8 probably don't even need to be shown on graph
