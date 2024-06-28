@@ -49,6 +49,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // mTODO: Lyrics for display aren't quite formatting properly due to inconsitencies of the html markup
 // mTODO: flagged words not in song should congregate together somewhere and not on the sides of the screen
 // mTODO: configure "View Lyrics" button and move it somewhere else
+// mTODO: disable "close" btn in searchSheet if lyrics are loading/analyzing
 
 // V 1.0    *******************************************************************
 // !TODO: OPTIMIZATIONS FOR API REQUESTS
