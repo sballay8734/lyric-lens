@@ -28,7 +28,8 @@ export default function Home(): React.JSX.Element {
 
   useEffect(() => {
     if (!testUser) {
-      // set words to default object
+      // set words to default object if there is no user
+      // TODO: Replace with default words
       Object.values(testData.flaggedWords).forEach((word) => {
         const wordToAdd = {
           id: sensitiveWordsMap[word].id,
@@ -54,3 +55,9 @@ export default function Home(): React.JSX.Element {
     </>
   );
 }
+
+// TODO FOR FRIDAY
+// 1. make border pulse (do NOT animate entire div - border ONLY - performance)
+// 2. style center nodes
+// 3. use markers instead of (10) for word counts (Maybe dots on the edge of the circle)
+// 4.

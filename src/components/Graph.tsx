@@ -67,8 +67,13 @@ export default function Graph(): React.JSX.Element {
     analyzeLyrics();
   }, [lyrics, analyzeLyrics]);
 
+  // REMOVE: FOR BORDER TESTING
+  const isSongClean = false;
+
   return (
-    <div className="MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200">
+    <div
+      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200 ${isSongClean ? "shadow-[inset_0_0_10px_1px_rgba(34,197,94,0.5)]" : "shadow-[inset_0_0_10px_1px_rgba(235,64,52,0.5)]"}`}
+    >
       {/* <span>
         {flaggedWords ? formatResponse() : "You need to choose a song"}
       </span> */}
@@ -93,15 +98,20 @@ export const ForceDirectedGraph: React.FC<{
   flaggedWords: FlaggedWordsObject;
 }> = ({ lyrics, flaggedWords }) => {
   const svgRef = useRef<SVGSVGElement>(null);
+  const selectedSong = useAppSelector(
+    (state: RootState) => state.songSearch.selectedSong,
+  );
 
   useEffect(() => {
     if (!flaggedWords || !svgRef.current) return () => {};
 
+    // Set up dimensions
     const width = window.innerWidth;
     const height = window.innerHeight;
     const centerX = width / 2;
     const centerY = height / 2;
 
+    // Format nodes from flaggedWords
     const formattedNodes: GraphNode[] = Object.keys(flaggedWords).map((w) => {
       const { id, word, occurances, vulgarityLvl, category } = flaggedWords[w];
       return {
@@ -114,20 +124,22 @@ export const ForceDirectedGraph: React.FC<{
       };
     });
 
+    // Create center node
     const centerNode: RootNode = {
       id: "root",
       word: null,
       occurances: null,
       vulgarityLvl: null,
       category: null,
-      radius: 45, // should get bigger with more curse words
-
+      radius: 65, // should get bigger with more curse words
       fx: centerX,
       fy: centerY,
     };
 
+    // Set up color scale
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
+    // Combine nodes and create links
     const nodes = [centerNode, ...formattedNodes];
     const links = formattedNodes
       .filter((node) => node.occurances > 0)
@@ -140,6 +152,7 @@ export const ForceDirectedGraph: React.FC<{
       connectedNodeIds.add((link.target as GraphNode | RootNode).id);
     });
 
+    // Set up force simulation
     const simulation = d3
       .forceSimulation(nodes)
       .force(
@@ -165,6 +178,7 @@ export const ForceDirectedGraph: React.FC<{
           .strength((d) => ((d as GraphNode).occurances > 0 ? 0.1 : 0.01)),
       );
 
+    // Set up SVG
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove(); // Clear previous content
     svg
@@ -173,6 +187,7 @@ export const ForceDirectedGraph: React.FC<{
       .attr("height", height)
       .attr("style", "max-width: 100%; height: auto;");
 
+    // Create links
     const link = svg
       .append("g")
       .attr("stroke", "#999")
@@ -182,6 +197,7 @@ export const ForceDirectedGraph: React.FC<{
       .join("line")
       .attr("stroke-width", 0.4);
 
+    // Create nodes
     const node = svg
       .append("g")
       .selectAll("circle")
@@ -203,29 +219,41 @@ export const ForceDirectedGraph: React.FC<{
         connectedNodeIds.has((d as GraphNode | RootNode).id) ? 1 : 0.5,
       );
 
+    // Create node groups for text
     const nodeGroup = svg.append("g").selectAll("g").data(nodes).join("g");
 
+    // Add text to nodes
     nodeGroup
       .append("text")
       .text((d) =>
         (d as GraphNode).occurances === 0
           ? d.word
-          : `${d.word} (${d.occurances})` || "",
+          : d.category === null // center node
+            ? selectedSong && selectedSong?.full_title
+            : `${d.word} (${d.occurances})` || "",
       )
       .attr("text-anchor", "middle")
       .attr("dy", ".35em")
-      .attr("font-size", (d) => `${(d as GraphNode | RootNode).radius / 3}px`)
+      .attr(
+        "font-size",
+        (d) =>
+          `${(d as GraphNode | RootNode).category === null ? "8" : d.radius / 3}px`,
+      )
       .attr("fill", "black");
 
+    // Add titles to nodes
     node.append("title").text((d) => (d as GraphNode).word || "");
 
+    // Update positions on each tick of the simulation
     simulation.on("tick", () => {
+      // Update link positions
       link
         .attr("x1", (d) => (d.source as any).x)
         .attr("y1", (d) => (d.source as any).y)
         .attr("x2", (d) => (d.target as any).x)
         .attr("y2", (d) => (d.target as any).y);
 
+      // Update node positions
       node
         .attr("cx", (d) => {
           const r = (d as GraphNode | RootNode).radius;
@@ -240,12 +268,14 @@ export const ForceDirectedGraph: React.FC<{
           return d.y!;
         });
 
+      // Update node group positions
       nodeGroup.attr(
         "transform",
         (d) => `translate(${(d as any).x},${(d as any).y})`,
       );
     });
 
+    // Cleanup function
     return () => {
       simulation.stop();
       svg.selectAll("*").remove(); // Clean up on unmount

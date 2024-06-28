@@ -47,9 +47,14 @@ export const flagManagerSlice = createSlice({
 
       state.flaggedWords[word].occurances = occurances;
     },
+    zeroOccurances: (state, action: PayloadAction<string>) => {
+      const wordToZero = action.payload;
+      state.flaggedWords[wordToZero].occurances = 0;
+    },
   },
 });
 
-export const { addFlaggedWord, setOccurances } = flagManagerSlice.actions;
+export const { addFlaggedWord, setOccurances, zeroOccurances } =
+  flagManagerSlice.actions;
 
 export default flagManagerSlice.reducer;

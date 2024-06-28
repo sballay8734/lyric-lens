@@ -12,6 +12,7 @@ import {
   setSelectedSong,
   setSongsLoading,
 } from "../../store/features/songSearch/songSearchSlice";
+import { hideBtmSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
 
 const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 
@@ -56,7 +57,8 @@ export default function SongInput(): React.JSX.Element {
       // Create promises for fetching up to 35 pages of songs
       /* NOTE: Avoiding the hardcoded upperbound for "page" would be ideal but  99.99% of artists have less than 35 pages */
       // SEE BOTTOM FOR REFERENCE
-      for (let page = 1; page <= 35; page++) {
+      // REVIEW: 35 is VERY SAFE but query is long. I THINK songs are sorted by popularity in the response so really, 10 pages or so should be fine
+      for (let page = 1; page <= 10; page++) {
         pagePromises.push(fetchSongsPage(artistId, page));
       }
 
@@ -175,9 +177,12 @@ export default function SongInput(): React.JSX.Element {
       // update lyrics in Redux Store
       dispatch(setLyrics(fullLyrics));
       dispatch(setLyricsLoading(false));
+      dispatch(hideBtmSheet());
+      // TODO: This is also where you should trigger the animation to start
     } else {
       // mTODO: Handle errors here (when RTK Query is added)
       dispatch(setLyricsLoading(false));
+      dispatch(hideBtmSheet());
       console.log("Lyrics not found");
     }
   }

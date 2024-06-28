@@ -82,7 +82,6 @@ export default function ArtistInput(): React.JSX.Element {
     const signal = controllerRef.current.signal;
 
     const params = new URLSearchParams({
-      // access_token: import.meta.env.VITE_GENIUS_ACCESS_TOKEN,
       q: query,
       per_page: "10", // Adjust as needed
       page: "1", // Adjust if you want to implement pagination
