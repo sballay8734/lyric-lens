@@ -1,6 +1,6 @@
 import { racialWords } from "./SensitiveWordFiles/racialWords";
 
-// !TODO: LEFT OFF @ "Lust" - https://medium.com/musixmatch-blog/profanity-in-lyrics-most-used-swear-words-and-their-usage-by-popular-genres-d8a12c776713
+// !TODO: LEFT OFF @ "shite" - https://medium.com/musixmatch-blog/profanity-in-lyrics-most-used-swear-words-and-their-usage-by-popular-genres-d8a12c776713
 
 export type SensitiveWordCategory =
   | "racial"
@@ -115,6 +115,20 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
   },
   motherfuckers: {
     id: "SW020aa",
+    vulgarityLvl: 8,
+    category: ["sexual", "general"],
+    family: "fuck",
+    isRootWord: false,
+  },
+  motherfucking: {
+    id: "SW020ab",
+    vulgarityLvl: 8,
+    category: ["sexual", "general"],
+    family: "fuck",
+    isRootWord: false,
+  },
+  motherfuckin: {
+    id: "SW020ac",
     vulgarityLvl: 8,
     category: ["sexual", "general"],
     family: "fuck",
@@ -553,6 +567,164 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "beaner",
     isRootWord: false,
   },
+
+  // "lust" & variations (Baseline 1) *********************************
+  lust: {
+    id: "SW068",
+    vulgarityLvl: 1,
+    category: ["sexual"],
+    family: "lust",
+    isRootWord: true,
+  },
+  lusting: {
+    id: "SW068a",
+    vulgarityLvl: 1,
+    category: ["sexual"],
+    family: "lust",
+    isRootWord: false,
+  },
+  lusted: {
+    id: "SW068b",
+    vulgarityLvl: 1,
+    category: ["sexual"],
+    family: "lust",
+    isRootWord: false,
+  },
+
+  // "bum" & variations (Baseline 2) *********************************
+  bum: {
+    id: "SW069",
+    vulgarityLvl: 2,
+    category: ["general"],
+    family: "bum",
+    isRootWord: true,
+  },
+  bums: {
+    id: "SW069a",
+    vulgarityLvl: 2,
+    category: ["general"],
+    family: "bum",
+    isRootWord: false,
+  },
+
+  // "cock" & variations (Baseline 7) *********************************
+  cock: {
+    id: "SW069",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "cock",
+    isRootWord: true,
+  },
+  cocks: {
+    id: "SW069a",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "cock",
+    isRootWord: false,
+  },
+
+  // "shite" & variations (Baseline 5) *********************************
+  shite: {
+    id: "SW070",
+    vulgarityLvl: 5,
+    category: ["general"],
+    family: "shite",
+    isRootWord: true,
+  },
+
+  // "butt" & variations (Baseline 2) *********************************
+  butt: {
+    id: "SW071",
+    vulgarityLvl: 2,
+    category: ["sexual"],
+    family: "butt",
+    isRootWord: true,
+  },
+  butts: {
+    id: "SW071a",
+    vulgarityLvl: 2,
+    category: ["sexual"],
+    family: "butt",
+    isRootWord: false,
+  },
+  butthead: {
+    id: "SW071b",
+    vulgarityLvl: 2,
+    category: ["sexual"],
+    family: "butt",
+    isRootWord: false,
+  },
+
+  // "booty" & variations (Baseline 3) *********************************
+  booty: {
+    id: "SW072",
+    vulgarityLvl: 3,
+    category: ["sexual"],
+    family: "booty",
+    isRootWord: true,
+  },
+  booties: {
+    id: "SW072a",
+    vulgarityLvl: 3,
+    category: ["sexual"],
+    family: "booty",
+    isRootWord: false,
+  },
+
+  // "cum" & variations (Baseline 7) *********************************
+  cum: {
+    id: "SW073",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "cum",
+    isRootWord: true,
+  },
+  cums: {
+    id: "SW073a",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "cum",
+    isRootWord: false,
+  },
+  cumming: {
+    id: "SW073b",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "cum",
+    isRootWord: false,
+  },
+  cumshot: {
+    id: "SW073c",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "cum",
+    isRootWord: false,
+  },
+  cumshots: {
+    id: "SW073d",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "cum",
+    isRootWord: false,
+  },
+
+  // "cunt" & variations (Baseline 7) *********************************
+  cunt: {
+    id: "SW074",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "cunt",
+    isRootWord: true,
+  },
+  cunts: {
+    id: "SW074a",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "cunt",
+    isRootWord: false,
+  },
+
+  // other ideas ("onlyfans", "camgirl", "camslut", "camwhore", "clit", "clitoris", "jerk[1]", "jerkoff[7]", "dildo")
 };
 
 // !TODO: You haven't added new words to the families
