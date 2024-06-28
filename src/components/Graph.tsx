@@ -11,6 +11,7 @@ import {
   FlaggedWordsObject,
   setOccurances,
 } from "../store/features/flagManager/flagManagerSlice";
+import { setAnalysisResult } from "../store/features/songSearch/songSearchSlice";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
@@ -18,6 +19,13 @@ export default function Graph(): React.JSX.Element {
   const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
   const flaggedWords = useAppSelector(
     (state: RootState) => state.flagManager.flaggedWords,
+  );
+  const selectedSong = useAppSelector(
+    (state: RootState) => state.songSearch.selectedSong,
+  );
+
+  const analysisResult = useAppSelector(
+    (state: RootState) => state.songSearch.analysisResult,
   );
 
   function analyzeLyrics() {
@@ -30,7 +38,7 @@ export default function Graph(): React.JSX.Element {
       .replace(/ {2,}/g, " ") // replace 2 or more consecutive spaces
       .trim();
 
-    console.log("FINAL:", formattedLyrics);
+    // console.log("FINAL:", formattedLyrics);
 
     // split lyrics into array
     const wordArray: string[] = formattedLyrics.split(" ");
@@ -51,6 +59,7 @@ export default function Graph(): React.JSX.Element {
     });
     console.log(hashMap);
 
+    let totalFlaggedWords = 0;
     // check users flagged words against lyrics hashMap
     Object.keys(flaggedWords).forEach((word) => {
       // if word is NOT in song, reset occurances
@@ -59,8 +68,20 @@ export default function Graph(): React.JSX.Element {
         return null;
       }
 
+      const currentWordTotalOccurances = hashMap[word];
+      totalFlaggedWords += currentWordTotalOccurances;
+
       dispatch(setOccurances({ word: word, occurances: hashMap[word] }));
     });
+
+    console.log(totalFlaggedWords);
+
+    // set result of song analysis
+    if (totalFlaggedWords === 0) {
+      dispatch(setAnalysisResult("pass"));
+    } else {
+      dispatch(setAnalysisResult("fail"));
+    }
   }
 
   // run lyric analysis whenever user changes the song
@@ -68,12 +89,9 @@ export default function Graph(): React.JSX.Element {
     analyzeLyrics();
   }, [lyrics]);
 
-  // REMOVE: FOR BORDER TESTING
-  const isSongClean = false;
-
   return (
     <div
-      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200 ${isSongClean ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
+      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200 ${!selectedSong ? "" : analysisResult === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
     >
       {/* <span>
         {flaggedWords ? formatResponse() : "You need to choose a song"}
@@ -93,6 +111,9 @@ export default function Graph(): React.JSX.Element {
 // REMEMBER: D3 modules that operate on selections (including d3-selection, d3-transition, and d3-axis) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook.
 
 // RESOURCE FOR ABOVE - https://d3js.org/getting-started#d3-in-react
+
+const nodeColorNotInSong = "#9b9c9e";
+const nodeColorIsInSong = "#3d75e3";
 
 export const ForceDirectedGraph: React.FC<{
   lyrics: string | null;
@@ -210,9 +231,11 @@ export const ForceDirectedGraph: React.FC<{
           : (d as GraphNode | RootNode).radius * 0.7,
       )
       .attr("fill", (d) =>
-        connectedNodeIds.has((d as GraphNode | RootNode).id)
-          ? color((d as GraphNode).category?.[0] || "")
-          : "#ccc",
+        (d as GraphNode | RootNode).id === "root"
+          ? "#1d232a" // Root node color
+          : connectedNodeIds.has((d as GraphNode | RootNode).id)
+            ? color((d as GraphNode).category?.[0] || "")
+            : "#fff",
       )
       .attr("stroke", "#fff")
       .attr("stroke-width", 0.5)
@@ -230,7 +253,7 @@ export const ForceDirectedGraph: React.FC<{
         (d as GraphNode).occurances === 0
           ? d.word
           : d.category === null // center node
-            ? selectedSong && selectedSong?.full_title
+            ? "TOTAL FLAGGED WORDS IN SONG"
             : `${d.word} (${d.occurances})` || "",
       )
       .attr("text-anchor", "middle")
@@ -238,9 +261,13 @@ export const ForceDirectedGraph: React.FC<{
       .attr(
         "font-size",
         (d) =>
-          `${(d as GraphNode | RootNode).category === null ? "8" : d.radius / 3}px`,
+          `${(d as GraphNode | RootNode).id === "root" ? "20" : d.radius / 3}px`,
       )
-      .attr("fill", "black");
+      .attr(
+        "fill",
+        (d) =>
+          `${(d as GraphNode | RootNode).id === "root" ? "white" : "black"}`,
+      );
 
     // Add titles to nodes
     node.append("title").text((d) => (d as GraphNode).word || "");

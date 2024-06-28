@@ -16,6 +16,8 @@ interface SongSearchState {
 
   lyrics: string | null; // the string returned from lyric fetch & parse
   lyricsLoading: boolean; // status of fetch & parse
+
+  analysisResult: "pass" | "fail" | null; // true = clean, false = not clean
 }
 
 // Define initial state
@@ -30,6 +32,8 @@ const initialState: SongSearchState = {
   lyricQuery: "",
   lyrics: null,
   lyricsLoading: false,
+
+  analysisResult: null,
 };
 
 export const songSearchSlice = createSlice({
@@ -67,6 +71,14 @@ export const songSearchSlice = createSlice({
     setLyricsLoading: (state, action: PayloadAction<boolean>) => {
       state.lyricsLoading = action.payload;
     },
+
+    // SET RESULT OF SONG ANALYSIS
+    setAnalysisResult: (
+      state,
+      action: PayloadAction<"pass" | "fail" | null>,
+    ) => {
+      state.analysisResult = action.payload;
+    },
   },
 });
 
@@ -79,6 +91,7 @@ export const {
   setLyricsLoading,
   setSongsLoading,
   setLyricQuery,
+  setAnalysisResult,
 } = songSearchSlice.actions;
 
 export default songSearchSlice.reducer;

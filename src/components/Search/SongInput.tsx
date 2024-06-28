@@ -12,7 +12,6 @@ import {
   setSelectedSong,
   setSongsLoading,
 } from "../../store/features/songSearch/songSearchSlice";
-import { hideBtmSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
 
 const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 
@@ -177,12 +176,10 @@ export default function SongInput(): React.JSX.Element {
       // update lyrics in Redux Store
       dispatch(setLyrics(fullLyrics));
       dispatch(setLyricsLoading(false));
-      dispatch(hideBtmSheet());
       // TODO: This is also where you should trigger the animation to start
     } else {
       // mTODO: Handle errors here (when RTK Query is added)
       dispatch(setLyricsLoading(false));
-      dispatch(hideBtmSheet());
       console.log("Lyrics not found");
     }
   }

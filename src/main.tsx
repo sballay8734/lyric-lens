@@ -38,6 +38,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // MVP TODO *******************************************************************
 // !TODO: Tabbing inside of the inputs causes some weird behavior
 // !TODO: Add toggle to switch between song search and word selection
+// TODO: Complete a default flaggedWords object (just any word over 2 vLvl)
 // TODO: Add a "View full lyrics" option that shows the song formatted by section (verse, chorus, etc...) and highlights the words that were flagged
 // TODO: Fix weird padding thing when artist dropdown is loading
 // TODO: Add loading states for LOTS of stuff
@@ -47,6 +48,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // V 1.0    *******************************************************************
 // !TODO: OPTIMIZATIONS FOR API REQUESTS
+// !TODO: All songs with the same title should be grouped and a "Versions" dropdown should show. Songs are labeled like "Count Me Out (Music Video)" where the music video is often much cleaner than the official song
 // TODO: You will probably need to track if the current lyric has already been analyzed or not. This will make it easier to handle certain state related to the UI in the btmSheet
 // TODO: If song is clean, center circle should disappear, all words should fly towards the edge of the screen, and a message that it's clean should appear.
 // TODO: Add a button to clear all inputs quickly
