@@ -61,7 +61,7 @@ export default function Graph(): React.JSX.Element {
         hashMap[formattedWord] = 1;
       }
     });
-    // console.log(hashMap);
+    console.log(hashMap);
 
     let totalFlaggedWords = 0;
     // check users flagged words against lyrics hashMap

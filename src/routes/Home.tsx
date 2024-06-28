@@ -32,8 +32,8 @@ function generateDefaultFlaggedWordsObject() {
     }
   });
 
-  console.log("FLAGGED:", flaggedWords);
-  console.log("OKAY:", unFlaggedWords);
+  // console.log("FLAGGED:", flaggedWords);
+  // console.log("OKAY:", unFlaggedWords);
   return flaggedWords;
 }
 
@@ -71,10 +71,13 @@ export default function Home(): React.JSX.Element {
   );
 }
 
-// TODO FOR FRIDAY
+// TODO FOR Saturday
 
-// 2. style center nodes
-// 3. use markers instead of (10) for word counts (Maybe dots on the edge of the circle)
-// 4. Add "Preview Lyrics" btn to songs dropdown
+// 1. connect new words to default profile
+// 2. Fix the formatting of lyrics INITIALLY (from parse)
+// 3. REFACTOR
+
+// 3. Maybe work on porfolio or node-names?
+
 // 5. Add loading feedback when song is changed and lyrics are loading
 // 6. Words above around lvl 8 probably don't even need to be shown on graph

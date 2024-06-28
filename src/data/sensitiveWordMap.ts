@@ -134,6 +134,20 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "fuck",
     isRootWord: false,
   },
+  motherfucka: {
+    id: "SW020ad",
+    vulgarityLvl: 8,
+    category: ["sexual", "general"],
+    family: "fuck",
+    isRootWord: false,
+  },
+  motherfuckas: {
+    id: "SW020ae",
+    vulgarityLvl: 8,
+    category: ["sexual", "general"],
+    family: "fuck",
+    isRootWord: false,
+  },
 
   // "shit" & variations (Baseline 8) ********************************
   shit: {
@@ -708,6 +722,29 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     isRootWord: false,
   },
 
+  // "skeet" & variations (Baseline 7) *********************************
+  skeet: {
+    id: "SW075",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "skeet",
+    isRootWord: true,
+  },
+  "skeet-skeet": {
+    id: "SW075a",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "skeet",
+    isRootWord: false,
+  },
+  skeeting: {
+    id: "SW075b",
+    vulgarityLvl: 7,
+    category: ["sexual"],
+    family: "skeet",
+    isRootWord: false,
+  },
+
   // "cunt" & variations (Baseline 7) *********************************
   cunt: {
     id: "SW074",
@@ -740,7 +777,21 @@ export const wordFamilies: { [key: string]: string[] } = {
     "jiggerboos",
   ],
   rape: ["rape", "raping", "rapist", "rapists"],
-  fuck: ["fuck", "fuckin", "fucking", "fuckhole"],
+  fuck: [
+    "fuck",
+    "fuckin",
+    "fucking",
+    "fuckhole",
+    "motherfucker",
+    "motherfuckers",
+    "motherfucking",
+    "motherfuckin",
+    "motherfucka",
+    "motherfuckas",
+    "fucks",
+    "fucked",
+    "",
+  ],
   shit: ["shit", "shitin", "shiting", "shithole"],
   apeshit: ["apeshit"],
   dogshit: ["dogshit"],
@@ -758,4 +809,5 @@ export const wordFamilies: { [key: string]: string[] } = {
   crap: ["crap", "crappy"],
   slut: ["slut", "sluts"],
   piss: ["piss", "pissed"],
+  skeet: ["skeet-skeet", "skeeting"],
 };
