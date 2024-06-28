@@ -11,7 +11,10 @@ import {
   FlaggedWordsObject,
   setOccurances,
 } from "../store/features/flagManager/flagManagerSlice";
-import { setAnalysisResult } from "../store/features/songSearch/songSearchSlice";
+import {
+  AnalysisResult,
+  setAnalysisResult,
+} from "../store/features/songSearch/songSearchSlice";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
@@ -74,13 +77,21 @@ export default function Graph(): React.JSX.Element {
       dispatch(setOccurances({ word: word, occurances: hashMap[word] }));
     });
 
-    console.log(totalFlaggedWords);
-
     // set result of song analysis
     if (totalFlaggedWords === 0) {
-      dispatch(setAnalysisResult("pass"));
+      dispatch(
+        setAnalysisResult({
+          result: "pass",
+          totalFlaggedWords: 0,
+        }),
+      );
     } else {
-      dispatch(setAnalysisResult("fail"));
+      dispatch(
+        setAnalysisResult({
+          result: "fail",
+          totalFlaggedWords: totalFlaggedWords,
+        }),
+      );
     }
   }
 
@@ -91,13 +102,17 @@ export default function Graph(): React.JSX.Element {
 
   return (
     <div
-      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200 ${!selectedSong ? "" : analysisResult === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
+      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
     >
       {/* <span>
         {flaggedWords ? formatResponse() : "You need to choose a song"}
       </span> */}
       {flaggedWords ? (
-        <ForceDirectedGraph lyrics={lyrics} flaggedWords={flaggedWords} />
+        <ForceDirectedGraph
+          lyrics={lyrics}
+          flaggedWords={flaggedWords}
+          analysisResult={analysisResult}
+        />
       ) : (
         "You need to choose a song"
       )}
@@ -112,17 +127,14 @@ export default function Graph(): React.JSX.Element {
 
 // RESOURCE FOR ABOVE - https://d3js.org/getting-started#d3-in-react
 
-const nodeColorNotInSong = "#9b9c9e";
-const nodeColorIsInSong = "#3d75e3";
+const MAX_RADIUS = 50;
 
 export const ForceDirectedGraph: React.FC<{
   lyrics: string | null;
   flaggedWords: FlaggedWordsObject;
-}> = ({ lyrics, flaggedWords }) => {
+  analysisResult: AnalysisResult;
+}> = ({ lyrics, flaggedWords, analysisResult }) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const selectedSong = useAppSelector(
-    (state: RootState) => state.songSearch.selectedSong,
-  );
 
   useEffect(() => {
     if (!flaggedWords || !svgRef.current) return () => {};
@@ -226,9 +238,12 @@ export const ForceDirectedGraph: React.FC<{
       .data(nodes)
       .join("circle")
       .attr("r", (d) =>
-        connectedNodeIds.has((d as GraphNode | RootNode).id)
-          ? (d as GraphNode | RootNode).radius
-          : (d as GraphNode | RootNode).radius * 0.7,
+        Math.min(
+          connectedNodeIds.has((d as GraphNode | RootNode).id)
+            ? (d as GraphNode | RootNode).radius
+            : (d as GraphNode | RootNode).radius * 0.7,
+          MAX_RADIUS, // Replace with your desired maximum radius value
+        ),
       )
       .attr("fill", (d) =>
         (d as GraphNode | RootNode).id === "root"
@@ -253,7 +268,9 @@ export const ForceDirectedGraph: React.FC<{
         (d as GraphNode).occurances === 0
           ? d.word
           : d.category === null // center node
-            ? "TOTAL FLAGGED WORDS IN SONG"
+            ? analysisResult === null
+              ? "N/A"
+              : analysisResult.totalFlaggedWords
             : `${d.word} (${d.occurances})` || "",
       )
       .attr("text-anchor", "middle")
@@ -261,7 +278,7 @@ export const ForceDirectedGraph: React.FC<{
       .attr(
         "font-size",
         (d) =>
-          `${(d as GraphNode | RootNode).id === "root" ? "20" : d.radius / 3}px`,
+          `${(d as GraphNode | RootNode).id === "root" ? "30" : d.radius > MAX_RADIUS ? MAX_RADIUS / 3 : d.radius / 3}px`,
       )
       .attr(
         "fill",

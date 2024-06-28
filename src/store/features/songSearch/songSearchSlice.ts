@@ -3,6 +3,11 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 import { ArtistSimple, SongFromApi } from "../../../types/api";
 
+export type AnalysisResult = {
+  result: "pass" | "fail";
+  totalFlaggedWords: number;
+};
+
 // Define type for slice state
 interface SongSearchState {
   artistQuery: string;
@@ -17,7 +22,7 @@ interface SongSearchState {
   lyrics: string | null; // the string returned from lyric fetch & parse
   lyricsLoading: boolean; // status of fetch & parse
 
-  analysisResult: "pass" | "fail" | null; // true = clean, false = not clean
+  analysisResult: AnalysisResult | null; // true = clean, false = not clean
 }
 
 // Define initial state
@@ -75,7 +80,7 @@ export const songSearchSlice = createSlice({
     // SET RESULT OF SONG ANALYSIS
     setAnalysisResult: (
       state,
-      action: PayloadAction<"pass" | "fail" | null>,
+      action: PayloadAction<AnalysisResult | null>,
     ) => {
       state.analysisResult = action.payload;
     },

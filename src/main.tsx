@@ -45,6 +45,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // TODO: ALL of the user's flagged words should be visible on the graph but only the ones in the song should be connected to the graph (the others should be small, faded, and around the edges of the screen)
 // TODO: btmSheet elements need to be moved off screen when the sheet is hidden (they are currently interactable in the devMenu even when sheet is closed -- in fact the entire sheet is still on screen)
 // mTODO: Lyrics for display aren't quite formatting properly due to inconsitencies of the html markup
+// mTODO: flagged words not in song should congregate together somewhere and not on the sides of the screen
+// mTODO: configure "View Lyrics" button and move it somewhere else
 
 // V 1.0    *******************************************************************
 // !TODO: OPTIMIZATIONS FOR API REQUESTS

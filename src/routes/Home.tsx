@@ -60,8 +60,6 @@ export default function Home(): React.JSX.Element {
 
 // TODO FOR FRIDAY
 
-// 1. Add analysisResult (pass/fail)
-// 1. Change border color based on analysisResult
 // 2. style center nodes
 // 3. use markers instead of (10) for word counts (Maybe dots on the edge of the circle)
 // 4. Add "Preview Lyrics" btn to songs dropdown
