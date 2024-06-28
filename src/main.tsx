@@ -40,29 +40,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // !TODO: Add toggle to switch between song search and word selection
 // !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
 // TODO: Complete a default flaggedWords object (just any word over 2 vLvl)
-// TODO: Add a "View full lyrics" option that shows the song formatted by section (verse, chorus, etc...) and highlights the words that were flagged
 // TODO: Fix weird padding thing when artist dropdown is loading
 // TODO: Add loading states for LOTS of stuff
-// TODO: ALL of the user's flagged words should be visible on the graph but only the ones in the song should be connected to the graph (the others should be small, faded, and around the edges of the screen)
-// TODO: btmSheet elements need to be moved off screen when the sheet is hidden (they are currently interactable in the devMenu even when sheet is closed -- in fact the entire sheet is still on screen)
 // TODO: Fix the fetching and formatting of lyrics all the way up to displaying them for the user
 // mTODO: Lyrics for display aren't quite formatting properly due to inconsitencies of the html markup
 // mTODO: flagged words not in song should congregate together somewhere and not on the sides of the screen
-// mTODO: configure "View Lyrics" button and move it somewhere else
+// mTODO: maybe move "View Lyrics" btn somewhere else
 // mTODO: disable "close" btn in searchSheet if lyrics are loading/analyzing
 
 // V 1.0    *******************************************************************
 // !TODO: OPTIMIZATIONS FOR API REQUESTS
 // !TODO: All songs with the same title should be grouped and a "Versions" dropdown should show. Songs are labeled like "Count Me Out (Music Video)" where the music video is often much cleaner than the official song
-// TODO: You will probably need to track if the current lyric has already been analyzed or not. This will make it easier to handle certain state related to the UI in the btmSheet
-// TODO: If song is clean, center circle should disappear, all words should fly towards the edge of the screen, and a message that it's clean should appear.
-// TODO: Add a button to clear all inputs quickly
 // TODO: You have to handle words like "shitll" (from "shit'll" but you currently are removing punctuation). This might end up not being that bad. Keeping in the opostrophes or spliting words differently might not be too hard
 // TODO: Account creation to save preferences
 // TODO: Flag "Presets" so users can quickly switch to different preferences
 // TODO: Look into clean vs. explicit versions and how Genius handles them
 // TODO: Persist word selections for users without account (local storage)
-// TODO: Do we really need 35 pages of songs? Are they being fetched in order of popularity?
 
 // V 1.x (Near term features) *************************************************
 
