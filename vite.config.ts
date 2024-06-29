@@ -23,5 +23,3 @@ export default defineConfig({
     },
   },
 });
-
-// !TODO: ESLint not working

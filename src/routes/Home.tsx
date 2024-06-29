@@ -60,7 +60,8 @@ export default function Home(): React.JSX.Element {
     } else {
       // set words to users preference
     }
-  });
+  }, []);
+
   return (
     <>
       <div className="flex flex-col justify-between h-full gap-2 w-full relative">

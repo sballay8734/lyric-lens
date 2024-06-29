@@ -7,50 +7,6 @@ import * as tseslint from "typescript-eslint";
 
 export default [
   {
-    files: ["**/*.{js,mjs,cjs,jsx}"],
-    ...js.configs.recommended,
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.es2021,
-      },
-      // parser: tseslint.parser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: { jsx: true },
-      },
-    },
-    plugins: {
-      react: reactPlugin,
-      "react-hooks": reactHooksPlugin,
-      import: importPlugin,
-    },
-    rules: {
-      "react/react-in-jsx-scope": "off",
-      "react/jsx-uses-react": "off",
-      "import/order": [
-        "warn",
-        {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            ["parent", "sibling"],
-            "index",
-            "object",
-            "type",
-          ],
-          "newlines-between": "always",
-          alphabetize: {
-            order: "asc",
-            caseInsensitive: true,
-          },
-        },
-      ],
-    },
-  },
-  {
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       parser: tseslint.parser,
@@ -69,6 +25,9 @@ export default [
       ...tseslint.configs.strictTypeChecked.rules,
       "react/react-in-jsx-scope": "off",
       "react/jsx-uses-react": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "no-console": "warn",
       "import/order": [
         "warn",
         {
