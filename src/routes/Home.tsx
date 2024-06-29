@@ -72,16 +72,3 @@ export default function Home(): React.JSX.Element {
     </>
   );
 }
-
-// TODO FOR Saturday
-
-// 1. connect new words to default profile
-// 2. Fix the formatting of lyrics INITIALLY (from parse)
-// 3. RENAME A LOT OF THINGS
-// 3. Organize types and mockData
-// 3. REFACTOR
-
-// 3. Maybe work on porfolio or node-names?
-
-// 5. Add loading feedback when song is changed and lyrics are loading
-// 6. Words above around lvl 8 probably don't even need to be shown on graph

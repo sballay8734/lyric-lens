@@ -116,9 +116,8 @@ export default function LyricsSheet(): React.JSX.Element {
         {/* Sheet header */}
         <div className="w-full flex justify-end text-error">
           <button
-            disabled={lyricsLoading}
             onClick={() => dispatch(hideLyricsSheet())}
-            className="p-2 rounded-sm hover:text-error/70 active:text-error/50 transition-colors duration-100"
+            className={`p-2 rounded-sm hover:text-error/70 active:text-error/50 transition-colors duration-100`}
           >
             Close
           </button>

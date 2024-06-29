@@ -47,8 +47,6 @@ export default function BottomSheet(): React.JSX.Element {
   }
 
   function handleClearFields() {
-    // REVIEW: double check this won't interrupt requests and mess with loading
-
     dispatch(setSelectedArtist(null));
     dispatch(setSelectedSong(null));
     dispatch(setLyrics(null));
@@ -64,8 +62,9 @@ export default function BottomSheet(): React.JSX.Element {
         {/* Sheet header */}
         <div className="w-full flex justify-end text-error">
           <button
+            disabled={lyricsLoading}
             onClick={() => dispatch(hideSearchSheet())}
-            className="p-2 rounded-sm hover:text-error/70 active:text-error/50 transition-colors duration-100"
+            className={`p-2 rounded-sm hover:text-error/70 active:text-error/50 transition-colors duration-100 ${lyricsLoading ? "opacity-30 pointer-events-none" : "opacity-100 pointer-events-auto"}`}
           >
             Close
           </button>
