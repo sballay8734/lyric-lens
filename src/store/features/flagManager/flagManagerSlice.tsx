@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 
 import {
   SensitiveWordCategory,
   VulgarityLevel,
 } from "../../../data/sensitiveWordMap";
+
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 export type FlaggedWordsObject = {
   [word: string]: {

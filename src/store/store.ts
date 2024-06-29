@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import songSearchReducer from "./features/songSearch/songSearchSlice";
 import bottomSheetReducer from "./features/bottomSheet/bottomSheetSlice";
 import flagManagerReducer from "./features/flagManager/flagManagerSlice";
+import songSearchReducer from "./features/songSearch/songSearchSlice";
 
 export const store = configureStore({
   reducer: {

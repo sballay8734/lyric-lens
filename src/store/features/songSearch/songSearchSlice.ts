@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 
 import { ArtistSimple, SongFromApi } from "../../../types/api";
+
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 export type AnalysisResult = {
   result: "pass" | "fail";

@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import Graph from "../components/Graph";
-import { addFlaggedWord } from "../store/features/flagManager/flagManagerSlice";
-import { sensitiveWordsMap } from "../data/sensitiveWordMap";
 import { useDispatch } from "react-redux";
+
+import Graph from "../components/Graph";
 import SongArtistOverlay from "../components/Graph/SongArtistOverlay";
+import { sensitiveWordsMap } from "../data/sensitiveWordMap";
+import { addFlaggedWord } from "../store/features/flagManager/flagManagerSlice";
 
 interface FlaggedWords {
   [id: string]: string;
@@ -75,6 +76,7 @@ export default function Home(): React.JSX.Element {
 
 // 1. connect new words to default profile
 // 2. Fix the formatting of lyrics INITIALLY (from parse)
+// 3. Organize types and mockData
 // 3. REFACTOR
 
 // 3. Maybe work on porfolio or node-names?

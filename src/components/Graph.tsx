@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useRef } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { RootState } from "../store/store";
 import * as d3 from "d3";
+import { useEffect, useRef } from "react";
 
-import { HashMap } from "../types/graph";
+import LyricsSheet from "./shared/LyricsSheet";
 import { GraphNode, RootNode } from "../data/mockGraphData";
-
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import {
   FlaggedWordsObject,
   setOccurances,
@@ -15,7 +13,8 @@ import {
   AnalysisResult,
   setAnalysisResult,
 } from "../store/features/songSearch/songSearchSlice";
-import LyricsSheet from "./shared/LyricsSheet";
+import { RootState } from "../store/store";
+import { HashMap } from "../types/graph";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {

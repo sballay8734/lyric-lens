@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "./index.css";
-import Home from "./routes/Home.tsx";
-import App from "./App.tsx";
-import { store } from "./store/store.ts";
 import { Provider } from "react-redux";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import "./index.css";
+import App from "./App.tsx";
+import Home from "./routes/Home.tsx";
 import ManageFlags from "./routes/ManageFlags.tsx";
+import { store } from "./store/store.ts";
 
 const router = createBrowserRouter([
   {

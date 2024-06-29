@@ -1,24 +1,11 @@
 import { useState } from "react";
-import {
-  SensitiveWordCategory,
-  VulgarityLevel,
-} from "../../data/sensitiveWordMap";
 
 export interface Props {
   word: string;
-  data: {
-    id: string;
-    vulgarityLvl: VulgarityLevel;
-    category: SensitiveWordCategory[];
-  };
   isActive: boolean;
 }
 
-export default function WordBtn({
-  word,
-  data,
-  isActive,
-}: Props): React.JSX.Element {
+export default function WordBtn({ word, isActive }: Props): React.JSX.Element {
   const [active, setActive] = useState<boolean>(isActive);
 
   // console.log(data);

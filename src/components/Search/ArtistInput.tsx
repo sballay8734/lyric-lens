@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { MdOutlinePerson } from "react-icons/md";
+
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import {
   setAnalysisResult,
@@ -8,8 +9,8 @@ import {
   setSelectedArtist,
   setSelectedSong,
 } from "../../store/features/songSearch/songSearchSlice";
-import { ArtistHit, ArtistSimple } from "../../types/api";
 import { RootState } from "../../store/store";
+import { ArtistHit, ArtistSimple } from "../../types/api";
 
 export default function ArtistInput(): React.JSX.Element {
   const controllerRef = useRef<AbortController>();

@@ -1,8 +1,9 @@
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../hooks/hooks";
-import { RootState } from "../../store/store";
-import { hideLyricsSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { useAppSelector } from "../../hooks/hooks";
+import { hideLyricsSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
+import { RootState } from "../../store/store";
 
 export default function LyricsSheet(): React.JSX.Element {
   const dispatch = useDispatch();

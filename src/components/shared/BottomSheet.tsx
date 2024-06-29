@@ -1,17 +1,18 @@
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../hooks/hooks";
-import { RootState } from "../../store/store";
-import { hideSearchSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
-import ArtistInput from "../Search/ArtistInput";
-import SongInput from "../Search/SongInput";
-import LyricsInput from "../Search/LyricsInput";
 import { LuMicroscope } from "react-icons/lu";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { useAppSelector } from "../../hooks/hooks";
+import { hideSearchSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
 import {
   setLyrics,
   setSelectedArtist,
   setSelectedSong,
 } from "../../store/features/songSearch/songSearchSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { RootState } from "../../store/store";
+import ArtistInput from "../Search/ArtistInput";
+import LyricsInput from "../Search/LyricsInput";
+import SongInput from "../Search/SongInput";
 
 export default function BottomSheet(): React.JSX.Element {
   const dispatch = useDispatch();

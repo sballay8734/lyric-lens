@@ -1,7 +1,8 @@
 import { Outlet } from "react-router-dom";
+
 import "./App.css";
-import Drawer from "./components/shared/Drawer";
 import BottomSheet from "./components/shared/BottomSheet";
+import Drawer from "./components/shared/Drawer";
 import FloatingToggle from "./components/shared/FloatingToggle";
 
 function App() {

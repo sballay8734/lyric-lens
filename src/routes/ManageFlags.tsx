@@ -1,5 +1,4 @@
 import WordBtn from "../components/FlagSelect/WordBtn";
-
 import { mockUser } from "../data/mockUser";
 import { sensitiveWordsMap } from "../data/sensitiveWordMap";
 
@@ -55,7 +54,6 @@ export default function ManageFlags(): React.JSX.Element {
                   <WordBtn
                     key={data.id}
                     word={word}
-                    data={data}
                     isActive={
                       !!activePreset?.flaggedWords[data.id] ||
                       data.vulgarityLvl >= 6

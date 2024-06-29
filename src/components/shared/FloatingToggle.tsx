@@ -1,9 +1,9 @@
+import { LuSearch } from "react-icons/lu";
 import { useDispatch } from "react-redux";
+
 import { useAppSelector } from "../../hooks/hooks";
 import { showSearchSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
 import { RootState } from "../../store/store";
-
-import { LuSearch } from "react-icons/lu";
 
 export default function FloatingToggle(): React.JSX.Element {
   const dispatch = useDispatch();

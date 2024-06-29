@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { RootState } from "../../store/store";
-import { SongFromApi } from "../../types/api";
-
-import { FaCaretDown } from "react-icons/fa";
 import { CgSpinnerAlt } from "react-icons/cg";
+import { FaCaretDown } from "react-icons/fa";
 
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import {
   setLyrics,
   setLyricsLoading,
   setSelectedSong,
   setSongsLoading,
 } from "../../store/features/songSearch/songSearchSlice";
+import { RootState } from "../../store/store";
+import { SongFromApi } from "../../types/api";
 
 const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 
