@@ -38,8 +38,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // MVP TODO *******************************************************************
 // SATURDAY
-// TODO: Fix the fetching and formatting of lyrics all the way up to displaying them for the user
-// mTODO: Lyrics for display aren't quite formatting properly due to inconsitencies of the html markup
 
 // !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
 // TODO: Add loading states for LOTS of stuff

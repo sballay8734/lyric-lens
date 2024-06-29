@@ -33,8 +33,8 @@ function generateDefaultFlaggedWordsObject() {
     }
   });
 
-  console.log("FLAGGED:", flaggedWords);
-  console.log("NOT FLAGGED:", unFlaggedWords);
+  // console.log("FLAGGED:", flaggedWords);
+  // console.log("NOT FLAGGED:", unFlaggedWords);
   return flaggedWords;
 }
 

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { MdOutlinePerson } from "react-icons/md";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { setLyricsHashMap } from "../../store/features/flagManager/flagManagerSlice";
 import {
   setAnalysisResult,
   setArtistQuery,
@@ -120,6 +121,9 @@ export default function ArtistInput(): React.JSX.Element {
 
     // clear selected song since new artist = completely different songs
     dispatch(setSelectedSong(null));
+
+    // clear songLyricHashMap since new song is being selected
+    dispatch(setLyricsHashMap(null));
 
     // clear lyrics
     dispatch(setLyrics(null));

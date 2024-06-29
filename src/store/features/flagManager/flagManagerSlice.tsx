@@ -4,6 +4,7 @@ import {
   SensitiveWordCategory,
   VulgarityLevel,
 } from "../../../data/sensitiveWordMap";
+import { HashMap } from "../../../types/graph";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
 
@@ -19,11 +20,13 @@ export type FlaggedFamiliesObject = {
 
 interface FlagManagerState {
   flaggedFamilies: FlaggedFamiliesObject;
+  lyricsHashMap: HashMap | null;
   // TODO: Maybe add word exceptions here as an array
 }
 
 const initialState: FlagManagerState = {
   flaggedFamilies: {},
+  lyricsHashMap: null,
 };
 
 export const flagManagerSlice = createSlice({
@@ -46,10 +49,14 @@ export const flagManagerSlice = createSlice({
 
       state.flaggedFamilies[family].occurances = occurances;
     },
+
+    setLyricsHashMap: (state, action: PayloadAction<HashMap | null>) => {
+      state.lyricsHashMap = action.payload;
+    },
   },
 });
 
-export const { addFlaggedFamily, setFamilyOccurances } =
+export const { addFlaggedFamily, setFamilyOccurances, setLyricsHashMap } =
   flagManagerSlice.actions;
 
 export default flagManagerSlice.reducer;

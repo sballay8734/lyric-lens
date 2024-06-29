@@ -46,7 +46,7 @@ export async function fetchAndParseLyrics(url: string, dispatch: Dispatch) {
       .replace(/\n{3,}/g, "\n\n") // replace 3 consecutive lines with 2
       .trim();
 
-    console.log(fullLyrics);
+    // console.log(fullLyrics);
 
     // update lyrics in Redux Store
     dispatch(setLyrics(fullLyrics));

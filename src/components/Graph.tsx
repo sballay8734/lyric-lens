@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import {
   FlaggedFamiliesObject,
   setFamilyOccurances,
+  setLyricsHashMap,
 } from "../store/features/flagManager/flagManagerSlice";
 import {
   AnalysisResult,
@@ -64,6 +65,9 @@ export default function Graph(): React.JSX.Element {
       }
     });
 
+    // store hashMap for highlighting words on lyrics sheet
+    dispatch(setLyricsHashMap(hashMap));
+
     let totalFlaggedWords = 0;
 
     // check users flagged words against lyrics hashMap
@@ -76,10 +80,6 @@ export default function Graph(): React.JSX.Element {
         },
       );
 
-      // console.log(allFamilyWords);
-      // [['nigger', {…}]), ['niggers', {…}]]
-
-      // !TODO: You need to clear occurances a different way.
       // check hash map for each word
       allFamilyWords.forEach(([word, _]) => {
         // if word IS in song, add occurances to family
@@ -371,6 +371,10 @@ export const ForceDirectedGraph: React.FC<{
 // Other possible options: ***************************************************
 // Circle Packing - https://observablehq.com/@d3/bubble-chart/2?intent=fork
 // Bubble Chart -
+
+// !TODO: Some nodes drift under overlay if there are alot of curse words
+
+// TODO: Nodes should be colored based on severity of word (9-10 are dark red)
 
 // TODO: Actually use user flagged list and song lyrics to render nodes (you're just using mock data now)
 
