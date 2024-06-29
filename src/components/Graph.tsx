@@ -6,8 +6,8 @@ import LyricsSheet from "./shared/LyricsSheet";
 import { GraphNode, RootNode } from "../data/mockGraphData";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import {
-  FlaggedWordsObject,
-  setOccurances,
+  FlaggedFamiliesObject,
+  setFamilyOccurances,
 } from "../store/features/flagManager/flagManagerSlice";
 import {
   AnalysisResult,
@@ -15,13 +15,14 @@ import {
 } from "../store/features/songSearch/songSearchSlice";
 import { RootState } from "../store/store";
 import { HashMap } from "../types/graph";
+import { sensitiveWordsMap } from "../data/sensitiveWordMap";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
-  const flaggedWords = useAppSelector(
-    (state: RootState) => state.flagManager.flaggedWords,
+  const flaggedFamilies = useAppSelector(
+    (state: RootState) => state.flagManager.flaggedFamilies,
   );
   const selectedSong = useAppSelector(
     (state: RootState) => state.songSearch.selectedSong,
@@ -36,12 +37,13 @@ export default function Graph(): React.JSX.Element {
 
     const formattedLyrics = lyrics
       .replace(/\[.*?\]/g, "") // removes [Verse 2: ... ] [Chorus: ... ]
+      .replace(/-/g, " ") // replace hyphens with spaces for words like "A-goddamn", "cock-block", etc...
       .replace(/\n/g, " ") // replace newlines
       .replace(/[?!.,'")()]/g, "") // replace punctuation (? ! . , ')
       .replace(/ {2,}/g, " ") // replace 2 or more consecutive spaces
       .trim();
 
-    // console.log("FINAL:", formattedLyrics);
+    console.log("FINAL:", formattedLyrics);
 
     // split lyrics into array
     const wordArray: string[] = formattedLyrics.split(" ");
@@ -60,21 +62,37 @@ export default function Graph(): React.JSX.Element {
         hashMap[formattedWord] = 1;
       }
     });
-    console.log(hashMap);
 
     let totalFlaggedWords = 0;
+
     // check users flagged words against lyrics hashMap
-    Object.keys(flaggedWords).forEach((word) => {
-      // if word is NOT in song, reset occurances
-      if (!hashMap[word]) {
-        dispatch(setOccurances({ word: word, occurances: 0 }));
-        return null;
-      }
+    Object.keys(flaggedFamilies).forEach((fam) => {
+      let totalFamilyOccurances = 0;
+      // get all words in current family
+      const allFamilyWords = Object.entries(sensitiveWordsMap).filter(
+        ([_, wordData]) => {
+          return wordData.family === fam;
+        },
+      );
 
-      const currentWordTotalOccurances = hashMap[word];
-      totalFlaggedWords += currentWordTotalOccurances;
+      // console.log(allFamilyWords);
+      // [['nigger', {…}]), ['niggers', {…}]]
 
-      dispatch(setOccurances({ word: word, occurances: hashMap[word] }));
+      // !TODO: You need to clear occurances a different way.
+      // check hash map for each word
+      allFamilyWords.forEach(([word, _]) => {
+        // if word IS in song, add occurances to family
+        if (hashMap[word]) {
+          totalFamilyOccurances += hashMap[word];
+        }
+      });
+
+      dispatch(
+        setFamilyOccurances({ family: fam, occurances: totalFamilyOccurances }),
+      );
+
+      // updated total flaggedWords in song
+      totalFlaggedWords += totalFamilyOccurances;
     });
 
     // set result of song analysis
@@ -107,10 +125,10 @@ export default function Graph(): React.JSX.Element {
       {/* <span>
         {flaggedWords ? formatResponse() : "You need to choose a song"}
       </span> */}
-      {flaggedWords ? (
+      {flaggedFamilies ? (
         <ForceDirectedGraph
           lyrics={lyrics}
-          flaggedWords={flaggedWords}
+          flaggedFamilies={flaggedFamilies}
           analysisResult={analysisResult}
         />
       ) : (
@@ -132,13 +150,13 @@ const MAX_RADIUS = 50;
 
 export const ForceDirectedGraph: React.FC<{
   lyrics: string | null;
-  flaggedWords: FlaggedWordsObject;
+  flaggedFamilies: FlaggedFamiliesObject;
   analysisResult: AnalysisResult;
-}> = ({ lyrics, flaggedWords, analysisResult }) => {
+}> = ({ lyrics, flaggedFamilies, analysisResult }) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
-    if (!flaggedWords || !svgRef.current) return () => {};
+    if (!flaggedFamilies || !svgRef.current) return () => {};
 
     // Set up dimensions
     const width = window.innerWidth;
@@ -146,23 +164,26 @@ export const ForceDirectedGraph: React.FC<{
     const centerX = width / 2;
     const centerY = height / 2;
 
-    // Format nodes from flaggedWords
-    const formattedNodes: GraphNode[] = Object.keys(flaggedWords).map((w) => {
-      const { id, word, occurances, vulgarityLvl, category } = flaggedWords[w];
-      return {
-        id,
-        word,
-        occurances,
-        vulgarityLvl,
-        category,
-        radius: 20 + occurances * 2,
-      };
-    });
+    // Format nodes from flaggedFamilies
+    const formattedNodes: GraphNode[] = Object.keys(flaggedFamilies).map(
+      (w) => {
+        const { id, family, occurances, vulgarityLvl, category } =
+          flaggedFamilies[w];
+        return {
+          id,
+          family,
+          occurances,
+          vulgarityLvl,
+          category,
+          radius: 20 + occurances * 2,
+        };
+      },
+    );
 
     // Create center node
     const centerNode: RootNode = {
       id: "root",
-      word: null,
+      family: null,
       occurances: null,
       vulgarityLvl: null,
       category: null,
@@ -277,12 +298,12 @@ export const ForceDirectedGraph: React.FC<{
       .append("text")
       .text((d) =>
         (d as GraphNode).occurances === 0
-          ? d.word
+          ? d.family
           : d.category === null // center node
             ? analysisResult === null
               ? "N/A"
               : analysisResult.totalFlaggedWords
-            : `${d.word} (${d.occurances})` || "",
+            : `${d.family} (${d.occurances})` || "",
       )
       .attr("text-anchor", "middle")
       .attr("dy", ".35em")
@@ -298,7 +319,7 @@ export const ForceDirectedGraph: React.FC<{
       );
 
     // Add titles to nodes
-    node.append("title").text((d) => (d as GraphNode).word || "");
+    node.append("title").text((d) => (d as GraphNode).family || "");
 
     // Update positions on each tick of the simulation
     simulation.on("tick", () => {
@@ -336,7 +357,7 @@ export const ForceDirectedGraph: React.FC<{
       simulation.stop();
       svg.selectAll("*").remove(); // Clean up on unmount
     };
-  }, [flaggedWords, lyrics, analysisResult?.totalFlaggedWords]);
+  }, [flaggedFamilies, lyrics, analysisResult?.totalFlaggedWords]);
 
   return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
 };
@@ -350,7 +371,6 @@ export const ForceDirectedGraph: React.FC<{
 // Circle Packing - https://observablehq.com/@d3/bubble-chart/2?intent=fork
 // Bubble Chart -
 
-// *************************** FOR MONDAY **********************************
 // TODO: Actually use user flagged list and song lyrics to render nodes (you're just using mock data now)
 
 // TODO: Add label to top of screen that shows current song and artist
@@ -362,3 +382,5 @@ export const ForceDirectedGraph: React.FC<{
 // TODO: flagged words that aren't in song should be pushed to edge of screen, faded out, links removed, and all made the same size
 
 // TODO: Deal with the "any" types in the code above
+
+//

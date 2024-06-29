@@ -7,55 +7,49 @@ import {
 
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export type FlaggedWordsObject = {
-  [word: string]: {
+export type FlaggedFamiliesObject = {
+  [family: string]: {
     id: string;
-    word: string;
+    family: string;
     occurances: number;
     vulgarityLvl: VulgarityLevel;
     category: SensitiveWordCategory[];
-    family: string;
-    isRootWord: boolean; // is the word the main word of the family
   };
 };
 
 interface FlagManagerState {
-  flaggedWords: FlaggedWordsObject;
+  flaggedFamilies: FlaggedFamiliesObject;
+  // TODO: Maybe add word exceptions here as an array
 }
 
 const initialState: FlagManagerState = {
-  flaggedWords: {},
+  flaggedFamilies: {},
 };
 
 export const flagManagerSlice = createSlice({
   name: "flagManager",
   initialState,
   reducers: {
-    addFlaggedWord: (state, action: PayloadAction<FlaggedWordsObject>) => {
+    addFlaggedFamily: (state, action: PayloadAction<FlaggedFamiliesObject>) => {
       const wordToAdd = action.payload;
       const [[word, wordData]] = Object.entries(wordToAdd);
 
-      if (state.flaggedWords[word]) return;
-      state.flaggedWords[word] = wordData;
+      if (state.flaggedFamilies[word]) return;
+      state.flaggedFamilies[word] = wordData;
     },
 
-    // removeFlaggedWord
-    setOccurances: (
+    setFamilyOccurances: (
       state,
-      action: PayloadAction<{ word: string; occurances: number }>,
+      action: PayloadAction<{ family: string; occurances: number }>,
     ) => {
-      const { word, occurances } = action.payload;
+      const { family, occurances } = action.payload;
 
-      state.flaggedWords[word].occurances = occurances;
-    },
-    zeroOccurances: (state, action: PayloadAction<string>) => {
-      const wordToZero = action.payload;
-      state.flaggedWords[wordToZero].occurances = 0;
+      state.flaggedFamilies[family].occurances = occurances;
     },
   },
 });
 
-export const { addFlaggedWord, setOccurances, zeroOccurances } =
+export const { addFlaggedFamily, setFamilyOccurances } =
   flagManagerSlice.actions;
 
 export default flagManagerSlice.reducer;

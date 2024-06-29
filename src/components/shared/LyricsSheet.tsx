@@ -19,7 +19,7 @@ export default function LyricsSheet(): React.JSX.Element {
   // TODO: Needs to be fixed PRIOR to this
   // TODO: Highlight flagged words in lyrics
   function formatLyrics() {
-    console.log(lyrics);
+    // console.log(lyrics);
     const songSections = lyrics?.split("\n\n");
 
     return songSections?.map((section, sectionIndex) => {

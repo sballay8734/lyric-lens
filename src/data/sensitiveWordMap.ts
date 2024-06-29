@@ -446,6 +446,20 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "damn",
     isRootWord: false,
   },
+  goddamn: {
+    id: "SW051a",
+    vulgarityLvl: 3,
+    category: ["general"],
+    family: "damn",
+    isRootWord: false,
+  },
+  goddamned: {
+    id: "SW051b",
+    vulgarityLvl: 3,
+    category: ["general"],
+    family: "damn",
+    isRootWord: false,
+  },
 
   // "hell" & variations (Baseline 2) *********************************
   hell: {
@@ -760,8 +774,6 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "cunt",
     isRootWord: false,
   },
-
-  // other ideas ("onlyfans", "camgirl", "camslut", "camwhore", "clit", "clitoris", "jerk[1]", "jerkoff[7]", "dildo")
 };
 
 // !TODO: You haven't added new words to the families
@@ -811,3 +823,9 @@ export const wordFamilies: { [key: string]: string[] } = {
   piss: ["piss", "pissed"],
   skeet: ["skeet-skeet", "skeeting"],
 };
+
+// !TODO: WORDS TO ADD
+// ho
+// masturbate
+
+// other ideas ("onlyfans", "camgirl", "camslut", "camwhore", "clit", "clitoris", "jerk[1]", "jerkoff[7]", "dildo")

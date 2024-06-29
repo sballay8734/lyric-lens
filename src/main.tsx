@@ -51,6 +51,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // V 1.0    *******************************************************************
 // !TODO: OPTIMIZATIONS FOR API REQUESTS
+// !TODO: Optimizations for logic and looping through families, words, etc...
+// !TODO: each bubble should be clickable and show more details like all the words (not just the family which is what they currently show)
 // !TODO: All songs with the same title should be grouped and a "Versions" dropdown should show. Songs are labeled like "Count Me Out (Music Video)" where the music video is often much cleaner than the official song
 // TODO: You have to handle words like "shitll" (from "shit'll" but you currently are removing punctuation). This might end up not being that bad. Keeping in the opostrophes or spliting words differently might not be too hard
 // TODO: Account creation to save preferences

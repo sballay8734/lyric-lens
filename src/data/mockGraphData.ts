@@ -1,14 +1,10 @@
 import { SimulationNodeDatum } from "d3";
 
-import {
-  SensitiveWordCategory,
-  VulgarityLevel,
-  sensitiveWordsMap,
-} from "./sensitiveWordMap";
+import { SensitiveWordCategory, VulgarityLevel } from "./sensitiveWordMap";
 
 export type GraphNode = SimulationNodeDatum & {
   id: string;
-  word: string;
+  family: string;
   occurances: number; // if occurances === 0 don't connect to center
   vulgarityLvl: VulgarityLevel;
   category: SensitiveWordCategory[];
@@ -17,7 +13,7 @@ export type GraphNode = SimulationNodeDatum & {
 
 export type RootNode = SimulationNodeDatum & {
   id: string;
-  word: null;
+  family: null;
   occurances: null;
   vulgarityLvl: null;
   category: null;
@@ -31,41 +27,41 @@ export type GraphDataType = {
   centerNode: RootNode;
 };
 
-const width = window.innerWidth;
-const height = window.innerHeight;
-const centerX = width / 2;
-const centerY = height / 2;
+// const width = window.innerWidth;
+// const height = window.innerHeight;
+// const centerX = width / 2;
+// const centerY = height / 2;
 
-export const mockNodes: GraphNode[] = Object.keys(sensitiveWordsMap).map(
-  (flaggedWord) => {
-    const mockWordCount = Math.floor(Math.random() * 21);
+// export const mockNodes: GraphNode[] = Object.keys(sensitiveWordsMap).map(
+//   (flaggedWord) => {
+//     const mockWordCount = Math.floor(Math.random() * 21);
 
-    return {
-      id: flaggedWord,
-      word: flaggedWord,
-      occurances: mockWordCount,
-      vulgarityLvl: sensitiveWordsMap[flaggedWord].vulgarityLvl,
-      category: sensitiveWordsMap[flaggedWord].category,
-      radius: mockWordCount / 1.4,
-    };
-  },
-);
+//     return {
+//       id: flaggedWord,
+//       family: flaggedWord,
+//       occurances: mockWordCount,
+//       vulgarityLvl: sensitiveWordsMap[flaggedWord].vulgarityLvl,
+//       category: sensitiveWordsMap[flaggedWord].category,
+//       radius: mockWordCount / 1.4,
+//     };
+//   },
+// );
 
-export const mockGraphData: { nodes: GraphNode[]; centerNode: RootNode } = {
-  nodes: mockNodes,
-  centerNode: {
-    id: "root",
-    word: null,
-    occurances: null, // might be able to make this equal to total curse words
-    vulgarityLvl: null,
-    category: null,
-    radius: 45, // should get bigger with more curse words
+// export const mockGraphData: { nodes: GraphNode[]; centerNode: RootNode } = {
+//   nodes: mockNodes,
+//   centerNode: {
+//     id: "root",
+//     family: null,
+//     occurances: null, // might be able to make this equal to total curse words
+//     vulgarityLvl: null,
+//     category: null,
+//     radius: 45, // should get bigger with more curse words
 
-    // vvv Or whereever the center is for fx and fy vvv
-    fx: centerX,
-    fy: centerY,
-  },
-};
+//     // vvv Or whereever the center is for fx and fy vvv
+//     fx: centerX,
+//     fy: centerY,
+//   },
+// };
 
 // usersProfile OR default flagged words
 

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import Graph from "../components/Graph";
 import SongArtistOverlay from "../components/Graph/SongArtistOverlay";
 import { sensitiveWordsMap } from "../data/sensitiveWordMap";
-import { addFlaggedWord } from "../store/features/flagManager/flagManagerSlice";
+import { addFlaggedFamily } from "../store/features/flagManager/flagManagerSlice";
 
 interface FlaggedWords {
   [id: string]: string;
@@ -33,8 +33,8 @@ function generateDefaultFlaggedWordsObject() {
     }
   });
 
-  // console.log("FLAGGED:", flaggedWords);
-  // console.log("OKAY:", unFlaggedWords);
+  console.log("FLAGGED:", flaggedWords);
+  console.log("NOT FLAGGED:", unFlaggedWords);
   return flaggedWords;
 }
 
@@ -55,7 +55,7 @@ export default function Home(): React.JSX.Element {
           family: sensitiveWordsMap[word].family,
           isRootWord: sensitiveWordsMap[word].isRootWord,
         };
-        dispatch(addFlaggedWord({ [word]: wordToAdd }));
+        dispatch(addFlaggedFamily({ [word]: wordToAdd }));
       });
     } else {
       // set words to users preference
@@ -77,6 +77,7 @@ export default function Home(): React.JSX.Element {
 
 // 1. connect new words to default profile
 // 2. Fix the formatting of lyrics INITIALLY (from parse)
+// 3. RENAME A LOT OF THINGS
 // 3. Organize types and mockData
 // 3. REFACTOR
 
