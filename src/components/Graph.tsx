@@ -4,19 +4,11 @@ import { useEffect, useRef } from "react";
 
 import LyricsSheet from "./shared/LyricsSheet";
 import { GraphNode, RootNode } from "../data/mockGraphData";
-import { sensitiveWordsMap } from "../data/sensitiveWordMap";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import {
-  FlaggedFamiliesObject,
-  setFamilyOccurances,
-  setLyricsHashMap,
-} from "../store/features/flagManager/flagManagerSlice";
-import {
-  AnalysisResult,
-  setAnalysisResult,
-} from "../store/features/songSearch/songSearchSlice";
+import { FlaggedFamiliesObject } from "../store/features/flagManager/flagManagerSlice";
+import { AnalysisResult } from "../store/features/songSearch/songSearchSlice";
 import { RootState } from "../store/store";
-import { HashMap } from "../types/graph";
+import { analyzeLyrics } from "../utils/analyzeLyrics";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
@@ -33,90 +25,11 @@ export default function Graph(): React.JSX.Element {
     (state: RootState) => state.songSearch.analysisResult,
   );
 
-  function analyzeLyrics() {
-    if (!lyrics) return null;
-
-    // format lyrics for analysis (DO NOT UPDATE LYRICS WITH THIS)
-    const formattedLyrics = lyrics
-      .replace(/\[.*?\]/g, "") // removes [Verse 2: ... ] [Chorus: ... ]
-      .replace(/-/g, " ") // replace hyphens with spaces for words like "A-goddamn", "cock-block", etc...
-      .replace(/\n/g, " ") // replace newlines
-      .replace(/[?!.,'")()]/g, "") // replace punctuation (? ! . , ')
-      .replace(/ {2,}/g, " ") // replace 2 or more consecutive spaces
-      .trim();
-
-    // console.log("FINAL:", formattedLyrics);
-
-    // split lyrics into array
-    const wordArray: string[] = formattedLyrics.split(" ");
-
-    // initialize hash map
-    const hashMap: HashMap = {};
-
-    // loop through lyrics
-    wordArray.forEach((word) => {
-      const formattedWord = word.toLocaleLowerCase();
-      // increment count if word exists
-      if (hashMap[formattedWord]) {
-        hashMap[formattedWord] += 1;
-        // add word to hashMap if it isn't in there already
-      } else {
-        hashMap[formattedWord] = 1;
-      }
-    });
-
-    // store hashMap for highlighting words on lyrics sheet
-    dispatch(setLyricsHashMap(hashMap));
-
-    let totalFlaggedWords = 0;
-
-    // check users flagged words against lyrics hashMap
-    Object.keys(flaggedFamilies).forEach((fam) => {
-      let totalFamilyOccurances = 0;
-      // get all words in current family
-      const allFamilyWords = Object.entries(sensitiveWordsMap).filter(
-        ([_, wordData]) => {
-          return wordData.family === fam;
-        },
-      );
-
-      // check hash map for each word
-      allFamilyWords.forEach(([word, _]) => {
-        // if word IS in song, add occurances to family
-        if (hashMap[word]) {
-          totalFamilyOccurances += hashMap[word];
-        }
-      });
-
-      dispatch(
-        setFamilyOccurances({ family: fam, occurances: totalFamilyOccurances }),
-      );
-
-      // updated total flaggedWords in song
-      totalFlaggedWords += totalFamilyOccurances;
-    });
-
-    // set result of song analysis
-    if (totalFlaggedWords === 0) {
-      dispatch(
-        setAnalysisResult({
-          result: "pass",
-          totalFlaggedWords: 0,
-        }),
-      );
-    } else {
-      dispatch(
-        setAnalysisResult({
-          result: "fail",
-          totalFlaggedWords: totalFlaggedWords,
-        }),
-      );
-    }
-  }
-
   // run lyric analysis whenever user changes the song
   useEffect(() => {
-    analyzeLyrics();
+    if (lyrics) {
+      analyzeLyrics(lyrics, dispatch, flaggedFamilies);
+    }
   }, [lyrics]);
 
   return (
@@ -194,7 +107,19 @@ export const ForceDirectedGraph: React.FC<{
     };
 
     // Set up color scale
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const colors = {
+      0: "#9dbcda",
+      1: "#9dbcda",
+      2: "#9dbcda",
+      3: "#8c96c6",
+      4: "#8c96c6",
+      5: "#8c6bb1",
+      6: "#8c6bb1",
+      7: "#88419d",
+      8: "#88419d",
+      9: "#4d004b",
+      10: "#4d004b",
+    };
 
     // Combine nodes and create links
     const nodes = [centerNode, ...formattedNodes];
@@ -269,24 +194,32 @@ export const ForceDirectedGraph: React.FC<{
         ),
       )
       .attr("fill", (d) =>
-        (d as GraphNode | RootNode).id === "root"
+        (d as GraphNode | RootNode).id === "root" // Root node color
           ? analysisResult && analysisResult.result === "pass"
             ? "#22c55e"
-            : "#a82f27" // Root node color
+            : "#a82f27"
           : connectedNodeIds.has((d as GraphNode | RootNode).id)
-            ? color((d as GraphNode).category?.[0] || "")
-            : "#fff",
+            ? colors[(d as GraphNode).vulgarityLvl]
+            : "#707070",
       )
       .attr("stroke", (d) =>
         (d as GraphNode | RootNode).id === "root"
           ? analysisResult && analysisResult.result === "pass"
             ? "#2bff79"
-            : "#f73b2f" // Root node color
+            : "#f73b2f" // Root node border
           : connectedNodeIds.has((d as GraphNode | RootNode).id)
-            ? color((d as GraphNode).category?.[0] || "")
-            : "blue",
+            ? "#750000"
+            : "#333333",
       )
-      .attr("stroke-width", 5)
+      .attr("stroke-width", (d) =>
+        (d as GraphNode | RootNode).id === "root"
+          ? analysisResult && analysisResult.result === "pass"
+            ? 5
+            : 5
+          : connectedNodeIds.has((d as GraphNode | RootNode).id)
+            ? 3
+            : 1,
+      )
       .attr("opacity", (d) =>
         connectedNodeIds.has((d as GraphNode | RootNode).id) ? 1 : 0.5,
       );
@@ -316,7 +249,7 @@ export const ForceDirectedGraph: React.FC<{
       .attr(
         "fill",
         (d) =>
-          `${(d as GraphNode | RootNode).id === "root" ? "white" : "black"}`,
+          `${(d as GraphNode | RootNode).id === "root" ? (analysisResult?.result === "pass" ? "#003800" : "#3b0000") : "black"}`,
       );
 
     // Add titles to nodes

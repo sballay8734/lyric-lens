@@ -41,6 +41,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
 // TODO: Add loading states for LOTS of stuff
+// TODO: On desktop, searchSheet and lyricsSheet should be modals NOT popovers
 
 // TUESDAY
 // !TODO: REFACTOR!!!!! (PROJECT IS GETTING MESSY)

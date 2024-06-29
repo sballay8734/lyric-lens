@@ -7,7 +7,7 @@ import FloatingToggle from "./components/shared/FloatingToggle";
 
 function App() {
   return (
-    <div className="flex flex-col w-full h-full items-center justify-center pt-[72px]">
+    <div className="flex flex-col w-full h-full items-center pt-[72px]">
       <Drawer />
       <BottomSheet />
       <FloatingToggle />
