@@ -4,7 +4,6 @@ import { FaCaretDown } from "react-icons/fa";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import {
-  setLyrics,
   setLyricsLoading,
   setSelectedSong,
   setSongsLoading,

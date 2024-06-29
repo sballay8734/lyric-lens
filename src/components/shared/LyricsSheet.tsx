@@ -5,12 +5,18 @@ import { useAppSelector } from "../../hooks/hooks";
 import { hideLyricsSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
 import { RootState } from "../../store/store";
 
+const MATCH_HEADER_LINES = /\[.*?\]/;
+
 export default function LyricsSheet(): React.JSX.Element {
   const dispatch = useDispatch();
   const lyricsSheetIsVis = useAppSelector(
     (state: RootState) => state.btmSheet.lyricsSheetIsVis,
   );
   const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
+
+  const selectedSong = useAppSelector(
+    (state: RootState) => state.songSearch.selectedSong,
+  );
 
   const [formattedLyrics, setFormattedLyrics] = useState<
     React.JSX.Element[] | null
@@ -27,12 +33,29 @@ export default function LyricsSheet(): React.JSX.Element {
 
       return (
         <span key={sectionIndex}>
-          {songLines.map((line, lineIndex) => (
-            <span className="text-xs" key={lineIndex}>
-              {line}
-              <br />
-            </span>
-          ))}
+          {songLines.map((line, lineIndex) => {
+            const lineIsHeaderLine = MATCH_HEADER_LINES.test(line);
+
+            // if line is header, style appropriately
+            if (lineIsHeaderLine) {
+              return (
+                <span
+                  className="text-xs font-bold text-secondary"
+                  key={lineIndex}
+                >
+                  {line}
+                  <br />
+                </span>
+              );
+            } else {
+              return (
+                <span className="text-xs" key={lineIndex}>
+                  {line}
+                  <br />
+                </span>
+              );
+            }
+          })}
         </span>
       );
     });
@@ -61,8 +84,17 @@ export default function LyricsSheet(): React.JSX.Element {
             Close
           </button>
         </div>
+        {/* Song Title and Artists */}
+        <div className="flex flex-col items-center justify-center mb-4 bg-base-300 py-4 rounded-sm">
+          <h2 className="font-bold text-white">{`"${selectedSong?.title}"`}</h2>
+          <h2 className="text-faded text-sm rounded-sm w-fit">
+            {selectedSong?.artist_names}
+          </h2>
+        </div>
         {/* Lyrics */}
-        <p className="flex text-center flex-col gap-8">{formattedLyrics}</p>
+        <p className="flex text-center flex-col gap-4 leading-4">
+          {formattedLyrics}
+        </p>
       </div>
       {/* OVERLAY TO HANDLE CLOSE CLOSE ON OUTSIDE CLICK */}
       <form

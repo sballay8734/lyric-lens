@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 import LyricsSheet from "./shared/LyricsSheet";
 import { GraphNode, RootNode } from "../data/mockGraphData";
+import { sensitiveWordsMap } from "../data/sensitiveWordMap";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import {
   FlaggedFamiliesObject,
@@ -15,7 +16,6 @@ import {
 } from "../store/features/songSearch/songSearchSlice";
 import { RootState } from "../store/store";
 import { HashMap } from "../types/graph";
-import { sensitiveWordsMap } from "../data/sensitiveWordMap";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
@@ -35,6 +35,7 @@ export default function Graph(): React.JSX.Element {
   function analyzeLyrics() {
     if (!lyrics) return null;
 
+    // format lyrics for analysis (DO NOT UPDATE LYRICS WITH THIS)
     const formattedLyrics = lyrics
       .replace(/\[.*?\]/g, "") // removes [Verse 2: ... ] [Chorus: ... ]
       .replace(/-/g, " ") // replace hyphens with spaces for words like "A-goddamn", "cock-block", etc...
@@ -43,7 +44,7 @@ export default function Graph(): React.JSX.Element {
       .replace(/ {2,}/g, " ") // replace 2 or more consecutive spaces
       .trim();
 
-    console.log("FINAL:", formattedLyrics);
+    // console.log("FINAL:", formattedLyrics);
 
     // split lyrics into array
     const wordArray: string[] = formattedLyrics.split(" ");
