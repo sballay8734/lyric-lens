@@ -17,7 +17,7 @@ export default function SongArtistOverlay(): React.JSX.Element {
   return (
     <div className="absolute w-full h-full top-0 pointer-events-none flex justify-center">
       <div
-        className={`bg-slate-500/10 w-fit h-fit px-4 py-2 rounded-md mt-20 backdrop-blur-sm flex flex-col items-center min-w-60 ${!selectedSong ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"}`}
+        className={`bg-slate-500/10 w-fit max-w-[80%] h-fit px-4 py-2 rounded-md mt-20 backdrop-blur-sm flex flex-col items-center min-w-60 ${!selectedSong ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"}`}
       >
         <h2 className="font-bold text-white mb-1">{`"${selectedSong?.title}"`}</h2>
         <h2 className="text-faded text-sm bg-slate-900/80 px-2 py-1 rounded-sm w-fit">

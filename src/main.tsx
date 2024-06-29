@@ -37,17 +37,21 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 
 // MVP TODO *******************************************************************
-// !TODO: Tabbing inside of the inputs causes some weird behavior
-// !TODO: Add toggle to switch between song search and word selection
-// !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
-// TODO: Complete a default flaggedWords object (just any word over 2 vLvl)
-// TODO: Fix weird padding thing when artist dropdown is loading
-// TODO: Add loading states for LOTS of stuff
+// SATURDAY
 // TODO: Fix the fetching and formatting of lyrics all the way up to displaying them for the user
 // mTODO: Lyrics for display aren't quite formatting properly due to inconsitencies of the html markup
+
+// !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
+// TODO: Add loading states for LOTS of stuff
+// mTODO: disable "close" btn in searchSheet if lyrics are loading/analyzing
+
+// TUESDAY
+// !TODO: Tabbing inside of the inputs causes some weird behavior
+// !TODO: Add toggle to switch between song search and word selection
+// TODO: Complete a default flaggedWords object (just any word over 2 vLvl)
+// TODO: Fix weird padding thing when artist dropdown is loading
 // mTODO: flagged words not in song should congregate together somewhere and not on the sides of the screen
 // mTODO: maybe move "View Lyrics" btn somewhere else
-// mTODO: disable "close" btn in searchSheet if lyrics are loading/analyzing
 
 // V 1.0    *******************************************************************
 // !TODO: OPTIMIZATIONS FOR API REQUESTS

@@ -776,54 +776,6 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
   },
 };
 
-// !TODO: You haven't added new words to the families
-export const wordFamilies: { [key: string]: string[] } = {
-  nigger: ["nigger", "niggers", "nigga", "niggas"],
-  coon: ["coon", "coons"],
-  jigaboo: [
-    "jigaboo",
-    "jiggaboo",
-    "jiggerboo",
-    "jigaboos",
-    "jiggaboos",
-    "jiggerboos",
-  ],
-  rape: ["rape", "raping", "rapist", "rapists"],
-  fuck: [
-    "fuck",
-    "fuckin",
-    "fucking",
-    "fuckhole",
-    "motherfucker",
-    "motherfuckers",
-    "motherfucking",
-    "motherfuckin",
-    "motherfucka",
-    "motherfuckas",
-    "fucks",
-    "fucked",
-    "",
-  ],
-  shit: ["shit", "shitin", "shiting", "shithole"],
-  apeshit: ["apeshit"],
-  dogshit: ["dogshit"],
-  horseshit: ["horseshit"],
-  sex: ["sex", "sexy", "sexual", "sexually", "sexuality"],
-  ass: ["ass", "assmunch", "arsehole", "asshole"],
-  suck: ["suck", "sucker", "sucking"],
-  bitch: ["bitch", "bitches", "bitchin"],
-  whore: ["whore", "whores"],
-  dick: ["dick", "dicks"],
-  pussy: ["pussy", "pussies"],
-  damn: ["damn", "damned"],
-  hell: ["hell", "hellish"],
-  bastard: ["bastard", "bastards"],
-  crap: ["crap", "crappy"],
-  slut: ["slut", "sluts"],
-  piss: ["piss", "pissed"],
-  skeet: ["skeet-skeet", "skeeting"],
-};
-
 // !TODO: WORDS TO ADD
 // ho
 // masturbate

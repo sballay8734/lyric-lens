@@ -11,6 +11,7 @@ import {
 } from "../../store/features/songSearch/songSearchSlice";
 import { RootState } from "../../store/store";
 import { SongFromApi } from "../../types/api";
+import { fetchAndParseLyrics } from "../../utils/parseLyrics";
 
 const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 
@@ -147,40 +148,8 @@ export default function SongInput(): React.JSX.Element {
     const lyricsPath = song.url.replace("https://genius.com", "");
     const getLyricsQuery = `/proxy${lyricsPath}`;
 
-    const res = await fetch(getLyricsQuery);
-    const html = await res.text();
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-
-    // get all elements containing lyrics
-    const lyricsElements = doc.querySelectorAll("div[data-lyrics-container]");
-
-    // remove tags from markup
-    if (lyricsElements.length > 0) {
-      let fullLyrics = "";
-      lyricsElements.forEach((element) => {
-        const lyricsHtml = element.innerHTML;
-        // console.log(lyricsHtml);
-        const formattedLyrics = lyricsHtml
-          .replace(/<br\s*\/?>/gi, "\n") // Replace <br> tags with newlines
-          .replace(/<\/a[^>]*>/gi, "") // Replace closing </a> tags
-          .replace(/<\/b[^>]*>/gi, " ") // Replace closing </b> tags
-          .replace(/<a[^>]*>/gi, "") // Replace opening <a> tags
-          .replace(/<\/?[^>]+(>|$)/g, ""); // Replace all remaining tags
-
-        fullLyrics += formattedLyrics + "\n\n"; // Add 2 lines between sections
-      });
-
-      // update lyrics in Redux Store
-      dispatch(setLyrics(fullLyrics));
-      dispatch(setLyricsLoading(false));
-      // TODO: This is also where you should trigger the animation to start
-    } else {
-      // mTODO: Handle errors here (when RTK Query is added)
-      dispatch(setLyricsLoading(false));
-      console.log("Lyrics not found");
-    }
+    // fetch, parse, and dispatch lyrics to redux
+    fetchAndParseLyrics(getLyricsQuery, dispatch);
   }
 
   // Accessiblity (select song by pressing the enter key)
