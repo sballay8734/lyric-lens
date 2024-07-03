@@ -13,8 +13,7 @@ import {
 import { RootState } from "../../store/store";
 import { ArtistHit, ArtistSimple } from "../../types/api";
 
-const publicUrl =
-  import.meta.env.VITE_PUBLIC_API_BASE_URL || "https://corsproxy.io/?";
+const publicUrl = import.meta.env.VITE_PUBLIC_API_BASE_URL || "/proxy";
 
 export default function ArtistInput(): React.JSX.Element {
   const controllerRef = useRef<AbortController>();
