@@ -38,6 +38,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // MVP TODO *******************************************************************
 // !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
+// TODO: dropdowns should scroll back to the top when a new song is selected
 // TODO: Add loading for when artists are being fetched (inside input)
 // TODO: Add loading states for LOTS of stuff (when lyrics are loading)
 // TODO: On desktop, searchSheet and lyricsSheet should be modals NOT popovers
