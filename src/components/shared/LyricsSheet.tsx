@@ -77,7 +77,10 @@ export default function LyricsSheet(): React.JSX.Element {
                       )
                     ) {
                       return (
-                        <span key={wordIndex} className="text-secondary">
+                        <span
+                          key={wordIndex}
+                          className="text-secondary bg-primary-content px-1"
+                        >
                           {word}{" "}
                         </span>
                       );

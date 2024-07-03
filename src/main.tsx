@@ -37,9 +37,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 
 // MVP TODO *******************************************************************
-// !TODO: TEST THAT DEV MODE STILL WORKS
-
 // !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
+// TODO: Add loading for when artists are being fetched (inside input)
 // TODO: Add loading states for LOTS of stuff (when lyrics are loading)
 // TODO: On desktop, searchSheet and lyricsSheet should be modals NOT popovers
 
