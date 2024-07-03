@@ -42,7 +42,7 @@ export default function SongInput(): React.JSX.Element {
   const fetchSongsPage = useCallback(async (artistId: number, page: number) => {
     const getAllSongsQuery = `${privateUrl}/artists/${artistId}/songs?sort=popularity&per_page=50&page=${page}`;
 
-    console.log(getAllSongsQuery);
+    console.log(bearer);
 
     const res = await fetch(getAllSongsQuery, {
       method: "GET",
