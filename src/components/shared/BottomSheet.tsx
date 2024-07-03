@@ -13,6 +13,7 @@ import { RootState } from "../../store/store";
 import ArtistInput from "../Search/ArtistInput";
 import LyricsInput from "../Search/LyricsInput";
 import SongInput from "../Search/SongInput";
+import LoadingModal from "./LoadingModal";
 
 export default function BottomSheet(): React.JSX.Element {
   const dispatch = useDispatch();
@@ -96,6 +97,7 @@ export default function BottomSheet(): React.JSX.Element {
             className="absolute right-4 opacity-80 scale-x-[-1]"
           />
         </button>
+        <LoadingModal />
       </div>
       {/* OVERLAY TO HANDLE CLOSE CLOSE ON OUTSIDE CLICK */}
       <form
