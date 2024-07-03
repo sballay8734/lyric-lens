@@ -15,10 +15,6 @@ export default function LyricsSheet(): React.JSX.Element {
   );
   const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
 
-  const lyricsLoading = useAppSelector(
-    (state: RootState) => state.songSearch.lyricsLoading,
-  );
-
   const selectedSong = useAppSelector(
     (state: RootState) => state.songSearch.selectedSong,
   );
@@ -54,7 +50,7 @@ export default function LyricsSheet(): React.JSX.Element {
               );
             } else {
               // TODO: This is where you have to copy the line
-              const originalLine = line;
+              // const originalLine = line;
               // highlight words that are flagged
               const words = line
                 .replace(/-/g, " ") // replace hyphens with spaces for words like "A-goddamn", "cock-block", etc...
