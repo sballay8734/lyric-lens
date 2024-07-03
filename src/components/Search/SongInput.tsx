@@ -48,6 +48,7 @@ export default function SongInput(): React.JSX.Element {
       method: "GET",
       headers: {
         Authorization: bearer,
+        Host: "api.genius.com",
         Accept: "application/json",
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
