@@ -45,7 +45,12 @@ export default function SongInput(): React.JSX.Element {
     console.log(getAllSongsQuery);
 
     const res = await fetch(getAllSongsQuery, {
-      headers: { Authorization: bearer },
+      method: "GET",
+      headers: {
+        Authorization: bearer,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
     });
     return res.json();
   }, []);

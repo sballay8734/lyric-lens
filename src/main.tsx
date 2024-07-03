@@ -42,7 +42,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // TODO: Add loading states for LOTS of stuff
 // TODO: On desktop, searchSheet and lyricsSheet should be modals NOT popovers
 
-// TUESDAY
 // !TODO: REFACTOR!!!!! (PROJECT IS GETTING MESSY)
 // TODO: Lots of things need to be renamed
 // TODO: Organize files, types, mockData, project structure, components etc...
@@ -56,6 +55,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // mTODO: Words above around lvl 8 probably don't even need to be shown on graph
 
 // V 1.0    *******************************************************************
+// !TODO: Update cors config (right now you're just using https://corsproxy.io/)
 // !TODO: OPTIMIZATIONS FOR API REQUESTS
 // !TODO: Optimizations for logic and looping through families, words, etc...
 // !TODO: each bubble should be clickable and show more details like all the words (not just the family which is what they currently show)
