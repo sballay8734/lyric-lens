@@ -13,6 +13,8 @@ import {
 import { RootState } from "../../store/store";
 import { ArtistHit, ArtistSimple } from "../../types/api";
 
+const privateUrl = import.meta.env.VITE_PUBLIC_API_BASE_URL || "/proxy";
+
 export default function ArtistInput(): React.JSX.Element {
   const controllerRef = useRef<AbortController>();
   // LOCAL STATE
@@ -86,7 +88,7 @@ export default function ArtistInput(): React.JSX.Element {
       page: "1", // Adjust if you want to implement pagination
     });
 
-    const artistQuery = `/proxy/api/search/artist?${params}`;
+    const artistQuery = `${privateUrl}/api/search/artist?${params}`;
 
     try {
       const res = await fetch(artistQuery, { signal });

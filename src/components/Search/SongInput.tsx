@@ -13,6 +13,9 @@ import { SongFromApi } from "../../types/api";
 import { fetchAndParseLyrics } from "../../utils/parseLyrics";
 
 const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
+const privateUrl =
+  import.meta.env.VITE_PRIVATE_API_BASE_URL || "/official-proxy";
+const publicUrl = import.meta.env.VITE_PUBLIC_API_BASE_URL || "/proxy";
 
 export default function SongInput(): React.JSX.Element {
   const dispatch = useAppDispatch();
@@ -37,7 +40,7 @@ export default function SongInput(): React.JSX.Element {
 
   // Fetch a single page of songs for an artist
   const fetchSongsPage = useCallback(async (artistId: number, page: number) => {
-    const getAllSongsQuery = `/official-proxy/artists/${artistId}/songs?sort=popularity&per_page=50&page=${page}`;
+    const getAllSongsQuery = `${privateUrl}/artists/${artistId}/songs?sort=popularity&per_page=50&page=${page}`;
     const res = await fetch(getAllSongsQuery, {
       headers: { Authorization: bearer },
     });
@@ -142,7 +145,7 @@ export default function SongInput(): React.JSX.Element {
     setSongDropdownShown(false);
 
     const lyricsPath = song.url.replace("https://genius.com", "");
-    const getLyricsQuery = `/proxy${lyricsPath}`;
+    const getLyricsQuery = `${publicUrl}${lyricsPath}`;
 
     // fetch, parse, and dispatch lyrics to redux
     fetchAndParseLyrics(getLyricsQuery, dispatch);
