@@ -37,7 +37,7 @@ export default function LyricsInput(): React.JSX.Element {
       <textarea
         rows={8}
         // mTODO: change true back to "disabled" when functionality is added
-        disabled={true}
+        disabled={disabled}
         maxLength={300}
         className="text-area grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50 resize-none"
         placeholder="Coming soon..."

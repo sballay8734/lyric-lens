@@ -5,7 +5,7 @@ import { useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
 
 export default function LoadingModal(): React.JSX.Element {
-  const [progress, setProgress] = useState<number>(0);
+  const [progress, _] = useState<number>(0);
 
   const lyricsLoading = useAppSelector(
     (state: RootState) => state.songSearch.lyricsLoading,
