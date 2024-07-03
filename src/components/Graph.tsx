@@ -208,7 +208,7 @@ export const ForceDirectedGraph: React.FC<{
             ? "#2bff79"
             : "#f73b2f" // Root node border
           : connectedNodeIds.has((d as GraphNode | RootNode).id)
-            ? "#750000"
+            ? "#cd75e6"
             : "#333333",
       )
       .attr("stroke-width", (d) =>

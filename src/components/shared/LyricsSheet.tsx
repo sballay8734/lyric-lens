@@ -79,7 +79,7 @@ export default function LyricsSheet(): React.JSX.Element {
                       return (
                         <span
                           key={wordIndex}
-                          className="text-secondary bg-primary-content px-1"
+                          className="text-secondary bg-primary-content rounded-sm"
                         >
                           {word}{" "}
                         </span>
@@ -122,7 +122,7 @@ export default function LyricsSheet(): React.JSX.Element {
           </button>
         </div>
         {/* Song Title and Artists */}
-        <div className="flex flex-col items-center justify-center mb-4 bg-base-300 py-4 rounded-sm">
+        <div className="flex flex-col items-center justify-center mb-4 bg-base-300 py-4 rounded-sm px-2">
           <h2 className="font-bold text-white">{`"${selectedSong?.title}"`}</h2>
           <h2 className="text-faded text-sm rounded-sm w-fit">
             {selectedSong?.artist_names}
