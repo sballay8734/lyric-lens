@@ -46,6 +46,7 @@ export default function SongInput(): React.JSX.Element {
 
     const res = await fetch(getAllSongsQuery, {
       method: "GET",
+      mode: "cors",
       headers: {
         Authorization: bearer,
         Host: "api.genius.com",
