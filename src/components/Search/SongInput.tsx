@@ -50,6 +50,7 @@ export default function SongInput(): React.JSX.Element {
         Authorization: bearer,
         Accept: "application/json",
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
     });
     return res.json();
