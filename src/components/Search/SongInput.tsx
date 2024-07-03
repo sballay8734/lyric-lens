@@ -12,7 +12,7 @@ import { RootState } from "../../store/store";
 import { SongFromApi } from "../../types/api";
 import { fetchAndParseLyrics } from "../../utils/parseLyrics";
 
-const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
+const accessToken = import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 const privateUrl =
   import.meta.env.VITE_PRIVATE_API_BASE_URL || "/official-proxy";
 const publicUrl = import.meta.env.VITE_PUBLIC_API_BASE_URL || "/proxy";
@@ -40,21 +40,9 @@ export default function SongInput(): React.JSX.Element {
 
   // Fetch a single page of songs for an artist
   const fetchSongsPage = useCallback(async (artistId: number, page: number) => {
-    const getAllSongsQuery = `${privateUrl}/artists/${artistId}/songs?sort=popularity&per_page=50&page=${page}`;
+    const getAllSongsQuery = `${privateUrl}/artists/${artistId}/songs?sort=popularity&per_page=50&page=${page}&access_token=${accessToken}`;
 
-    console.log(bearer);
-
-    const res = await fetch(getAllSongsQuery, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        Authorization: bearer,
-        Host: "api.genius.com",
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
+    const res = await fetch(getAllSongsQuery);
     return res.json();
   }, []);
 
