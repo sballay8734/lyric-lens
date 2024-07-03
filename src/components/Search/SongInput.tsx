@@ -15,7 +15,8 @@ import { fetchAndParseLyrics } from "../../utils/parseLyrics";
 const bearer = "Bearer " + import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 const privateUrl =
   import.meta.env.VITE_PRIVATE_API_BASE_URL || "/official-proxy";
-const publicUrl = import.meta.env.VITE_PUBLIC_API_BASE_URL || "/proxy";
+const publicUrl =
+  import.meta.env.VITE_PUBLIC_API_BASE_URL || "https://corsproxy.io/?";
 
 export default function SongInput(): React.JSX.Element {
   const dispatch = useAppDispatch();
