@@ -1,11 +1,6 @@
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
-// import eslint from "vite-plugin-eslint";
-// import dns from "dns";
 
-// dns.setDefaultResultOrder("verbatim");
-
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {

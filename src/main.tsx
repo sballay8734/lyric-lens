@@ -37,7 +37,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 
 // MVP TODO *******************************************************************
-// SATURDAY
 
 // !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
 // TODO: Add loading states for LOTS of stuff

@@ -53,9 +53,6 @@ export default function SongInput(): React.JSX.Element {
       const pagePromises = [];
 
       // Create promises for fetching up to 35 pages of songs
-      /* NOTE: Avoiding the hardcoded upperbound for "page" would be ideal but  99.99% of artists have less than 35 pages */
-      // SEE BOTTOM FOR REFERENCE
-      // REVIEW: 35 is VERY SAFE but query is long. I THINK songs are sorted by popularity in the response so really, 10 pages or so should be fine
       for (let page = 1; page <= 10; page++) {
         pagePromises.push(fetchSongsPage(artistId, page));
       }
