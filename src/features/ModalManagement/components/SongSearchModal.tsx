@@ -15,7 +15,7 @@ import {
 } from "../../SongSearchForm/redux/songSearchFormSlice";
 import { hideSearchSheet } from "../redux/modalManagementSlice";
 
-export default function BottomSheet(): React.JSX.Element {
+export default function SongSearchModal(): React.JSX.Element {
   const dispatch = useDispatch();
   let location = useLocation();
   const navigate = useNavigate();

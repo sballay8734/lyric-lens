@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { ArtistSimple, SongFromApi } from "../../../types/api";
+import { ArtistSimple, SongFromApi } from "../../../types/apiObjects";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
 

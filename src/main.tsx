@@ -39,6 +39,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // MVP TODO *******************************************************************
 // !TODO: REFACTOR & REORGANIZE!!!!! (PROJECT IS GETTING MESSY)
 
+// TODO: BtmSheet should take up full screen
 // !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
 // !TODO: Users should be able to search by Song Title WITHOUT artist
 // TODO: Users should easily be able to switch flag profiles ON the graph without needing to navigate to a different page.

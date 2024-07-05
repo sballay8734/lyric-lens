@@ -4,7 +4,7 @@ import { FaCaretDown } from "react-icons/fa";
 
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import { SongFromApi } from "../../../types/api";
+import { SongFromApi } from "../../../types/apiObjects";
 import {
   setLyricsLoading,
   setSelectedSong,

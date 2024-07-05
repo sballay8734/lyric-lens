@@ -1,6 +1,9 @@
 import { SimulationNodeDatum } from "d3";
 
-import { SensitiveWordCategory, VulgarityLevel } from "./sensitiveWordMap";
+import {
+  SensitiveWordCategory,
+  VulgarityLevel,
+} from "../../../data/sensitiveWordMap";
 
 export type GraphNode = SimulationNodeDatum & {
   id: string;

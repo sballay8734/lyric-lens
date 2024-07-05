@@ -13,8 +13,7 @@ export default function LoadingModal(): React.JSX.Element {
 
   return (
     <dialog open={lyricsLoading} id="loadingModal" className={`modal`}>
-      {/* NOTE: negative margin is to offset global padding */}
-      <div className="modal-box flex items-center justify-center w-[80%] gap-6 bg-neutral flex-col rounded-sm mb-[72px]">
+      <div className="modal-box flex items-center justify-center w-[80%] gap-6 bg-neutral flex-col rounded-sm">
         <div className="flex items-center justify-center gap-2">
           <h3>Fetching lyrics...</h3>
           <AiOutlineLoading3Quarters className="animate-spin" />

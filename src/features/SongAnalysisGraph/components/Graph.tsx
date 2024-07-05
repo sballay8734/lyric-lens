@@ -2,13 +2,13 @@
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 
-import { GraphNode, RootNode } from "../../../data/mockGraphData";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import { analyzeLyrics } from "../../SongSearchForm/utils/analyzeLyrics";
 import { FlaggedFamiliesObject } from "../../FlagManagement/redux/flagManagementSlice";
 import LyricsSheet from "../../ModalManagement/components/LyricsSheet";
 import { AnalysisResult } from "../../SongSearchForm/redux/songSearchFormSlice";
+import { analyzeLyrics } from "../../SongSearchForm/utils/analyzeLyrics";
+import { GraphNode, RootNode } from "../data/mockGraphData";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
@@ -103,7 +103,7 @@ export const ForceDirectedGraph: React.FC<{
       occurances: null,
       vulgarityLvl: null,
       category: null,
-      radius: 65, // should get bigger with more curse words
+      radius: 65, // TODO: should get bigger with more curse words
       fx: centerX,
       fy: centerY,
     };
@@ -270,13 +270,13 @@ export const ForceDirectedGraph: React.FC<{
       node
         .attr("cx", (d) => {
           const r = (d as GraphNode | RootNode).radius;
-          const padding = -10; // Adjust the padding value as needed
+          const padding = 0; // Adjust the padding value as needed
           d.x = Math.max(r + padding, Math.min(width - r - padding, d.x!));
           return d.x!;
         })
         .attr("cy", (d) => {
           const r = (d as GraphNode | RootNode).radius;
-          const padding = 20; // Adjust the padding value as needed
+          const padding = 0; // Adjust the padding value as needed
           d.y = Math.max(r + padding, Math.min(height - r - padding, d.y!));
           return d.y!;
         });

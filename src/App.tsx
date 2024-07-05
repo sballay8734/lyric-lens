@@ -1,15 +1,15 @@
 import { Outlet } from "react-router-dom";
 
 import "./App.css";
-import Drawer from "./components/Drawer";
-import BottomSheet from "./features/ModalManagement/components/BottomSheet";
+// import Drawer from "./components/Drawer";
 import FloatingToggle from "./features/ModalManagement/components/FloatingToggle";
+import SongSearchModal from "./features/ModalManagement/components/SongSearchModal";
 
 function App() {
   return (
-    <div className="flex flex-col w-full h-full items-center pt-[72px]">
-      <Drawer />
-      <BottomSheet />
+    <div className="flex flex-col w-full h-full items-center">
+      {/* <Drawer /> */}
+      <SongSearchModal />
       <FloatingToggle />
       <Outlet />
     </div>

@@ -4,7 +4,7 @@ export interface GeniusResponseFormat {
   response: unknown;
 }
 
-export interface ArtistHit {
+export interface ArtistFromApi {
   highlights?: [];
   index: string;
   result: {

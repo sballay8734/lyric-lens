@@ -1,12 +1,12 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
 import { sensitiveWordsMap } from "../../../data/sensitiveWordMap";
-import { HashMap } from "../../../types/graph";
 import {
   FlaggedFamiliesObject,
   setFamilyOccurances,
   setLyricsHashMap,
 } from "../../FlagManagement/redux/flagManagementSlice";
+import { HashMap } from "../../SongAnalysisGraph/types/graphTypes";
 import { setAnalysisResult } from "../redux/songSearchFormSlice";
 
 export function analyzeLyrics(

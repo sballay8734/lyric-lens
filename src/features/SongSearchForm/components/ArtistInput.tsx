@@ -3,7 +3,7 @@ import { MdOutlinePerson } from "react-icons/md";
 
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import { ArtistHit, ArtistSimple } from "../../../types/api";
+import { ArtistFromApi, ArtistSimple } from "../../../types/apiObjects";
 import { setLyricsHashMap } from "../../FlagManagement/redux/flagManagementSlice";
 import {
   setAnalysisResult,
@@ -99,7 +99,7 @@ export default function ArtistInput(): React.JSX.Element {
       // console.log(data);
 
       const artistsArray = data.response.sections[0].hits.map(
-        (item: ArtistHit) => {
+        (item: ArtistFromApi) => {
           return {
             name: item.result.name,
             slug: item.result.slug,
