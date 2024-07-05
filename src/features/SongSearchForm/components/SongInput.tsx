@@ -2,15 +2,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CgSpinnerAlt } from "react-icons/cg";
 import { FaCaretDown } from "react-icons/fa";
 
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
+import { SongFromApi } from "../../../types/api";
 import {
   setLyricsLoading,
   setSelectedSong,
   setSongsLoading,
-} from "../../store/features/songSearch/songSearchSlice";
-import { RootState } from "../../store/store";
-import { SongFromApi } from "../../types/api";
-import { fetchAndParseLyrics } from "../../utils/parseLyrics";
+} from "../redux/songSearchFormSlice";
+import { fetchAndParseLyrics } from "../utils/parseLyrics";
 
 const accessToken = import.meta.env.VITE_GENIUS_ACCESS_TOKEN;
 const privateUrl =
@@ -25,13 +25,13 @@ export default function SongInput(): React.JSX.Element {
   const [songTitle, setSongTitle] = useState<string>("");
 
   const selectedArtist = useAppSelector(
-    (state: RootState) => state.songSearch.selectedArtist,
+    (state: RootState) => state.songSearchForm.selectedArtist,
   );
   const selectedSong = useAppSelector(
-    (state: RootState) => state.songSearch.selectedSong,
+    (state: RootState) => state.songSearchForm.selectedSong,
   );
   const songsLoading = useAppSelector(
-    (state: RootState) => state.songSearch.songsLoading,
+    (state: RootState) => state.songSearchForm.songsLoading,
   );
 
   // !TODO: MOVE BELOW STATE TO REDUX

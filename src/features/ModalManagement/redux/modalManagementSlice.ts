@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface BtmSheetState {
+interface ModalManagementState {
   searchSheetIsVis: boolean;
   lyricsSheetIsVis: boolean;
 }
 
-const initialState: BtmSheetState = {
+const initialState: ModalManagementState = {
   searchSheetIsVis: false,
   lyricsSheetIsVis: false,
 };
 
-export const btmSheetSlice = createSlice({
-  name: "btmSheet",
+export const modalManagementSlice = createSlice({
+  name: "modalManagement",
   initialState,
   reducers: {
     hideSearchSheet: (state) => {
@@ -35,6 +35,6 @@ export const {
   showSearchSheet,
   hideLyricsSheet,
   showLyricsSheet,
-} = btmSheetSlice.actions;
+} = modalManagementSlice.actions;
 
-export default btmSheetSlice.reducer;
+export default modalManagementSlice.reducer;

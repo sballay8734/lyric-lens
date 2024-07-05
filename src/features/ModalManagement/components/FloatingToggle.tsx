@@ -1,14 +1,14 @@
 import { LuSearch } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 
-import { useAppSelector } from "../../hooks/hooks";
-import { showSearchSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
-import { RootState } from "../../store/store";
+import { useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
+import { showSearchSheet } from "../redux/modalManagementSlice";
 
 export default function FloatingToggle(): React.JSX.Element {
   const dispatch = useDispatch();
   const searchSheetIsVis = useAppSelector(
-    (state: RootState) => state.btmSheet.searchSheetIsVis,
+    (state: RootState) => state.modalManagement.searchSheetIsVis,
   );
 
   return (

@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import bottomSheetReducer from "./features/bottomSheet/bottomSheetSlice";
-import flagManagerReducer from "./features/flagManager/flagManagerSlice";
-import songSearchReducer from "./features/songSearch/songSearchSlice";
+import flagManagementReducer from "../features/FlagManagement/redux/flagManagementSlice";
+import modalManagementReducer from "../features/ModalManagement/redux/modalManagementSlice";
+import songSearchFormReducer from "../features/SongSearchForm/redux/songSearchFormSlice";
 
 export const store = configureStore({
   reducer: {
-    songSearch: songSearchReducer,
-    btmSheet: bottomSheetReducer,
-    flagManager: flagManagerReducer,
+    songSearchForm: songSearchFormReducer,
+    modalManagement: modalManagementReducer,
+    flagManagement: flagManagementReducer,
   },
 });
 

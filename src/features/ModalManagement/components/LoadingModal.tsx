@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import { useAppSelector } from "../../hooks/hooks";
-import { RootState } from "../../store/store";
+import { useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
 
 export default function LoadingModal(): React.JSX.Element {
   const [progress, _] = useState<number>(0);
 
   const lyricsLoading = useAppSelector(
-    (state: RootState) => state.songSearch.lyricsLoading,
+    (state: RootState) => state.songSearchForm.lyricsLoading,
   );
 
   return (

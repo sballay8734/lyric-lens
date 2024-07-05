@@ -1,18 +1,20 @@
 import { useDispatch } from "react-redux";
 
-import { useAppSelector } from "../../hooks/hooks";
-import { showLyricsSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
-import { RootState } from "../../store/store";
+import { useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
+import { showLyricsSheet } from "../../ModalManagement/redux/modalManagementSlice";
 
 export default function SongArtistOverlay(): React.JSX.Element {
   const dispatch = useDispatch();
   const selectedSong = useAppSelector(
-    (state: RootState) => state.songSearch.selectedSong,
+    (state: RootState) => state.songSearchForm.selectedSong,
   );
   const analysisResult = useAppSelector(
-    (state: RootState) => state.songSearch.analysisResult,
+    (state: RootState) => state.songSearchForm.analysisResult,
   );
-  const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
+  const lyrics = useAppSelector(
+    (state: RootState) => state.songSearchForm.lyrics,
+  );
 
   return (
     <div className="absolute w-full h-full top-0 pointer-events-none flex justify-center">

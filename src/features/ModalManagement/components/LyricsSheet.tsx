@@ -1,26 +1,28 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { sensitiveWordsMap } from "../../data/sensitiveWordMap";
-import { useAppSelector } from "../../hooks/hooks";
-import { hideLyricsSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
-import { RootState } from "../../store/store";
+import { sensitiveWordsMap } from "../../../data/sensitiveWordMap";
+import { useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
+import { hideLyricsSheet } from "../redux/modalManagementSlice";
 
 const MATCH_HEADER_LINES = /\[.*?\]/;
 
 export default function LyricsSheet(): React.JSX.Element {
   const dispatch = useDispatch();
   const lyricsSheetIsVis = useAppSelector(
-    (state: RootState) => state.btmSheet.lyricsSheetIsVis,
+    (state: RootState) => state.modalManagement.lyricsSheetIsVis,
   );
-  const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
+  const lyrics = useAppSelector(
+    (state: RootState) => state.songSearchForm.lyrics,
+  );
 
   const selectedSong = useAppSelector(
-    (state: RootState) => state.songSearch.selectedSong,
+    (state: RootState) => state.songSearchForm.selectedSong,
   );
 
   const flaggedFamilies = useAppSelector(
-    (state: RootState) => state.flagManager.flaggedFamilies,
+    (state: RootState) => state.flagManagement.flaggedFamilies,
   );
 
   const [formattedLyrics, setFormattedLyrics] = useState<

@@ -2,27 +2,29 @@
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 
-import LyricsSheet from "./shared/LyricsSheet";
-import { GraphNode, RootNode } from "../data/mockGraphData";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { FlaggedFamiliesObject } from "../store/features/flagManager/flagManagerSlice";
-import { AnalysisResult } from "../store/features/songSearch/songSearchSlice";
-import { RootState } from "../store/store";
-import { analyzeLyrics } from "../utils/analyzeLyrics";
+import { GraphNode, RootNode } from "../../../data/mockGraphData";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
+import { analyzeLyrics } from "../../SongSearchForm/utils/analyzeLyrics";
+import { FlaggedFamiliesObject } from "../../FlagManagement/redux/flagManagementSlice";
+import LyricsSheet from "../../ModalManagement/components/LyricsSheet";
+import { AnalysisResult } from "../../SongSearchForm/redux/songSearchFormSlice";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
   const dispatch = useAppDispatch();
-  const lyrics = useAppSelector((state: RootState) => state.songSearch.lyrics);
+  const lyrics = useAppSelector(
+    (state: RootState) => state.songSearchForm.lyrics,
+  );
   const flaggedFamilies = useAppSelector(
-    (state: RootState) => state.flagManager.flaggedFamilies,
+    (state: RootState) => state.flagManagement.flaggedFamilies,
   );
   const selectedSong = useAppSelector(
-    (state: RootState) => state.songSearch.selectedSong,
+    (state: RootState) => state.songSearchForm.selectedSong,
   );
 
   const analysisResult = useAppSelector(
-    (state: RootState) => state.songSearch.analysisResult,
+    (state: RootState) => state.songSearchForm.analysisResult,
   );
 
   // run lyric analysis whenever user changes the song

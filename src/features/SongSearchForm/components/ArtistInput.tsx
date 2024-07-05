@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { MdOutlinePerson } from "react-icons/md";
 
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { setLyricsHashMap } from "../../store/features/flagManager/flagManagerSlice";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
+import { ArtistHit, ArtistSimple } from "../../../types/api";
+import { setLyricsHashMap } from "../../FlagManagement/redux/flagManagementSlice";
 import {
   setAnalysisResult,
   setArtistQuery,
   setLyrics,
   setSelectedArtist,
   setSelectedSong,
-} from "../../store/features/songSearch/songSearchSlice";
-import { RootState } from "../../store/store";
-import { ArtistHit, ArtistSimple } from "../../types/api";
+} from "../redux/songSearchFormSlice";
 
 const publicUrl = import.meta.env.VITE_PUBLIC_API_BASE_URL || "/proxy";
 
@@ -25,12 +25,14 @@ export default function ArtistInput(): React.JSX.Element {
 
   // REDUX STATE
   const dispatch = useAppDispatch();
-  const artistQuery = useAppSelector((state) => state.songSearch.artistQuery);
+  const artistQuery = useAppSelector(
+    (state) => state.songSearchForm.artistQuery,
+  );
   const selectedArtist = useAppSelector(
-    (state: RootState) => state.songSearch.selectedArtist,
+    (state: RootState) => state.songSearchForm.selectedArtist,
   );
   const songsLoading = useAppSelector(
-    (state: RootState) => state.songSearch.songsLoading,
+    (state: RootState) => state.songSearchForm.songsLoading,
   );
 
   // Handle queryString state change

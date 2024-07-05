@@ -37,13 +37,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 
 // MVP TODO *******************************************************************
+// !TODO: REFACTOR & REORGANIZE!!!!! (PROJECT IS GETTING MESSY)
+
 // !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
+// !TODO: Users should be able to search by Song Title WITHOUT artist
+// TODO: Users should easily be able to switch flag profiles ON the graph without needing to navigate to a different page.
 // TODO: dropdowns should scroll back to the top when a new song is selected
 // TODO: Add loading for when artists are being fetched (inside input)
 // TODO: Add loading states for LOTS of stuff (when lyrics are loading)
 // TODO: On desktop, searchSheet and lyricsSheet should be modals NOT popovers
 
-// !TODO: REFACTOR!!!!! (PROJECT IS GETTING MESSY)
 // TODO: Lots of things need to be renamed
 // TODO: Organize files, types, mockData, project structure, components etc...
 // TODO: Tabbing inside of the inputs causes some weird behavior

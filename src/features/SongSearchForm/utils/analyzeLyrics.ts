@@ -1,13 +1,13 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
-import { sensitiveWordsMap } from "../data/sensitiveWordMap";
+import { sensitiveWordsMap } from "../../../data/sensitiveWordMap";
+import { HashMap } from "../../../types/graph";
 import {
   FlaggedFamiliesObject,
   setFamilyOccurances,
   setLyricsHashMap,
-} from "../store/features/flagManager/flagManagerSlice";
-import { setAnalysisResult } from "../store/features/songSearch/songSearchSlice";
-import { HashMap } from "../types/graph";
+} from "../../FlagManagement/redux/flagManagementSlice";
+import { setAnalysisResult } from "../redux/songSearchFormSlice";
 
 export function analyzeLyrics(
   lyrics: string,

@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import Graph from "../components/Graph";
-import SongArtistOverlay from "../components/Graph/SongArtistOverlay";
 import { sensitiveWordsMap } from "../data/sensitiveWordMap";
-import { addFlaggedFamily } from "../store/features/flagManager/flagManagerSlice";
+import { addFlaggedFamily } from "../features/FlagManagement/redux/flagManagementSlice";
+import Graph from "../features/SongAnalysisGraph/components/Graph";
+import SongArtistOverlay from "../features/SongAnalysisGraph/components/SongArtistOverlay";
 
 interface FlaggedWords {
   [id: string]: string;

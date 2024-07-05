@@ -3,7 +3,7 @@ import { Dispatch } from "@reduxjs/toolkit";
 import {
   setLyrics,
   setLyricsLoading,
-} from "../store/features/songSearch/songSearchSlice";
+} from "../features/SongSearchForm/redux/songSearchFormSlice";
 
 export async function fetchAndParseLyrics(url: string, dispatch: Dispatch) {
   const res = await fetch(url);

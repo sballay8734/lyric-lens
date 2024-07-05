@@ -18,19 +18,19 @@ export type FlaggedFamiliesObject = {
   };
 };
 
-interface FlagManagerState {
+interface FlagManagementState {
   flaggedFamilies: FlaggedFamiliesObject;
   lyricsHashMap: HashMap | null;
   // TODO: Maybe add word exceptions here as an array
 }
 
-const initialState: FlagManagerState = {
+const initialState: FlagManagementState = {
   flaggedFamilies: {},
   lyricsHashMap: null,
 };
 
-export const flagManagerSlice = createSlice({
-  name: "flagManager",
+export const flagManagementSlice = createSlice({
+  name: "flagManagement",
   initialState,
   reducers: {
     addFlaggedFamily: (state, action: PayloadAction<FlaggedFamiliesObject>) => {
@@ -57,6 +57,6 @@ export const flagManagerSlice = createSlice({
 });
 
 export const { addFlaggedFamily, setFamilyOccurances, setLyricsHashMap } =
-  flagManagerSlice.actions;
+  flagManagementSlice.actions;
 
-export default flagManagerSlice.reducer;
+export default flagManagementSlice.reducer;

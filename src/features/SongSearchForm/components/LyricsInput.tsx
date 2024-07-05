@@ -1,14 +1,14 @@
 import { MdOutlineLyrics } from "react-icons/md";
 
-import { useAppSelector } from "../../hooks/hooks";
-import { RootState } from "../../store/store";
+import { useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
 
 export default function LyricsInput(): React.JSX.Element {
   const selectedArtist = useAppSelector(
-    (state: RootState) => state.songSearch.selectedArtist,
+    (state: RootState) => state.songSearchForm.selectedArtist,
   );
   const selectedSong = useAppSelector(
-    (state: RootState) => state.songSearch.selectedSong,
+    (state: RootState) => state.songSearchForm.selectedSong,
   );
 
   const disabled = selectedArtist && selectedSong ? true : false;

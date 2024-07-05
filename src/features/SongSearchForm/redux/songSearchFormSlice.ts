@@ -10,7 +10,7 @@ export type AnalysisResult = {
 } | null;
 
 // Define type for slice state
-interface SongSearchState {
+interface SongSearchFormState {
   artistQuery: string;
   selectedArtist: ArtistSimple | null;
 
@@ -28,7 +28,7 @@ interface SongSearchState {
 }
 
 // Define initial state
-const initialState: SongSearchState = {
+const initialState: SongSearchFormState = {
   artistQuery: "",
   selectedArtist: null,
 
@@ -45,8 +45,8 @@ const initialState: SongSearchState = {
   analysisResult: null,
 };
 
-export const songSearchSlice = createSlice({
-  name: "songSearch",
+export const songSearchFormSlice = createSlice({
+  name: "songSearchForm",
   initialState,
   reducers: {
     // ARTIST
@@ -101,6 +101,6 @@ export const {
   setSongsLoading,
   setLyricQuery,
   setAnalysisResult,
-} = songSearchSlice.actions;
+} = songSearchFormSlice.actions;
 
-export default songSearchSlice.reducer;
+export default songSearchFormSlice.reducer;

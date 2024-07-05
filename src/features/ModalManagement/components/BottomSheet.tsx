@@ -2,18 +2,18 @@ import { LuMicroscope } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { useAppSelector } from "../../hooks/hooks";
-import { hideSearchSheet } from "../../store/features/bottomSheet/bottomSheetSlice";
+import LoadingModal from "./LoadingModal";
+import { useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
+import ArtistInput from "../../SongSearchForm/components/ArtistInput";
+import LyricsInput from "../../SongSearchForm/components/LyricsInput";
+import SongInput from "../../SongSearchForm/components/SongInput";
 import {
   setLyrics,
   setSelectedArtist,
   setSelectedSong,
-} from "../../store/features/songSearch/songSearchSlice";
-import { RootState } from "../../store/store";
-import ArtistInput from "../Search/ArtistInput";
-import LyricsInput from "../Search/LyricsInput";
-import SongInput from "../Search/SongInput";
-import LoadingModal from "./LoadingModal";
+} from "../../SongSearchForm/redux/songSearchFormSlice";
+import { hideSearchSheet } from "../redux/modalManagementSlice";
 
 export default function BottomSheet(): React.JSX.Element {
   const dispatch = useDispatch();
@@ -21,13 +21,13 @@ export default function BottomSheet(): React.JSX.Element {
   const navigate = useNavigate();
 
   const searchSheetIsVis = useAppSelector(
-    (state: RootState) => state.btmSheet.searchSheetIsVis,
+    (state: RootState) => state.modalManagement.searchSheetIsVis,
   );
   const lyricsLoading = useAppSelector(
-    (state: RootState) => state.songSearch.lyricsLoading,
+    (state: RootState) => state.songSearchForm.lyricsLoading,
   );
   const selectedSong = useAppSelector(
-    (state: RootState) => state.songSearch.selectedSong,
+    (state: RootState) => state.songSearchForm.selectedSong,
   );
 
   // lyric analysis already starts automatically when lyrics load into Redux

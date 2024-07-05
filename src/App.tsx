@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 
 import "./App.css";
-import BottomSheet from "./components/shared/BottomSheet";
-import Drawer from "./components/shared/Drawer";
-import FloatingToggle from "./components/shared/FloatingToggle";
+import Drawer from "./components/Drawer";
+import BottomSheet from "./features/ModalManagement/components/BottomSheet";
+import FloatingToggle from "./features/ModalManagement/components/FloatingToggle";
 
 function App() {
   return (
