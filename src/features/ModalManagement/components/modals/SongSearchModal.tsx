@@ -13,15 +13,15 @@ import {
   setSelectedArtist,
   setSelectedSong,
 } from "../../../SongSearchForm/redux/songSearchFormSlice";
-import { hideSearchSheet } from "../../redux/modalManagementSlice";
+import { hideSongSearchModal } from "../../redux/modalManagementSlice";
 
 export default function SongSearchModal(): React.JSX.Element {
   const dispatch = useDispatch();
   let location = useLocation();
   const navigate = useNavigate();
 
-  const searchSheetIsVis = useAppSelector(
-    (state: RootState) => state.modalManagement.searchSheetIsVis,
+  const songSearchModalIsVis = useAppSelector(
+    (state: RootState) => state.modalManagement.songSearchModalIsVis,
   );
   const lyricsLoading = useAppSelector(
     (state: RootState) => state.songSearchForm.lyricsLoading,
@@ -38,7 +38,7 @@ export default function SongSearchModal(): React.JSX.Element {
       console.log("Loading...");
     } else {
       // close dropdown
-      dispatch(hideSearchSheet());
+      dispatch(hideSongSearchModal());
 
       // if not on home page, navigate there
       if (location.pathname !== "/") {
@@ -55,8 +55,8 @@ export default function SongSearchModal(): React.JSX.Element {
 
   return (
     <dialog
-      open={searchSheetIsVis}
-      className={`modal modal-bottom rounded-none ${searchSheetIsVis ? "visible" : "invisible"}`}
+      open={songSearchModalIsVis}
+      className={`modal modal-bottom rounded-none ${songSearchModalIsVis ? "visible" : "invisible"}`}
     >
       {/* MODAL CONTENT */}
       <div className="modal-box song-search-modal h-full bg-base-100 flex flex-col gap-2 pt-3">
@@ -64,7 +64,7 @@ export default function SongSearchModal(): React.JSX.Element {
         <div className="w-full flex justify-end text-error">
           <button
             disabled={lyricsLoading}
-            onClick={() => dispatch(hideSearchSheet())}
+            onClick={() => dispatch(hideSongSearchModal())}
             className={`p-2 rounded-sm hover:text-error/70 active:text-error/50 transition-colors duration-100 ${lyricsLoading ? "opacity-30 pointer-events-none" : "opacity-100 pointer-events-auto"}`}
           >
             Close
@@ -113,7 +113,7 @@ export default function SongSearchModal(): React.JSX.Element {
       </div>
       {/* OVERLAY TO HANDLE CLOSE CLOSE ON OUTSIDE CLICK */}
       <form
-        onClick={() => dispatch(hideSearchSheet())}
+        onClick={() => dispatch(hideSongSearchModal())}
         method="dialog"
         className="modal-backdrop bg-black/50"
       >

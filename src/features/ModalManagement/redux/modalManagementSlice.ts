@@ -1,40 +1,54 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface ModalManagementState {
-  searchSheetIsVis: boolean;
-  lyricsSheetIsVis: boolean;
+  songSearchModalIsVis: boolean;
+  lyricsModalIsVis: boolean;
+  flagManagerModalIsVis: boolean;
 }
 
 const initialState: ModalManagementState = {
-  searchSheetIsVis: false,
-  lyricsSheetIsVis: false,
+  songSearchModalIsVis: false,
+  lyricsModalIsVis: false,
+  flagManagerModalIsVis: false,
 };
 
 export const modalManagementSlice = createSlice({
   name: "modalManagement",
   initialState,
   reducers: {
-    hideSearchSheet: (state) => {
-      state.searchSheetIsVis = false;
+    // song search form modal
+    hideSongSearchModal: (state) => {
+      state.songSearchModalIsVis = false;
     },
-    showSearchSheet: (state) => {
-      state.searchSheetIsVis = true;
+    showSongSearchModal: (state) => {
+      state.songSearchModalIsVis = true;
     },
 
+    // lyrics modal
     hideLyricsModal: (state) => {
-      state.lyricsSheetIsVis = false;
+      state.lyricsModalIsVis = false;
     },
     showLyricsModal: (state) => {
-      state.lyricsSheetIsVis = true;
+      state.lyricsModalIsVis = true;
+    },
+
+    // Flag manager modal
+    hideFlagManagerModal: (state) => {
+      state.flagManagerModalIsVis = false;
+    },
+    showFlagManagerModal: (state) => {
+      state.flagManagerModalIsVis = true;
     },
   },
 });
 
 export const {
-  hideSearchSheet,
-  showSearchSheet,
+  hideSongSearchModal,
+  showSongSearchModal,
   hideLyricsModal,
   showLyricsModal,
+  hideFlagManagerModal,
+  showFlagManagerModal,
 } = modalManagementSlice.actions;
 
 export default modalManagementSlice.reducer;

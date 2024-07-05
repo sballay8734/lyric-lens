@@ -10,8 +10,8 @@ const MATCH_HEADER_LINES = /\[.*?\]/;
 
 export default function LyricsModal(): React.JSX.Element {
   const dispatch = useDispatch();
-  const LyricsModalIsVis = useAppSelector(
-    (state: RootState) => state.modalManagement.lyricsSheetIsVis,
+  const lyricsModalIsVis = useAppSelector(
+    (state: RootState) => state.modalManagement.lyricsModalIsVis,
   );
   const lyrics = useAppSelector(
     (state: RootState) => state.songSearchForm.lyrics,
@@ -109,8 +109,8 @@ export default function LyricsModal(): React.JSX.Element {
 
   return (
     <dialog
-      open={LyricsModalIsVis}
-      className={`modal modal-bottom h-full ${LyricsModalIsVis ? "visible" : "invisible"}`}
+      open={lyricsModalIsVis}
+      className={`modal modal-bottom h-full ${lyricsModalIsVis ? "visible" : "invisible"}`}
     >
       {/* MODAL CONTENT */}
       <div className="modal-box lyrics-sheet-modal h-full bg-base-100 flex flex-col gap-2 pt-3 px-4">
