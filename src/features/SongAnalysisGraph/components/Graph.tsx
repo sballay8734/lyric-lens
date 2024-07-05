@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import * as d3 from "d3";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
@@ -9,6 +9,7 @@ import LyricsModal from "../../ModalManagement/components/modals/LyricsModal";
 import { AnalysisResult } from "../../SongSearchForm/redux/songSearchFormSlice";
 import { analyzeLyrics } from "../../SongSearchForm/utils/analyzeLyrics";
 import { GraphNode, RootNode } from "../data/mockGraphData";
+import { useWindowSize } from "../hooks/graphHooks";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
@@ -70,6 +71,7 @@ export const ForceDirectedGraph: React.FC<{
   analysisResult: AnalysisResult;
 }> = ({ lyrics, flaggedFamilies, analysisResult }) => {
   const svgRef = useRef<SVGSVGElement>(null);
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     if (!flaggedFamilies || !svgRef.current) return () => {};
@@ -293,7 +295,7 @@ export const ForceDirectedGraph: React.FC<{
       simulation.stop();
       svg.selectAll("*").remove(); // Clean up on unmount
     };
-  }, [flaggedFamilies, lyrics, analysisResult?.totalFlaggedWords]);
+  }, [flaggedFamilies, lyrics, analysisResult?.totalFlaggedWords, windowSize]);
 
   return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
 };
