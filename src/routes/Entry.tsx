@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-import "./App.css";
+import "../index.css";
 // import Drawer from "./components/Drawer";
 import FloatingToggle from "../features/ModalManagement/components/FloatingToggle";
 import SongSearchModal from "../features/ModalManagement/components/SongSearchModal";
