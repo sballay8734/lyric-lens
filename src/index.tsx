@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./index.css";
-import App from "./App.tsx";
+import Entry from "./routes/Entry.tsx";
 import Home from "./routes/Home.tsx";
 import ManageFlags from "./routes/ManageFlags.tsx";
 import { store } from "./store/store.ts";
@@ -12,7 +12,7 @@ import { store } from "./store/store.ts";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Entry />,
     // mTODO: Add error catch element here
     errorElement: <div>ERROR</div>,
     children: [

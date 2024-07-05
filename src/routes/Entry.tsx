@@ -2,10 +2,10 @@ import { Outlet } from "react-router-dom";
 
 import "./App.css";
 // import Drawer from "./components/Drawer";
-import FloatingToggle from "./features/ModalManagement/components/FloatingToggle";
-import SongSearchModal from "./features/ModalManagement/components/SongSearchModal";
+import FloatingToggle from "../features/ModalManagement/components/FloatingToggle";
+import SongSearchModal from "../features/ModalManagement/components/SongSearchModal";
 
-function App() {
+function Entry() {
   return (
     <div className="flex flex-col w-full h-full items-center">
       {/* <Drawer /> */}
@@ -16,4 +16,4 @@ function App() {
   );
 }
 
-export default App;
+export default Entry;

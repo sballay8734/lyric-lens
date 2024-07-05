@@ -66,6 +66,10 @@ body {
 #root {
   height: 100svh;
   width: 100%;
+  margin: 0;
+  text-align: center;
+  background-color: oklch(var(--b3));
+  height: 100svh;
 }
 
 /* vvvvvvvvvvvvvvvv YOUR CSS STARTS HERE vvvvvvvvvvvvvvvvv */
