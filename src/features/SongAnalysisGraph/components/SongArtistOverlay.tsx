@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 
 import { useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import { showLyricsSheet } from "../../ModalManagement/redux/modalManagementSlice";
+import { showLyricsModal } from "../../ModalManagement/redux/modalManagementSlice";
 
 export default function SongArtistOverlay(): React.JSX.Element {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ export default function SongArtistOverlay(): React.JSX.Element {
           )}
           <button
             disabled={lyrics === null}
-            onClick={() => dispatch(showLyricsSheet())}
+            onClick={() => dispatch(showLyricsModal())}
             className="bg-gradient-to-r from-primary to-secondary text-black px-2 py-1 ml-auto pointer-events-auto"
           >
             View Lyrics

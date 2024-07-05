@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
 import { FlaggedFamiliesObject } from "../../FlagManagement/redux/flagManagementSlice";
-import LyricsSheet from "../../ModalManagement/components/LyricsSheet";
+import LyricsModal from "../../ModalManagement/components/modals/LyricsModal";
 import { AnalysisResult } from "../../SongSearchForm/redux/songSearchFormSlice";
 import { analyzeLyrics } from "../../SongSearchForm/utils/analyzeLyrics";
 import { GraphNode, RootNode } from "../data/mockGraphData";
@@ -50,7 +50,7 @@ export default function Graph(): React.JSX.Element {
       ) : (
         "You need to choose a song"
       )}
-      <LyricsSheet />
+      <LyricsModal />
     </div>
   );
 }

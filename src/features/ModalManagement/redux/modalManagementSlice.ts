@@ -21,10 +21,10 @@ export const modalManagementSlice = createSlice({
       state.searchSheetIsVis = true;
     },
 
-    hideLyricsSheet: (state) => {
+    hideLyricsModal: (state) => {
       state.lyricsSheetIsVis = false;
     },
-    showLyricsSheet: (state) => {
+    showLyricsModal: (state) => {
       state.lyricsSheetIsVis = true;
     },
   },
@@ -33,8 +33,8 @@ export const modalManagementSlice = createSlice({
 export const {
   hideSearchSheet,
   showSearchSheet,
-  hideLyricsSheet,
-  showLyricsSheet,
+  hideLyricsModal,
+  showLyricsModal,
 } = modalManagementSlice.actions;
 
 export default modalManagementSlice.reducer;

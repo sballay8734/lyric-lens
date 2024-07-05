@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { sensitiveWordsMap } from "../../../data/sensitiveWordMap";
-import { useAppSelector } from "../../../hooks/hooks";
-import { RootState } from "../../../store/store";
-import { hideLyricsSheet } from "../redux/modalManagementSlice";
+import { sensitiveWordsMap } from "../../../../data/sensitiveWordMap";
+import { useAppSelector } from "../../../../hooks/hooks";
+import { RootState } from "../../../../store/store";
+import { hideLyricsModal } from "../../redux/modalManagementSlice";
 
 const MATCH_HEADER_LINES = /\[.*?\]/;
 
-export default function LyricsSheet(): React.JSX.Element {
+export default function LyricsModal(): React.JSX.Element {
   const dispatch = useDispatch();
-  const lyricsSheetIsVis = useAppSelector(
+  const LyricsModalIsVis = useAppSelector(
     (state: RootState) => state.modalManagement.lyricsSheetIsVis,
   );
   const lyrics = useAppSelector(
@@ -109,15 +109,15 @@ export default function LyricsSheet(): React.JSX.Element {
 
   return (
     <dialog
-      open={lyricsSheetIsVis}
-      className={`modal modal-bottom h-full ${lyricsSheetIsVis ? "visible" : "invisible"}`}
+      open={LyricsModalIsVis}
+      className={`modal modal-bottom h-full ${LyricsModalIsVis ? "visible" : "invisible"}`}
     >
       {/* MODAL CONTENT */}
       <div className="modal-box lyrics-sheet-modal h-full bg-base-100 flex flex-col gap-2 pt-3 px-4">
         {/* Sheet header */}
         <div className="w-full flex justify-end text-error">
           <button
-            onClick={() => dispatch(hideLyricsSheet())}
+            onClick={() => dispatch(hideLyricsModal())}
             className={`p-2 rounded-sm hover:text-error/70 active:text-error/50 transition-colors duration-100`}
           >
             Close
@@ -139,7 +139,7 @@ export default function LyricsSheet(): React.JSX.Element {
       </div>
       {/* OVERLAY TO HANDLE CLOSE CLOSE ON OUTSIDE CLICK */}
       <form
-        onClick={() => dispatch(hideLyricsSheet())}
+        onClick={() => dispatch(hideLyricsModal())}
         method="dialog"
         className="modal-backdrop bg-black/50"
       >

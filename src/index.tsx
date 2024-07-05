@@ -46,7 +46,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // TODO: dropdowns should scroll back to the top when a new song is selected
 // TODO: Add loading for when artists are being fetched (inside input)
 // TODO: Add loading states for LOTS of stuff (when lyrics are loading)
-// TODO: On desktop, searchSheet and lyricsSheet should be modals NOT popovers
+// TODO: On desktop, searchSheet and LyricsModal should be modals NOT popovers
 
 // TODO: Lots of things need to be renamed
 // TODO: Organize files, types, mockData, project structure, components etc...

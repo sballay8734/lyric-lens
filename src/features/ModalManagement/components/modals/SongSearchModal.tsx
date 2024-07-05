@@ -3,17 +3,17 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import LoadingModal from "./LoadingModal";
-import { useAppSelector } from "../../../hooks/hooks";
-import { RootState } from "../../../store/store";
-import ArtistInput from "../../SongSearchForm/components/ArtistInput";
-import LyricsInput from "../../SongSearchForm/components/LyricsInput";
-import SongInput from "../../SongSearchForm/components/SongInput";
+import { useAppSelector } from "../../../../hooks/hooks";
+import { RootState } from "../../../../store/store";
+import ArtistInput from "../../../SongSearchForm/components/ArtistInput";
+import LyricsInput from "../../../SongSearchForm/components/LyricsInput";
+import SongInput from "../../../SongSearchForm/components/SongInput";
 import {
   setLyrics,
   setSelectedArtist,
   setSelectedSong,
-} from "../../SongSearchForm/redux/songSearchFormSlice";
-import { hideSearchSheet } from "../redux/modalManagementSlice";
+} from "../../../SongSearchForm/redux/songSearchFormSlice";
+import { hideSearchSheet } from "../../redux/modalManagementSlice";
 
 export default function SongSearchModal(): React.JSX.Element {
   const dispatch = useDispatch();

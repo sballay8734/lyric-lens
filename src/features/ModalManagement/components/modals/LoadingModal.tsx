@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import { useAppSelector } from "../../../hooks/hooks";
-import { RootState } from "../../../store/store";
+import { useAppSelector } from "../../../../hooks/hooks";
+import { RootState } from "../../../../store/store";
 
 export default function LoadingModal(): React.JSX.Element {
   const [progress, _] = useState<number>(0);
@@ -12,7 +12,7 @@ export default function LoadingModal(): React.JSX.Element {
   );
 
   return (
-    <dialog open={lyricsLoading} id="loadingModal" className={`modal`}>
+    <dialog open={lyricsLoading} id="LoadingModal" className={`modal`}>
       <div className="modal-box flex items-center justify-center w-[80%] gap-6 bg-neutral flex-col rounded-sm">
         <div className="flex items-center justify-center gap-2">
           <h3>Fetching lyrics...</h3>
