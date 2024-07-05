@@ -56,11 +56,11 @@ export default function SongSearchModal(): React.JSX.Element {
   return (
     <dialog
       open={searchSheetIsVis}
-      className={`modal modal-bottom ${searchSheetIsVis ? "visible" : "invisible"}`}
+      className={`modal modal-bottom rounded-none ${searchSheetIsVis ? "visible" : "invisible"}`}
     >
       {/* MODAL CONTENT */}
-      <div className="modal-box h-full bg-base-100 flex flex-col gap-2 pt-3">
-        {/* Sheet header */}
+      <div className="modal-box song-search-modal h-full bg-base-100 flex flex-col gap-2 pt-3">
+        {/* Sheet close btn */}
         <div className="w-full flex justify-end text-error">
           <button
             disabled={lyricsLoading}
@@ -69,6 +69,18 @@ export default function SongSearchModal(): React.JSX.Element {
           >
             Close
           </button>
+        </div>
+        {/* How to use */}
+        <div className="w-full flex flex-col gap-2 mb-2 px-2 py-4 bg-base-200 rounded-md">
+          <h2 className="text-2xl font-bold text-primary underline">
+            How To Use
+          </h2>
+          <p className="text-sm">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores
+            ratione obcaecati eaque. Officia, possimus vero fuga, nostrum
+            ratione recusandae et asperiores ullam sunt nobis sequi. Magnam
+            expedita ullam quis animi?
+          </p>
         </div>
         {/* INPUT GROUP */}
         <div className="w-full flex flex-col gap-2">

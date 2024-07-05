@@ -113,7 +113,7 @@ export default function LyricsSheet(): React.JSX.Element {
       className={`modal modal-bottom h-full ${lyricsSheetIsVis ? "visible" : "invisible"}`}
     >
       {/* MODAL CONTENT */}
-      <div className="modal-box h-full bg-base-100 flex flex-col gap-2 pt-3 px-4">
+      <div className="modal-box lyrics-sheet-modal h-full bg-base-100 flex flex-col gap-2 pt-3 px-4">
         {/* Sheet header */}
         <div className="w-full flex justify-end text-error">
           <button

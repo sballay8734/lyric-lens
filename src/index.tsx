@@ -37,9 +37,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 
 // MVP TODO *******************************************************************
-// !TODO: REFACTOR & REORGANIZE!!!!! (PROJECT IS GETTING MESSY)
+// TODO: Song search + Flag manager in same container
+// TODO: Move close btn for modals to bottom
 
-// TODO: BtmSheet should take up full screen
 // !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
 // !TODO: Users should be able to search by Song Title WITHOUT artist
 // TODO: Users should easily be able to switch flag profiles ON the graph without needing to navigate to a different page.
@@ -54,6 +54,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // TODO: Add toggle to switch between song search and word selection
 // TODO: Complete a default flaggedWords object (just any word over 2 vLvl)
 // TODO: Fix weird padding thing when artist dropdown is loading
+// mTODO: Set minimum amount of time for loading modal to pop up (maybe 2 seconds) - it sometimes flashes too quickly
 // mTODO: flagged words not in song should congregate together somewhere and not on the sides of the screen
 // mTODO: maybe move "View Lyrics" btn somewhere else
 // mTODO: Add loading feedback when song is changed and lyrics are loading
