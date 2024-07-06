@@ -48,6 +48,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // mTODO: Words above around lvl 8 probably don't even need to be shown on graph
 // mTODO: Lyric input should be an accordion
 // mTODO: Manage z-indexes better
+// mTODO: Why are spaces after flagged words being highlighted in lyrics sheet
+// mTODO: Show words that are NOT flagged also
 
 // AFTER SAT July 6th
 // !TODO: Users should be able to search by Song Title WITHOUT artist

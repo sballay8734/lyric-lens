@@ -1,37 +1,19 @@
-// import { racialWords } from "./SensitiveWordFiles/racialWords";
+import {
+  SensitiveWordCategory,
+  VulgarityLevel,
+} from "../data/sensitiveWordMap";
 
-// !TODO: LEFT OFF @ "shite" - https://medium.com/musixmatch-blog/profanity-in-lyrics-most-used-swear-words-and-their-usage-by-popular-genres-d8a12c776713
-
-export type SensitiveWordCategory =
-  | "racial"
-  | "sexual"
-  | "religious"
-  | "general";
-export type VulgarityLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-
-export interface SensitiveWordsMap {
+export interface FlaggableWordsObject {
   [word: string]: {
     id: string;
-    vulgarityLvl: VulgarityLevel;
-    category: SensitiveWordCategory[];
+    vulgarityLvl: VulgarityLevel; // 0-10
+    category: SensitiveWordCategory[]; // "racial", "sexual", "religious", "general";
     family: string;
-    isRootWord: boolean; // is the word the main word of the family
+    isRootWord: boolean;
   };
 }
 
-export interface WordMap {
-  [word: string]: {
-    id: string;
-    vulgarityLvl: VulgarityLevel;
-    category: SensitiveWordCategory[];
-    family: string;
-    isRootWord: boolean; // is the word the main word of the family
-  };
-}
-
-// TODO: Start with the worst ones and work your way down
-export const sensitiveWordsMap: SensitiveWordsMap = {
-  // ...racialWords,
+export const FLAGGABLE_WORDS_MASTER: FlaggableWordsObject = {
   nigger: {
     id: "SW001",
     vulgarityLvl: 10,
@@ -384,7 +366,7 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
   // "suck" & variations (Baseline 3) *********************************
   suck: {
     id: "SW037",
-    vulgarityLvl: 3,
+    vulgarityLvl: 4,
     category: ["sexual"],
     family: "suck",
     isRootWord: true,
@@ -405,7 +387,7 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
   },
   sucking: {
     id: "SW040",
-    vulgarityLvl: 3,
+    vulgarityLvl: 4,
     category: ["sexual"],
     family: "suck",
     isRootWord: false,
@@ -541,14 +523,14 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
   },
   goddamn: {
     id: "SW051a",
-    vulgarityLvl: 3,
+    vulgarityLvl: 4,
     category: ["general"],
     family: "damn",
     isRootWord: false,
   },
   goddamned: {
     id: "SW051b",
-    vulgarityLvl: 3,
+    vulgarityLvl: 4,
     category: ["general"],
     family: "damn",
     isRootWord: false,
@@ -621,7 +603,7 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
   // "piss" & variations (Baseline 3) *********************************
   piss: {
     id: "SW060",
-    vulgarityLvl: 3,
+    vulgarityLvl: 4,
     category: ["general"],
     family: "piss",
     isRootWord: true,
@@ -635,14 +617,14 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
   },
   pissing: {
     id: "SW062",
-    vulgarityLvl: 3,
+    vulgarityLvl: 4,
     category: ["general"],
     family: "piss",
     isRootWord: false,
   },
   pisses: {
     id: "SW063",
-    vulgarityLvl: 3,
+    vulgarityLvl: 4,
     category: ["general"],
     family: "piss",
     isRootWord: false,
@@ -779,14 +761,14 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
   // "booty" & variations (Baseline 3) *********************************
   booty: {
     id: "SW072",
-    vulgarityLvl: 3,
+    vulgarityLvl: 4,
     category: ["sexual"],
     family: "booty",
     isRootWord: true,
   },
   booties: {
     id: "SW072a",
-    vulgarityLvl: 3,
+    vulgarityLvl: 4,
     category: ["sexual"],
     family: "booty",
     isRootWord: false,
@@ -867,10 +849,27 @@ export const sensitiveWordsMap: SensitiveWordsMap = {
     family: "cunt",
     isRootWord: false,
   },
+
+  // "god" & variations (Baseline 1) *********************************
+  god: {
+    id: "SW075",
+    vulgarityLvl: 1,
+    category: ["general"],
+    family: "god",
+    isRootWord: true,
+  },
+  jesus: {
+    id: "SW076",
+    vulgarityLvl: 1,
+    category: ["general"],
+    family: "god",
+    isRootWord: false,
+  },
+  christ: {
+    id: "SW077",
+    vulgarityLvl: 1,
+    category: ["general"],
+    family: "god",
+    isRootWord: false,
+  },
 };
-
-// !TODO: WORDS TO ADD
-// ho
-// masturbate
-
-// other ideas ("onlyfans", "camgirl", "camslut", "camwhore", "clit", "clitoris", "jerk[1]", "jerkoff[7]", "dildo")

@@ -20,24 +20,26 @@ export default function Graph(): React.JSX.Element {
   const flaggedFamilies = useAppSelector(
     (state: RootState) => state.flagManagement.flaggedFamilies,
   );
+  const currentPresetId = useAppSelector(
+    (state: RootState) => state.flagManagement.currentPreset?.presetId,
+  );
   const selectedSong = useAppSelector(
     (state: RootState) => state.songSearchForm.selectedSong,
   );
-
   const analysisResult = useAppSelector(
     (state: RootState) => state.songSearchForm.analysisResult,
   );
 
-  // run lyric analysis whenever user changes the song
+  // run lyric analysis whenever user changes the song or flag preset
   useEffect(() => {
-    if (lyrics) {
+    if (lyrics && flaggedFamilies) {
       analyzeLyrics(lyrics, dispatch, flaggedFamilies);
     }
-  }, [lyrics]);
+  }, [lyrics, currentPresetId]);
 
   return (
     <div
-      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#000000] items-center group transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
+      className={`MainGraph group flex h-full w-full flex-col items-center justify-center bg-[#000000] transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
     >
       {/* <span>
         {flaggedWords ? formatResponse() : "You need to choose a song"}
@@ -72,6 +74,9 @@ export const ForceDirectedGraph: React.FC<{
 }> = ({ lyrics, flaggedFamilies, analysisResult }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const windowSize = useWindowSize();
+  const currentPresetId = useAppSelector(
+    (state: RootState) => state.flagManagement.currentPreset?.presetId,
+  );
 
   useEffect(() => {
     if (!flaggedFamilies || !svgRef.current) return () => {};
@@ -295,7 +300,7 @@ export const ForceDirectedGraph: React.FC<{
       simulation.stop();
       svg.selectAll("*").remove(); // Clean up on unmount
     };
-  }, [flaggedFamilies, lyrics, analysisResult?.totalFlaggedWords, windowSize]);
+  }, [lyrics, analysisResult?.totalFlaggedWords, windowSize, currentPresetId]);
 
   return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
 };
