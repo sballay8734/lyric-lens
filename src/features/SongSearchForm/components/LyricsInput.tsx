@@ -39,7 +39,7 @@ export default function LyricsInput(): React.JSX.Element {
         // mTODO: change true back to "disabled" when functionality is added
         disabled={disabled}
         maxLength={300}
-        className="text-area grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50 resize-none"
+        className="text-area grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50 resize-none focus:outline-none focus:border-none"
         placeholder="Coming soon..."
       />
       <MdOutlineLyrics className="mt-[5px] text-neutral-content/50 group-hover:text-primary transition-colors duration-200" />

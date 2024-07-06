@@ -106,3 +106,8 @@ label:active {
 .modal-bottom:where(.modal[open]) {
   align-items: flex-start !important;
 }
+
+input:focus,
+input:active {
+  outline: none !important;
+}
