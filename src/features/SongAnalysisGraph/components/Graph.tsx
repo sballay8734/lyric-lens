@@ -37,7 +37,7 @@ export default function Graph(): React.JSX.Element {
 
   return (
     <div
-      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
+      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#000000] items-center group transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
     >
       {/* <span>
         {flaggedWords ? formatResponse() : "You need to choose a song"}
