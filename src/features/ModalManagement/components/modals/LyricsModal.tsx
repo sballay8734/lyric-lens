@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { IoMdClose } from "react-icons/io";
 import { useDispatch } from "react-redux";
 
 import { sensitiveWordsMap } from "../../../../data/sensitiveWordMap";
@@ -113,38 +114,35 @@ export default function LyricsModal(): React.JSX.Element {
       className={`modal modal-bottom h-full ${lyricsModalIsVis ? "visible" : "invisible"}`}
     >
       {/* MODAL CONTENT */}
-      <div className="modal-box lyrics-sheet-modal h-full bg-base-100 flex flex-col gap-2 pt-3 px-4">
-        {/* Sheet header */}
-        <div className="w-full flex justify-end text-error">
-          <button
-            onClick={() => dispatch(hideLyricsModal())}
-            className={`p-2 rounded-sm hover:text-error/70 active:text-error/50 transition-colors duration-100`}
-          >
-            Close
-          </button>
-        </div>
+      <div className="modal-box lyrics-sheet-modal h-full bg-base-100 flex flex-col gap-2 p-2">
         {/* Song Title and Artists */}
-        <div className="flex flex-col items-center justify-center mb-4 bg-base-300 py-4 rounded-sm px-2">
+        <div className="flex flex-col items-center justify-center bg-base-300 py-4 rounded-sm px-2">
           <h2 className="font-bold text-white">{`"${selectedSong?.title}"`}</h2>
           <h2 className="text-faded text-sm rounded-sm w-fit">
             {selectedSong?.artist_names}
           </h2>
         </div>
         {/* Lyrics */}
-        <div className="flex flex-col gap-4 leading-4 bg-base-200 py-4 rounded-sm h-full overflow-hidden">
-          <div className="overflow-auto flex flex-col gap-4 leading-4 rounded-sm h-full px-4">
+        <div className="flex flex-col gap-4 leading-4 bg-base-200 py-2 rounded-sm h-full overflow-hidden">
+          <div className="overflow-auto flex flex-col gap-4 leading-4 rounded-sm h-full px-2">
             {formattedLyrics}
           </div>
         </div>
+        <div className="w-full flex text-error mt-auto gap-2 min-h-14">
+          <button
+            onClick={() => console.log("Not configured")}
+            className="btn text-error rounded-sm flex-[10_10_0%] h-full"
+          >
+            DOES NOTHING
+          </button>
+          <button
+            onClick={() => dispatch(hideLyricsModal())}
+            className={`btn m-0 btn-error flex flex-[1_1_0%] h-full items-center justify-center rounded-sm transition-colors duration-100`}
+          >
+            <IoMdClose size={20} />
+          </button>
+        </div>
       </div>
-      {/* OVERLAY TO HANDLE CLOSE CLOSE ON OUTSIDE CLICK */}
-      <form
-        onClick={() => dispatch(hideLyricsModal())}
-        method="dialog"
-        className="modal-backdrop bg-black/50"
-      >
-        <button>close</button>
-      </form>
     </dialog>
   );
 }

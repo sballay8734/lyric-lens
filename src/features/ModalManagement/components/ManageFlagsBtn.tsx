@@ -9,7 +9,7 @@ export default function ManageFlagsBtn(): React.JSX.Element {
   return (
     <button
       onClick={() => dispatch(showFlagManagerModal())}
-      className={`flex items-center justify-center rounded-md text-black bg-gradient-to-r from-primary to-secondary px-2 py-2 w-full`}
+      className={`flex items-center justify-center rounded-sm text-black bg-gradient-to-r from-primary to-secondary px-2 py-2 w-full`}
     >
       <span className="flex w-full items-center justify-center gap-1">
         <span>Manage Flags</span>

@@ -37,12 +37,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 
 // MVP TODO *******************************************************************
-// TODO: Song search + Flag manager in same container
 // TODO: Move close btn for modals to bottom
+// TODO: Move "View Lyrics" btn somewhere else
+// TODO: If song is clean show "Clean" instead of 0 in center node
 
-// !TODO: Viewing lyrics after analyzing should highlight the flagged words in the song
 // !TODO: Users should be able to search by Song Title WITHOUT artist
 // TODO: Users should easily be able to switch flag profiles ON the graph without needing to navigate to a different page.
+// TODO: nodes not in song should group up somewhere and not spread around the screen
 // TODO: dropdowns should scroll back to the top when a new song is selected
 // TODO: Add loading for when artists are being fetched (inside input)
 // TODO: Add loading states for LOTS of stuff (when lyrics are loading)
@@ -54,9 +55,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // TODO: Add toggle to switch between song search and word selection
 // TODO: Complete a default flaggedWords object (just any word over 2 vLvl)
 // TODO: Fix weird padding thing when artist dropdown is loading
+// mTODO: Move Graph and Graph Wrapper to separate components
+// mTODO: Refactor/Extract logic inside useEffect (the d3 stuff)
 // mTODO: Set minimum amount of time for loading modal to pop up (maybe 2 seconds) - it sometimes flashes too quickly
 // mTODO: flagged words not in song should congregate together somewhere and not on the sides of the screen
-// mTODO: maybe move "View Lyrics" btn somewhere else
 // mTODO: Add loading feedback when song is changed and lyrics are loading
 // mTODO: Words above around lvl 8 probably don't even need to be shown on graph
 

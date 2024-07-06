@@ -35,7 +35,7 @@ export default function LyricsInput(): React.JSX.Element {
       className={`flex items-start gap-2 bg-base-300 py-4 px-4 rounded-sm group border-[1px] border-transparent pointer-events-none opacity-30`}
     >
       <textarea
-        rows={8}
+        rows={6}
         // mTODO: change true back to "disabled" when functionality is added
         disabled={disabled}
         maxLength={300}

@@ -8,10 +8,16 @@ export default function BottomBtnsWrapper(): React.JSX.Element {
     (state: RootState) => state.modalManagement.songSearchModalIsVis,
   );
 
+  const flagManagerModalisVis = useAppSelector(
+    (state: RootState) => state.modalManagement.flagManagerModalIsVis,
+  );
+
+  const modalIsShowing = songSearchModalIsVis || flagManagerModalisVis;
+
   return (
     <div
       className={`flex items-center justify-between gap-4 absolute bottom-10 w-full z-[999] px-6 ${
-        songSearchModalIsVis
+        modalIsShowing
           ? "opacity-0 pointer-events-none"
           : "opacity-100 pointer-events-auto"
       } transition-opacity duration-200`}
