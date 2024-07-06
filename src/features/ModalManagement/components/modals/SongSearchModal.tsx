@@ -1,7 +1,7 @@
+import { IoMdClose } from "react-icons/io";
 import { LuMicroscope } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { IoMdClose } from "react-icons/io";
 
 import LoadingModal from "./LoadingModal";
 import { useAppSelector } from "../../../../hooks/hooks";
