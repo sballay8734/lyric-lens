@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { sensitiveWordsMap } from "../data/sensitiveWordMap";
 import { addFlaggedFamily } from "../features/FlagManagement/redux/flagManagementSlice";
 import Graph from "../features/SongAnalysisGraph/components/Graph";
-import SongArtistOverlay from "../features/SongAnalysisGraph/components/SongArtistOverlay";
+import Overlay from "../features/SongAnalysisGraph/components/Overlay";
 
 interface FlaggedWords {
   [id: string]: string;
@@ -64,10 +64,10 @@ export default function Home(): React.JSX.Element {
 
   return (
     <>
-      <div className="flex flex-col justify-between h-full gap-2 w-full relative">
+      <div className="relative flex h-full w-full flex-col justify-between gap-2">
         {/* GRAPH */}
         <Graph />
-        <SongArtistOverlay />
+        <Overlay />
       </div>
     </>
   );

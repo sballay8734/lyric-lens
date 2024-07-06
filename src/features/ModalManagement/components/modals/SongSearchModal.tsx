@@ -57,12 +57,12 @@ export default function SongSearchModal(): React.JSX.Element {
   return (
     <dialog
       open={songSearchModalIsVis}
-      className={`modal modal-bottom rounded-none ${songSearchModalIsVis ? "visible" : "invisible"}`}
+      className={`modal modal-bottom h-full rounded-none ${songSearchModalIsVis ? "visible" : "invisible"}`}
     >
       {/* MODAL CONTENT */}
-      <div className="modal-box song-search-modal h-full bg-base-100 flex flex-col gap-2 py-2 px-2">
+      <div className="song-search-modal modal-box flex h-full flex-col gap-2 bg-base-100 px-2 py-2">
         {/* How to use */}
-        <div className="w-full flex flex-col gap-2 mb-2 px-2 py-4 bg-base-200 rounded-md">
+        <div className="mb-2 flex w-full flex-col gap-2 rounded-md bg-base-200 px-2 py-4">
           <h2 className="text-2xl font-bold text-primary underline">
             How To Use
           </h2>
@@ -74,20 +74,20 @@ export default function SongSearchModal(): React.JSX.Element {
           </p>
         </div>
         {/* INPUT GROUP */}
-        <div className="w-full flex flex-col gap-2">
+        <div className="flex w-full flex-col gap-2">
           <ArtistInput />
           <SongInput />
-          <div className="divider flex items-center my-2">OR</div>
+          <div className="divider my-2 flex items-center">OR</div>
           <LyricsInput />
         </div>
         {/* ANALYZE BUTTON */}
-        <div className="h-full flex items-center justify-center">
+        <div className="flex h-full items-center justify-center">
           <button
             disabled={lyricsLoading || !selectedSong}
             onClick={handleAnalyzeLyrics}
-            className={`w-full flex items-center rounded-sm relative text-black py-4 h-full hover:opacity-80 active:opacity-70 disabled:pointer-events-none text-4xl ${
+            className={`relative flex h-full w-full items-center rounded-sm py-4 text-4xl text-black hover:opacity-80 active:opacity-70 disabled:pointer-events-none ${
               lyricsLoading || !selectedSong
-                ? "bg-gray-700 opacity-50 text-gray-800"
+                ? "bg-gray-700 text-gray-800 opacity-50"
                 : "bg-gradient-to-r from-primary to-secondary"
             } transition-opacity duration-200`}
           >
@@ -95,24 +95,24 @@ export default function SongSearchModal(): React.JSX.Element {
             <span className="w-full font-bold">ANALYZE</span>
             <LuMicroscope
               size={30}
-              className="absolute right-4 opacity-80 scale-x-[-1]"
+              className="absolute right-4 scale-x-[-1] opacity-80"
             />
           </button>
         </div>
         <LoadingModal />
         {/* Btns */}
         {/* !TODO: Close btn overflows slightly on wider screens (could be a scroll bar issue with the html tag) */}
-        <div className="w-full flex text-error mt-auto gap-2 min-h-14">
+        <div className="mt-auto flex min-h-14 w-full gap-2 text-error">
           <button
             onClick={handleClearFields}
-            className="btn text-error rounded-sm flex-[10_10_0%] h-full"
+            className="btn h-full flex-[10_10_0%] rounded-sm text-error"
           >
             Clear Form
           </button>
           <button
             disabled={lyricsLoading}
             onClick={() => dispatch(hideSongSearchModal())}
-            className={`btn m-0 btn-error flex flex-[1_1_0%] h-full items-center justify-center rounded-sm transition-colors duration-100 ${lyricsLoading ? "opacity-30 pointer-events-none" : "opacity-100 pointer-events-auto"}`}
+            className={`btn btn-error m-0 flex h-full flex-[1_1_0%] items-center justify-center rounded-sm transition-colors duration-100 ${lyricsLoading ? "pointer-events-none opacity-30" : "pointer-events-auto opacity-100"}`}
           >
             <IoMdClose size={20} />
           </button>

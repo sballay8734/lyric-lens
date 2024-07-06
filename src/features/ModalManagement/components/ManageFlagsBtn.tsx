@@ -9,12 +9,9 @@ export default function ManageFlagsBtn(): React.JSX.Element {
   return (
     <button
       onClick={() => dispatch(showFlagManagerModal())}
-      className={`flex items-center justify-center rounded-sm text-black bg-gradient-to-r from-primary to-secondary px-2 py-2 w-full`}
+      className={`btn col-span-1 flex h-full w-full items-center justify-center rounded-sm bg-slate-800/50 px-2 py-2 text-primary`}
     >
-      <span className="flex w-full items-center justify-center gap-1">
-        <span>Manage Flags</span>
-        <FaRegFlag size={11} />
-      </span>
+      <FaRegFlag size={16} />
     </button>
   );
 }
