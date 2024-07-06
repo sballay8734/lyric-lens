@@ -16,14 +16,15 @@ const testProfiles: TestProfile[] = [
 
 export default function ProfileSwitcher(): React.JSX.Element {
   const [flagProfile, setFlagProfile] = useState<TestProfile>("Default");
-  const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(false);
+  const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(true);
 
   function handleProfileSelection(profile: TestProfile) {
     setFlagProfile(profile);
+    setDropdownIsShown(false);
   }
 
   return (
-    <div className="dropdown dropdown-top w-full">
+    <div className="dropdown dropdown-top relative w-full">
       <div className="mt-2 flex w-full items-center justify-between gap-2 px-2">
         <span className="text-faded col-span-2 mr-[2px] gap-2 place-self-start self-center text-sm">
           Current Profile
@@ -32,6 +33,7 @@ export default function ProfileSwitcher(): React.JSX.Element {
         <div
           tabIndex={0}
           role="button"
+          onClick={() => setDropdownIsShown(!dropdownIsShown)}
           className="group btn pointer-events-auto h-auto min-h-6 flex-1 flex-nowrap justify-end gap-2 overflow-hidden border-none bg-transparent p-0 outline-none hover:bg-transparent"
         >
           <span className="block truncate text-primary transition-colors duration-200 group-hover:text-primary/70">
@@ -45,13 +47,13 @@ export default function ProfileSwitcher(): React.JSX.Element {
       </div>
       <ul
         tabIndex={0}
-        className="menu dropdown-content z-[998] w-full rounded-md bg-base-100 p-2 shadow"
+        className={`absolute -top-44 z-[998] flex w-full flex-col gap-1 rounded-md bg-base-200 p-2 shadow ${dropdownIsShown ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"} transition-opacity duration-100`}
       >
         {testProfiles &&
           testProfiles.map((profile: TestProfile) => {
             return (
               <li
-                className={`${profile === flagProfile ? "bg-base-300" : ""} rounded-sm transition-colors duration-100 hover:bg-black focus:bg-black active:bg-black`}
+                className={`py-2 text-sm ${profile === flagProfile ? "bg-base-300" : ""} rounded-sm transition-colors duration-100 hover:bg-black focus:bg-black active:bg-black`}
                 key={profile}
                 onClick={() => handleProfileSelection(profile)}
               >
