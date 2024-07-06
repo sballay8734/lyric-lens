@@ -1,6 +1,6 @@
-import WordBtn from "../components/FlagSelect/WordBtn";
 import { mockUser } from "../data/mockUser";
 import { sensitiveWordsMap } from "../data/sensitiveWordMap";
+import WordBtn from "../features/FlagManagement/components/WordToggleBtn";
 
 type Word = string;
 

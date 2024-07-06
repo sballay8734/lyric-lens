@@ -66,6 +66,10 @@ body {
 #root {
   height: 100svh;
   width: 100%;
+  margin: 0;
+  text-align: center;
+  background-color: oklch(var(--b3));
+  height: 100svh;
 }
 
 /* vvvvvvvvvvvvvvvv YOUR CSS STARTS HERE vvvvvvvvvvvvvvvvv */
@@ -76,4 +80,29 @@ label {
 
 label:active {
   outline: none !important;
+}
+
+.modal-bottom .modal-box.song-search-modal {
+  border-radius: 0 !important;
+  height: 100svh !important;
+  max-height: 100svh !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  top: 0 !important;
+}
+
+.modal-bottom .modal-box.lyrics-sheet-modal {
+  border-radius: 0 !important;
+  height: 100svh !important;
+  max-height: 100svh !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  top: 0 !important;
+}
+
+.modal-bottom:where(.modal-open),
+.modal-bottom:where(.modal[open]) {
+  align-items: flex-start !important;
 }
