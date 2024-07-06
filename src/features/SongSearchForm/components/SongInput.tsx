@@ -217,7 +217,7 @@ export default function SongInput(): React.JSX.Element {
         <input
           disabled={selectedArtist === null || songsLoading}
           type="text"
-          className={`grow bg-transparent outline-0 border-0 placeholder:text-neutral-content/50 disabled:group:pointer-events-none ${
+          className={`grow bg-transparent outline-0 border-0 focus:outline-none focus:border-none placeholder:text-neutral-content/50 disabled:group:pointer-events-none ${
             selectedSong?.title
               ? "placeholder:text-white placeholder:font-bold"
               : "placeholder:text-neutral-content/50"

@@ -175,7 +175,7 @@ export default function ArtistInput(): React.JSX.Element {
         <input
           disabled={songsLoading}
           type="text"
-          className={`grow bg-transparent outline-0 border-0 ${
+          className={`grow bg-transparent outline-0 border-0 focus:outline-none focus:border-none ${
             selectedArtist?.name
               ? "placeholder:text-white placeholder:font-bold"
               : "placeholder:text-neutral-content/50"
