@@ -37,9 +37,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 
 // MVP TODO *******************************************************************
-// TODO: Move close btn for modals to bottom
 // TODO: Move "View Lyrics" btn somewhere else
 // TODO: If song is clean show "Clean" instead of 0 in center node
+// TODO:
 
 // !TODO: Users should be able to search by Song Title WITHOUT artist
 // TODO: Users should easily be able to switch flag profiles ON the graph without needing to navigate to a different page.
