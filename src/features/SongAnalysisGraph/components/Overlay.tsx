@@ -11,7 +11,7 @@ export default function Overlay(): React.JSX.Element {
   return (
     <div className="pointer-events-none absolute top-0 z-[997] flex h-full w-full flex-col justify-end p-2">
       <div
-        className={`flex w-full min-w-60 flex-col items-center gap-1 rounded-md bg-slate-400/10 p-2 backdrop-blur-sm`}
+        className={`pointer-events-auto flex w-full min-w-60 flex-col items-center gap-1 rounded-md bg-slate-400/10 p-2 backdrop-blur-sm`}
       >
         {/* Song and Artists */}
         <div className="flex h-full w-full flex-col items-center">
