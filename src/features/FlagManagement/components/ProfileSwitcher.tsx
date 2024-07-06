@@ -40,20 +40,20 @@ export default function ProfileSwitcher(): React.JSX.Element {
             {flagProfile}
           </span>
           <FaAngleDown
-            className="flex-shrink-0 text-primary transition-colors duration-200 group-hover:text-primary/70"
+            className={`flex-shrink-0 text-primary transition-colors duration-200 group-hover:text-primary/70 ${dropdownIsShown ? "rotate-180" : "rotate-0"} transition-transform duration-200`}
             size={14}
           />
         </div>
       </div>
       <ul
         tabIndex={0}
-        className={`absolute -top-44 z-[998] flex w-full flex-col gap-1 rounded-md bg-base-200 p-2 shadow ${dropdownIsShown ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"} transition-opacity duration-100`}
+        className={`absolute -top-[12.5rem] z-[998] flex w-full flex-col rounded-md bg-base-200 p-2 shadow ${dropdownIsShown ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"} transition-opacity duration-100`}
       >
         {testProfiles &&
           testProfiles.map((profile: TestProfile) => {
             return (
               <li
-                className={`py-2 text-sm ${profile === flagProfile ? "bg-base-300" : ""} rounded-sm transition-colors duration-100 hover:bg-black focus:bg-black active:bg-black`}
+                className={`py-3 text-sm ${profile === flagProfile ? "bg-base-300" : ""} rounded-sm border-b-[1px] border-[#121417] transition-colors duration-100 last:border-transparent hover:bg-black focus:bg-black active:bg-black`}
                 key={profile}
                 onClick={() => handleProfileSelection(profile)}
               >

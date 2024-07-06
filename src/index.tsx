@@ -38,12 +38,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // MVP TODO *******************************************************************
 // SAT July 6th
-// TODO: If song is clean show "Clean" instead of 0 in center node
 // TODO: Refactor user profiles and create a few default profiles
-// TODO: Users should easily be able to switch flag profiles ON the graph without needing to navigate to a different page.
+
+// TODO: If song is clean show "Clean" instead of 0 in center node
 // TODO: Add loading for when artists are being fetched (inside input)
 // TODO: Fix weird padding thing when artist dropdown is loading
 // TODO: Fix theme and colors (search dropdowns etc..)
+// mTODO: Also close profile select dropdown on outside click
 // mTODO: Words above around lvl 8 probably don't even need to be shown on graph
 // mTODO: Lyric input should be an accordion
 // mTODO: Manage z-indexes better
