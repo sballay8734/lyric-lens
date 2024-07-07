@@ -8,7 +8,7 @@ import {
   setFlaggedFamilies,
 } from "../features/FlagManagement/redux/flagManagementSlice";
 import findFlaggedFamilies from "../features/FlagManagement/utils/findFlaggedFamilies";
-import Graph from "../features/SongAnalysisGraph/components/Graph";
+import Graph from "../features/SongAnalysisGraph/components/GraphWrapper";
 import Overlay from "../features/SongAnalysisGraph/components/Overlay";
 import { useAppSelector } from "../hooks/hooks";
 import { RootState } from "../store/store";

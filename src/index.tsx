@@ -40,17 +40,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // Sun July 7th
 // TODO: Refactor d3 stuff
 
+// !TODO: Smooth out animations and OPTIMIZE D3 stuff
+
 // !TODO: Recent additions to flagManagement are sloppy and all over the place. The code works but a MASSIVE REFACTOR IS NEEDED (AS WELL AS TESTING)
 
 // !TODO: Re-rendering is happening too much when changing preset and causing a very janky animation
 
 // !TODO: Check Kendrick Lamar's "We Cry Together" on maximum filter (One node is not connected for some reason - probably because you recently added some words wrong to the master list)
 
-// TODO: Move root node to top 3rd of the screen (centered in between top of Overlay and top of screen)
-
 // TODO: Fix theme and colors (search dropdowns etc..)
 
-// TODO: If song is clean show "Clean" instead of 0 in center node
 // TODO: Add loading for when artists are being fetched (inside input)
 // TODO: Fix weird padding thing when artist dropdown is loading
 // mTODO: Also close profile select dropdown on outside click
