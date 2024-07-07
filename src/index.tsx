@@ -38,7 +38,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // MVP TODO *******************************************************************
 // SAT July 6th
-// TODO: Refactor user profiles and create a few default profiles
+// !TODO: Recent additions to flagManagement are sloppy and all over the place. The code works but a MASSIVE REFACTOR IS NEEDED (AS WELL AS TESTING)
+
+// !TODO: Re-rendering is happening too much when changing preset and causing a very janky animation
+
+// !TODO: Check Kendrick Lamar's "We Cry Together" on maximum filter (One node is not connected for some reason - probably because you recently added some words wrong to the master list)
 
 // TODO: If song is clean show "Clean" instead of 0 in center node
 // TODO: Add loading for when artists are being fetched (inside input)
@@ -63,6 +67,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // mTODO: Add loading feedback when song is changed and lyrics are loading
 
 // V 1.0    *******************************************************************
+// !TODO: Really need to refactor logic for flaggedFamilies and current flag Profile. It's messy and sloppy and all over the place
+
 // !TODO: Update cors config (right now you're just using https://corsproxy.io/)
 // !TODO: OPTIMIZATIONS FOR API REQUESTS
 // !TODO: Optimizations for logic and looping through families, words, etc...

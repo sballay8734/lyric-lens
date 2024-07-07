@@ -54,6 +54,7 @@ export const flagManagementSlice = createSlice({
       state,
       action: PayloadAction<{ family: string; occurances: number }>,
     ) => {
+      // console.log(action.payload);
       const { family, occurances } = action.payload;
 
       if (state.flaggedFamilies) {

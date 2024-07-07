@@ -100,6 +100,19 @@ export const DEFAULT_FLAG_PROFILE_PRESETS: DefaultFlagPreset[] = [
   },
   {
     presetId: "TEST_003",
+    presetName: "Words Over 8",
+    presetDescription: "Words like ...",
+    flaggedWords: Object.keys(FLAGGABLE_WORDS_MASTER).reduce((acc, word) => {
+      const { vulgarityLvl } = FLAGGABLE_WORDS_MASTER[word];
+
+      if (vulgarityLvl >= 8) {
+        return { ...acc, [word]: { ...FLAGGABLE_WORDS_MASTER[word] } };
+      }
+      return acc;
+    }, {}),
+  },
+  {
+    presetId: "TEST_004",
     presetName: "Anything Goes",
     presetDescription: "Words like ...",
     flaggedWords: {},

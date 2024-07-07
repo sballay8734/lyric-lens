@@ -19,6 +19,7 @@ export default function ProfileSwitcher(): React.JSX.Element {
 
   function handleProfileSelection(preset: DefaultFlagPreset) {
     setDropdownIsShown(false);
+
     dispatch(setCurrentPreset(preset));
   }
 
