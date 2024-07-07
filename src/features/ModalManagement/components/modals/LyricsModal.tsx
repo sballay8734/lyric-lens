@@ -44,7 +44,7 @@ export default function LyricsModal(): React.JSX.Element {
             if (lineIsHeaderLine) {
               return (
                 <div
-                  className="text-xs font-bold text-white text-left"
+                  className="text-left text-xs font-bold text-white"
                   key={lineIndex}
                 >
                   {line}
@@ -64,7 +64,7 @@ export default function LyricsModal(): React.JSX.Element {
                 .split(" ");
 
               return (
-                <div className="text-xs text-left" key={lineIndex}>
+                <div className="text-left text-xs" key={lineIndex}>
                   {words.map((word, wordIndex) => {
                     const formattedWord = word.toLowerCase();
 
@@ -82,7 +82,7 @@ export default function LyricsModal(): React.JSX.Element {
                       return (
                         <span
                           key={wordIndex}
-                          className="text-secondary bg-primary-content rounded-sm"
+                          className="rounded-sm bg-primary-content text-secondary"
                         >
                           {word}{" "}
                         </span>
@@ -114,30 +114,30 @@ export default function LyricsModal(): React.JSX.Element {
       className={`modal modal-bottom h-full ${lyricsModalIsVis ? "visible" : "invisible"}`}
     >
       {/* MODAL CONTENT */}
-      <div className="modal-box lyrics-sheet-modal h-full bg-base-100 flex flex-col gap-2 p-2">
+      <div className="lyrics-sheet-modal modal-box flex h-full flex-col gap-2 bg-base-100 p-2">
         {/* Song Title and Artists */}
-        <div className="flex flex-col items-center justify-center bg-base-300 py-4 rounded-sm px-2">
+        <div className="flex flex-col items-center justify-center rounded-sm bg-base-300 px-2 py-4">
           <h2 className="font-bold text-white">{`"${selectedSong?.title}"`}</h2>
-          <h2 className="text-faded text-sm rounded-sm w-fit">
+          <h2 className="text-faded w-fit rounded-sm text-sm">
             {selectedSong?.artist_names}
           </h2>
         </div>
         {/* Lyrics */}
-        <div className="flex flex-col gap-4 leading-4 bg-base-200 py-2 rounded-sm h-full overflow-hidden">
-          <div className="overflow-auto flex flex-col gap-4 leading-4 rounded-sm h-full px-2">
+        <div className="flex h-full flex-col gap-4 overflow-hidden rounded-sm bg-base-200 py-2 leading-4">
+          <div className="flex h-full flex-col gap-4 overflow-auto rounded-sm px-2 leading-4">
             {formattedLyrics}
           </div>
         </div>
-        <div className="w-full flex text-error mt-auto gap-2 min-h-14">
+        <div className="mt-auto flex min-h-14 w-full gap-2 text-error">
           <button
             onClick={() => console.log("Not configured")}
-            className="btn text-error rounded-sm flex-[10_10_0%] h-full"
+            className="btn h-full flex-[10_10_0%] rounded-sm text-error"
           >
             DOES NOTHING
           </button>
           <button
             onClick={() => dispatch(hideLyricsModal())}
-            className={`btn m-0 btn-error flex flex-[1_1_0%] h-full items-center justify-center rounded-sm transition-colors duration-100`}
+            className={`btn btn-error m-0 flex h-full flex-[1_1_0%] items-center justify-center rounded-sm transition-colors duration-100`}
           >
             <IoMdClose size={20} />
           </button>

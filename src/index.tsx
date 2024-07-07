@@ -3,11 +3,11 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import "./index.css";
 import Entry from "./routes/Entry.tsx";
 import Home from "./routes/Home.tsx";
 import ManageFlags from "./routes/ManageFlags.tsx";
 import { store } from "./store/store.ts";
+import "./index.css";
 
 const router = createBrowserRouter([
   {
@@ -38,15 +38,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // MVP TODO *******************************************************************
 // SAT July 6th
-// TODO: Remove border around artist & title inputs on mobile when inputs are focused/selected
+// !TODO: Recent additions to flagManagement are sloppy and all over the place. The code works but a MASSIVE REFACTOR IS NEEDED (AS WELL AS TESTING)
 
-// TODO: Move "View Lyrics" btn somewhere else
+// !TODO: Re-rendering is happening too much when changing preset and causing a very janky animation
+
+// !TODO: Check Kendrick Lamar's "We Cry Together" on maximum filter (One node is not connected for some reason - probably because you recently added some words wrong to the master list)
+
 // TODO: If song is clean show "Clean" instead of 0 in center node
-// TODO: Refactor user profiles and create a few default profiles
-// TODO: Users should easily be able to switch flag profiles ON the graph without needing to navigate to a different page.
 // TODO: Add loading for when artists are being fetched (inside input)
 // TODO: Fix weird padding thing when artist dropdown is loading
+// TODO: Fix theme and colors (search dropdowns etc..)
+// mTODO: Also close profile select dropdown on outside click
 // mTODO: Words above around lvl 8 probably don't even need to be shown on graph
+// mTODO: Lyric input should be an accordion
+// mTODO: Manage z-indexes better
+// mTODO: Why are spaces after flagged words being highlighted in lyrics sheet
+// mTODO: Show words that are NOT flagged also
 
 // AFTER SAT July 6th
 // !TODO: Users should be able to search by Song Title WITHOUT artist
@@ -60,6 +67,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // mTODO: Add loading feedback when song is changed and lyrics are loading
 
 // V 1.0    *******************************************************************
+// !TODO: Really need to refactor logic for flaggedFamilies and current flag Profile. It's messy and sloppy and all over the place
+
 // !TODO: Update cors config (right now you're just using https://corsproxy.io/)
 // !TODO: OPTIMIZATIONS FOR API REQUESTS
 // !TODO: Optimizations for logic and looping through families, words, etc...

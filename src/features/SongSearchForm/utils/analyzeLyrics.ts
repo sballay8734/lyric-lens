@@ -1,18 +1,22 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
-import { sensitiveWordsMap } from "../../../data/sensitiveWordMap";
 import {
-  FlaggedFamiliesObject,
-  setFamilyOccurances,
+  DefaultFlagPreset,
+  UserFlagPreset,
+} from "../../../constants/defaultProfiles";
+import {
+  setFlaggedFamilies,
   setLyricsHashMap,
 } from "../../FlagManagement/redux/flagManagementSlice";
+import findFlaggedFamilies from "../../FlagManagement/utils/findFlaggedFamilies";
+import { updateFlaggedFamilies } from "../../FlagManagement/utils/updateFlaggedFamilies";
 import { HashMap } from "../../SongAnalysisGraph/types/graphTypes";
 import { setAnalysisResult } from "../redux/songSearchFormSlice";
 
 export function analyzeLyrics(
   lyrics: string,
   dispatch: Dispatch,
-  flaggedFamilies: FlaggedFamiliesObject,
+  currentPreset: DefaultFlagPreset | UserFlagPreset | null,
 ) {
   const formattedLyrics = lyrics
     .replace(/\[.*?\]/g, "") // removes [Verse 2: ... ] [Chorus: ... ]
@@ -45,39 +49,20 @@ export function analyzeLyrics(
   // store hashMap for highlighting words on lyrics sheet
   dispatch(setLyricsHashMap(hashMap));
 
-  let totalFlaggedWords = 0;
+  const flaggedFamilies = currentPreset && findFlaggedFamilies(currentPreset);
+
+  if (!flaggedFamilies) {
+    console.error("Something went wrong");
+    return;
+  }
 
   // check users flagged words against lyrics hashMap
-  Object.keys(flaggedFamilies).forEach((fam) => {
-    let totalFamilyOccurances = 0;
-    // get all words in current family
-    const allFamilyWords = Object.entries(sensitiveWordsMap).filter(
-      ([_, wordData]) => {
-        return wordData.family === fam;
-      },
-    );
+  const updatedFlags = updateFlaggedFamilies(flaggedFamilies, hashMap);
 
-    // check hash map for each word
-    allFamilyWords.forEach(([word, _]) => {
-      // if word IS in song, add occurances to family
-      if (hashMap[word]) {
-        totalFamilyOccurances += hashMap[word];
-      }
-    });
-
-    dispatch(
-      setFamilyOccurances({
-        family: fam,
-        occurances: totalFamilyOccurances,
-      }),
-    );
-
-    // updated total flaggedWords in song
-    totalFlaggedWords += totalFamilyOccurances;
-  });
+  dispatch(setFlaggedFamilies(updatedFlags.flaggedFamilies));
 
   // set result of song analysis
-  if (totalFlaggedWords === 0) {
+  if (updatedFlags.totalFlaggedWords === 0) {
     dispatch(
       setAnalysisResult({
         result: "pass",
@@ -88,7 +73,7 @@ export function analyzeLyrics(
     dispatch(
       setAnalysisResult({
         result: "fail",
-        totalFlaggedWords: totalFlaggedWords,
+        totalFlaggedWords: updatedFlags.totalFlaggedWords,
       }),
     );
   }

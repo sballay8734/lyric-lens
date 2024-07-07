@@ -1,73 +1,57 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { sensitiveWordsMap } from "../data/sensitiveWordMap";
-import { addFlaggedFamily } from "../features/FlagManagement/redux/flagManagementSlice";
+import { DEFAULT_FLAG_PROFILE_PRESETS } from "../constants/defaultProfiles";
+import { FLAGGABLE_WORDS_MASTER } from "../constants/flaggableWords";
+import {
+  setCurrentPreset,
+  setDefaultPresets,
+  setFlaggedFamilies,
+} from "../features/FlagManagement/redux/flagManagementSlice";
+import findFlaggedFamilies from "../features/FlagManagement/utils/findFlaggedFamilies";
 import Graph from "../features/SongAnalysisGraph/components/Graph";
-import SongArtistOverlay from "../features/SongAnalysisGraph/components/SongArtistOverlay";
+import Overlay from "../features/SongAnalysisGraph/components/Overlay";
+import { useAppSelector } from "../hooks/hooks";
+import { RootState } from "../store/store";
 
-interface FlaggedWords {
-  [id: string]: string;
-}
-
-// REMOVE:
-const testUser = false;
-
-const defaultProfile = {
-  id: "DEFAULT",
-  presetName: "Default",
-  flaggedWords: generateDefaultFlaggedWordsObject(),
-};
-
-function generateDefaultFlaggedWordsObject() {
-  const flaggedWords: FlaggedWords = {};
-  const unFlaggedWords: FlaggedWords = {};
-
-  Object.keys(sensitiveWordsMap).forEach((word, index) => {
-    const { vulgarityLvl, isRootWord } = sensitiveWordsMap[word];
-
-    if (isRootWord && vulgarityLvl > 2) {
-      flaggedWords[`SW${index}`] = word;
-    } else if (isRootWord && vulgarityLvl <= 2) {
-      unFlaggedWords[`SW${index}`] = word;
-    }
-  });
-
-  // console.log("FLAGGED:", flaggedWords);
-  // console.log("NOT FLAGGED:", unFlaggedWords);
-  return flaggedWords;
-}
+const FALLBACK_PRESET = DEFAULT_FLAG_PROFILE_PRESETS[0];
 
 export default function Home(): React.JSX.Element {
   const dispatch = useDispatch();
+  const currentPreset = useAppSelector(
+    (state: RootState) => state.flagManagement.currentPreset,
+  );
+  const currentPresetId = useAppSelector(
+    (state: RootState) => state.flagManagement.currentPreset?.presetId,
+  );
+  const defaultPresets = useAppSelector(
+    (state: RootState) => state.flagManagement.defaultPresets,
+  );
+  const flaggedFamilies = useAppSelector(
+    (state: RootState) => state.flagManagement.flaggedFamilies,
+  );
 
   useEffect(() => {
-    if (!testUser) {
-      // set words to default object if there is no user
-      // TODO: Replace with default words
-      Object.values(defaultProfile.flaggedWords).forEach((word) => {
-        const wordToAdd = {
-          id: sensitiveWordsMap[word].id,
-          word: word,
-          occurances: 0,
-          vulgarityLvl: sensitiveWordsMap[word].vulgarityLvl,
-          category: sensitiveWordsMap[word].category,
-          family: sensitiveWordsMap[word].family,
-          isRootWord: sensitiveWordsMap[word].isRootWord,
-        };
-        dispatch(addFlaggedFamily({ [word]: wordToAdd }));
-      });
-    } else {
-      // set words to users preference
+    const curPreset = currentPreset || FALLBACK_PRESET;
+
+    dispatch(setCurrentPreset(curPreset));
+    // set words to default object if there is no user
+    if (defaultPresets === null) {
+      dispatch(setDefaultPresets(DEFAULT_FLAG_PROFILE_PRESETS));
     }
-  }, []);
+
+    if (flaggedFamilies === null) {
+      const initialFlaggedFamilies = findFlaggedFamilies(curPreset);
+      dispatch(setFlaggedFamilies(initialFlaggedFamilies));
+    }
+  }, [currentPresetId]);
 
   return (
     <>
-      <div className="flex flex-col justify-between h-full gap-2 w-full relative">
+      <div className="relative flex h-full w-full flex-col justify-between gap-2">
         {/* GRAPH */}
         <Graph />
-        <SongArtistOverlay />
+        <Overlay />
       </div>
     </>
   );

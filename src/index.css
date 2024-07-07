@@ -111,3 +111,13 @@ input:focus,
 input:active {
   outline: none !important;
 }
+/* 
+li:focus,
+li:active {
+  background-color: red !important;
+} */
+
+a:focus,
+a:active {
+  background-color: rgba(0, 0, 0, 0.46) !important;
+}

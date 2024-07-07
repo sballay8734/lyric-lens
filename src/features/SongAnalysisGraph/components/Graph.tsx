@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import { FlaggedFamiliesObject } from "../../FlagManagement/redux/flagManagementSlice";
 import LyricsModal from "../../ModalManagement/components/modals/LyricsModal";
 import { AnalysisResult } from "../../SongSearchForm/redux/songSearchFormSlice";
 import { analyzeLyrics } from "../../SongSearchForm/utils/analyzeLyrics";
@@ -17,40 +16,29 @@ export default function Graph(): React.JSX.Element {
   const lyrics = useAppSelector(
     (state: RootState) => state.songSearchForm.lyrics,
   );
-  const flaggedFamilies = useAppSelector(
-    (state: RootState) => state.flagManagement.flaggedFamilies,
+  const currentPreset = useAppSelector(
+    (state: RootState) => state.flagManagement.currentPreset,
   );
   const selectedSong = useAppSelector(
     (state: RootState) => state.songSearchForm.selectedSong,
   );
-
   const analysisResult = useAppSelector(
     (state: RootState) => state.songSearchForm.analysisResult,
   );
 
-  // run lyric analysis whenever user changes the song
+  // run lyric analysis whenever user changes the song or flag preset
   useEffect(() => {
     if (lyrics) {
-      analyzeLyrics(lyrics, dispatch, flaggedFamilies);
+      analyzeLyrics(lyrics, dispatch, currentPreset);
     }
-  }, [lyrics]);
+  }, [lyrics, currentPreset?.presetId]);
 
   return (
     <div
-      className={`MainGraph flex flex-col justify-center w-full h-full bg-[#0e1114] items-center group transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
+      className={`MainGraph group flex h-full w-full flex-col items-center justify-center bg-[#000000] transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
     >
-      {/* <span>
-        {flaggedWords ? formatResponse() : "You need to choose a song"}
-      </span> */}
-      {flaggedFamilies ? (
-        <ForceDirectedGraph
-          lyrics={lyrics}
-          flaggedFamilies={flaggedFamilies}
-          analysisResult={analysisResult}
-        />
-      ) : (
-        "You need to choose a song"
-      )}
+      <ForceDirectedGraph lyrics={lyrics} analysisResult={analysisResult} />
+
       <LyricsModal />
     </div>
   );
@@ -67,11 +55,16 @@ const MAX_RADIUS = 50;
 
 export const ForceDirectedGraph: React.FC<{
   lyrics: string | null;
-  flaggedFamilies: FlaggedFamiliesObject;
   analysisResult: AnalysisResult;
-}> = ({ lyrics, flaggedFamilies, analysisResult }) => {
+}> = ({ lyrics, analysisResult }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const windowSize = useWindowSize();
+  const currentPresetId = useAppSelector(
+    (state: RootState) => state.flagManagement.currentPreset?.presetId,
+  );
+  const flaggedFamilies = useAppSelector(
+    (state: RootState) => state.flagManagement.flaggedFamilies,
+  );
 
   useEffect(() => {
     if (!flaggedFamilies || !svgRef.current) return () => {};
@@ -81,6 +74,8 @@ export const ForceDirectedGraph: React.FC<{
     const height = window.innerHeight;
     const centerX = width / 2;
     const centerY = height / 2;
+
+    // console.log(flaggedFamilies);
 
     // Format nodes from flaggedFamilies
     const formattedNodes: GraphNode[] = Object.keys(flaggedFamilies).map(
@@ -93,10 +88,12 @@ export const ForceDirectedGraph: React.FC<{
           occurances,
           vulgarityLvl,
           category,
-          radius: 20 + occurances * 2,
+          radius: 20 + occurances * 1.2,
         };
       },
     );
+
+    // console.log(formattedNodes);
 
     // Create center node
     const centerNode: RootNode = {
@@ -295,7 +292,7 @@ export const ForceDirectedGraph: React.FC<{
       simulation.stop();
       svg.selectAll("*").remove(); // Clean up on unmount
     };
-  }, [flaggedFamilies, lyrics, analysisResult?.totalFlaggedWords, windowSize]);
+  }, [lyrics, analysisResult?.totalFlaggedWords, windowSize, currentPresetId]);
 
   return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
 };

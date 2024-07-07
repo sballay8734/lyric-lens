@@ -15,20 +15,20 @@ export default function FlagManagerModal(): React.JSX.Element {
       className={`modal modal-bottom h-full ${flagManagerModalIsVis ? "visible" : "invisible"}`}
     >
       {/* MODAL CONTENT */}
-      <div className="modal-box lyrics-sheet-modal h-full bg-base-100 flex flex-col gap-2 p-2">
+      <div className="lyrics-sheet-modal modal-box flex h-full flex-col gap-2 bg-base-100 p-2">
         <div className="flex h-full items-center justify-center bg-base-200">
           <h2>FLAG MANAGER FOR X PROFILE</h2>
         </div>
-        <div className="w-full flex text-error mt-auto gap-2 min-h-14">
+        <div className="mt-auto flex min-h-14 w-full gap-2 text-error">
           <button
             onClick={() => console.log("Not configured")}
-            className="btn text-error rounded-sm flex-[10_10_0%] h-full"
+            className="btn h-full flex-[10_10_0%] rounded-sm text-error"
           >
             DOES NOTHING
           </button>
           <button
             onClick={() => dispatch(hideFlagManagerModal())}
-            className={`btn m-0 btn-error flex flex-[1_1_0%] h-full items-center justify-center rounded-sm transition-colors duration-100`}
+            className={`btn btn-error m-0 flex h-full flex-[1_1_0%] items-center justify-center rounded-sm transition-colors duration-100`}
           >
             <IoMdClose size={20} />
           </button>

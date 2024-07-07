@@ -12,7 +12,7 @@ function Entry() {
       {/* <Drawer /> */}
       <SongSearchModal />
       <FlagManagerModal />
-      <BottomBtnsWrapper />
+      {/* <BottomBtnsWrapper /> */}
       <Outlet />
     </div>
   );
