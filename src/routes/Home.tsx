@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { DEFAULT_FLAG_PROFILE_PRESETS } from "../constants/defaultProfiles";
-import { FLAGGABLE_WORDS_MASTER } from "../constants/flaggableWords";
 import {
   setCurrentPreset,
   setDefaultPresets,

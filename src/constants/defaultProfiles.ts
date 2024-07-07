@@ -5,9 +5,6 @@
 
 import { FLAGGABLE_WORDS_MASTER, FlaggableWordsObject } from "./flaggableWords";
 
-type Word = string;
-type WordId = string;
-
 export interface DefaultFlagPreset {
   presetId: string;
   presetName: string;

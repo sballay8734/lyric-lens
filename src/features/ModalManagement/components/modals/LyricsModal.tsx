@@ -75,6 +75,7 @@ export default function LyricsModal(): React.JSX.Element {
 
                     // if user has flagged the words family
                     if (
+                      flaggedFamilies &&
                       flaggedFamilies.hasOwnProperty(
                         sensitiveWordsMap[formattedWord].family,
                       )
