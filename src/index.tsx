@@ -44,10 +44,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // !TODO: Check Kendrick Lamar's "We Cry Together" on maximum filter (One node is not connected for some reason - probably because you recently added some words wrong to the master list)
 
+// TODO: Increase size of Overlay, overlay text, and profile select dropdown toggle and dropdown list items
+
+// TODO: Move root node to top 3rd of the screen (centered in between top of Overlay and top of screen)
+
+// TODO: Fix theme and colors (search dropdowns etc..)
+
 // TODO: If song is clean show "Clean" instead of 0 in center node
 // TODO: Add loading for when artists are being fetched (inside input)
 // TODO: Fix weird padding thing when artist dropdown is loading
-// TODO: Fix theme and colors (search dropdowns etc..)
 // mTODO: Also close profile select dropdown on outside click
 // mTODO: Words above around lvl 8 probably don't even need to be shown on graph
 // mTODO: Lyric input should be an accordion
