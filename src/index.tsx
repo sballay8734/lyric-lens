@@ -37,16 +37,20 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 
 // MVP TODO *******************************************************************
-// Sun July 7th
-// TODO: Refactor d3 stuff
+// NEXT WORK SESSION
+// !TODO: Make box for words that are not in the song but are in the flagged list (this is good for user feedback)
 
-// !TODO: Smooth out animations and OPTIMIZE D3 stuff on song change and preset change
+// !TODO: Node positions should NOT reset on song change or preset change.
 
-// !TODO: Recent additions to flagManagement are sloppy and all over the place. The code works but a MASSIVE REFACTOR IS NEEDED (AS WELL AS TESTING)
+// !TODO: Smooth out animations
+
+// !TODO: Might have to check out d3 bindings and how they work
 
 // !TODO: Re-rendering is happening too much when changing preset and causing a very janky animation
 
 // !TODO: Check Kendrick Lamar's "We Cry Together" on maximum filter (One node is not connected for some reason - probably because you recently added some words wrong to the master list)
+
+// TODO: Words not in song should be visible in their own area
 
 // TODO: Fix theme and colors (search dropdowns etc..)
 

@@ -10,6 +10,7 @@ import {
   centerY,
   height,
   MIN_NODE_RADIUS,
+  rectGroup,
   width,
 } from "../constants/graphConstants";
 import { GraphNode } from "../data/mockGraphData";
@@ -170,6 +171,18 @@ export default function Graph({
             : analysisResult?.totalFlaggedWords}
         </text>
       </g>
+      {/* Rect for words not in song *************************************** */}
+      <rect
+        x={rectGroup.x}
+        y={rectGroup.y}
+        width={rectGroup.width}
+        height={rectGroup.height}
+        rx={rectGroup.rx}
+        fill={rectGroup.fill}
+        stroke={rectGroup.stroke}
+        strokeWidth={rectGroup.strokeWidth}
+      />
+
       {/* Nodes */}
       {nodes.map((node) => (
         <WordNode

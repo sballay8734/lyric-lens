@@ -23,7 +23,7 @@ export const MIN_NODE_RADIUS = 25;
 export const width = window.innerWidth;
 export const height = window.innerHeight;
 export const centerX = width / 2;
-export const centerY = height / 3;
+export const centerY = height / 4.5;
 
 // Center node obj
 export const centerNode: RootNode = {
@@ -35,4 +35,19 @@ export const centerNode: RootNode = {
   radius: 60, // TODO: should get bigger with more curse words
   fx: centerX,
   fy: centerY,
+};
+
+const rectWidth = 300;
+const rectHeight = 200;
+
+export const rectGroup = {
+  id: "rect",
+  x: centerX - rectWidth / 2,
+  y: (height * 2) / 4.5,
+  width: 300,
+  height: 200,
+  rx: 5,
+  fill: "#141414",
+  stroke: "#212121",
+  strokeWidth: 2,
 };

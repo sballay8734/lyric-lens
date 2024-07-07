@@ -25,7 +25,7 @@ export default function ProfileSwitcher(): React.JSX.Element {
 
   return (
     <div className="dropdown dropdown-top relative w-full">
-      <div className="flex min-h-12 w-full items-center justify-between gap-2 rounded-sm bg-black/40 px-2">
+      <div className="flex min-h-12 w-full items-center justify-between gap-2 rounded-sm bg-black/40 px-3">
         <span className="text-faded col-span-2 mr-[2px] gap-2 place-self-start self-center text-sm font-thin">
           Active Profile
         </span>
