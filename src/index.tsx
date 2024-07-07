@@ -40,7 +40,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // Sun July 7th
 // TODO: Refactor d3 stuff
 
-// !TODO: Smooth out animations and OPTIMIZE D3 stuff
+// !TODO: Smooth out animations and OPTIMIZE D3 stuff on song change and preset change
 
 // !TODO: Recent additions to flagManagement are sloppy and all over the place. The code works but a MASSIVE REFACTOR IS NEEDED (AS WELL AS TESTING)
 
@@ -82,13 +82,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // TODO: Account creation to save preferences
 // TODO: Look into clean vs. explicit versions and how Genius handles them
 // TODO: Persist word selections for users without account (local storage)
-// REMOVE:
-// BUG:
-// REVIEW:
-// HACK:
-// NOTE:
-// REMEMBER:
-// OPTIMIZE:
 // V 1.x (Near term features) *************************************************
 
 // V 2.0 (Long term features) *************************************************
+
+// CURRENT ISSUE **************************************************************
+// On initial song selection, nodes are not created BUT flagged families is updating
+
+// When preset is changed, it works
+
+// When song is changed, it does not work until you change the preset

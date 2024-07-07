@@ -7,12 +7,7 @@ import {
 } from "../../../constants/defaultProfiles";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import {
-  setCurrentPreset,
-  setFlaggedFamilies,
-} from "../redux/flagManagementSlice";
-import findFlaggedFamilies from "../utils/findFlaggedFamilies";
-import { updateFlaggedFamilies } from "../utils/updateFlaggedFamilies";
+import { setCurrentPreset } from "../redux/flagManagementSlice";
 
 export default function ProfileSwitcher(): React.JSX.Element {
   const dispatch = useAppDispatch();
@@ -21,25 +16,11 @@ export default function ProfileSwitcher(): React.JSX.Element {
   const currentPreset = useAppSelector(
     (state: RootState) => state.flagManagement.currentPreset,
   );
-  const lyricsHashMap = useAppSelector(
-    (state: RootState) => state.flagManagement.lyricsHashMap,
-  );
 
   function handleProfileSelection(preset: DefaultFlagPreset) {
     setDropdownIsShown(false);
 
     dispatch(setCurrentPreset(preset));
-
-    const flaggedFamilies = findFlaggedFamilies(preset);
-
-    if (lyricsHashMap) {
-      const updatedFlaggedFamilies = updateFlaggedFamilies(
-        flaggedFamilies,
-        lyricsHashMap,
-      );
-      console.log("FROM SWITCHER:", updatedFlaggedFamilies);
-      dispatch(setFlaggedFamilies(updatedFlaggedFamilies.flaggedFamilies));
-    }
   }
 
   return (
@@ -67,7 +48,7 @@ export default function ProfileSwitcher(): React.JSX.Element {
       </div>
       <ul
         tabIndex={0}
-        className={`customScrollbar absolute bottom-[3.2rem] z-[998] flex max-h-96 w-full flex-col overflow-auto rounded-md bg-base-100 p-2 shadow ${dropdownIsShown ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"} transition-opacity duration-100`}
+        className={`customScrollbar absolute bottom-[3.5rem] z-[998] flex max-h-96 w-full flex-col overflow-auto rounded-md bg-base-100 p-2 shadow ${dropdownIsShown ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"} transition-opacity duration-100`}
       >
         {DEFAULT_FLAG_PROFILE_PRESETS &&
           DEFAULT_FLAG_PROFILE_PRESETS.map((preset: DefaultFlagPreset) => {

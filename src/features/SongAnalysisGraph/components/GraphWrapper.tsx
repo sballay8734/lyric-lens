@@ -1,15 +1,12 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
 
 import Graph from "./Graph";
-import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
 import LyricsModal from "../../ModalManagement/components/modals/LyricsModal";
-import { analyzeLyrics } from "../../SongSearchForm/utils/analyzeLyrics";
 
 // Graph Wrapper
 export default function GraphWrapper(): React.JSX.Element {
-  const dispatch = useAppDispatch();
   const lyrics = useAppSelector(
     (state: RootState) => state.songSearchForm.lyrics,
   );
@@ -20,15 +17,8 @@ export default function GraphWrapper(): React.JSX.Element {
     (state: RootState) => state.songSearchForm.selectedSong,
   );
   const analysisResult = useAppSelector(
-    (state: RootState) => state.songSearchForm.analysisResult,
+    (state: RootState) => state.flagManagement.analysisResult,
   );
-
-  // run lyric analysis whenever user changes the song or flag preset
-  useEffect(() => {
-    if (lyrics) {
-      analyzeLyrics(lyrics, dispatch, currentPreset);
-    }
-  }, [lyrics, currentPreset?.presetId]);
 
   return (
     <div

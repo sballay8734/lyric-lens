@@ -3,10 +3,10 @@ import { HashMap } from "../../SongAnalysisGraph/types/graphTypes";
 import { FlaggedFamiliesObject } from "../redux/flagManagementSlice";
 
 export function updateFlaggedFamilies(
-  stateFlaggedFamilies: FlaggedFamiliesObject,
+  flaggedFamilies: FlaggedFamiliesObject,
   hashMap: HashMap,
 ) {
-  return Object.keys(stateFlaggedFamilies).reduce(
+  return Object.keys(flaggedFamilies).reduce(
     (acc, fam) => {
       // get all words in current family
       const allFamilyWords = Object.entries(FLAGGABLE_WORDS_MASTER).filter(
@@ -20,7 +20,7 @@ export function updateFlaggedFamilies(
 
       // Update flaggedFamilies
       acc.flaggedFamilies[fam] = {
-        ...stateFlaggedFamilies[fam],
+        ...flaggedFamilies[fam],
         occurances: totalFamilyOccurrences,
       };
 
@@ -30,7 +30,7 @@ export function updateFlaggedFamilies(
       return acc;
     },
     {
-      flaggedFamilies: { ...stateFlaggedFamilies },
+      flaggedFamilies: { ...flaggedFamilies },
       totalFlaggedWords: 0,
     },
   );

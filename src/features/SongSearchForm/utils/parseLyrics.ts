@@ -1,8 +1,14 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
+import { analyzeLyrics } from "./analyzeLyrics";
+import { FlaggedFamiliesObject } from "../../FlagManagement/redux/flagManagementSlice";
 import { setLyrics, setLyricsLoading } from "../redux/songSearchFormSlice";
 
-export async function fetchAndParseLyrics(url: string, dispatch: Dispatch) {
+export async function fetchAndParseLyrics(
+  url: string,
+  dispatch: Dispatch,
+  flaggedFamilies: FlaggedFamiliesObject,
+) {
   const res = await fetch(url);
   const html = await res.text();
 
@@ -48,16 +54,14 @@ export async function fetchAndParseLyrics(url: string, dispatch: Dispatch) {
     // update lyrics in Redux Store
     dispatch(setLyrics(fullLyrics));
     dispatch(setLyricsLoading(false));
+
+    analyzeLyrics(fullLyrics, dispatch, flaggedFamilies);
   } else {
     // mTODO: Handle errors here (when RTK Query is added)
     dispatch(setLyricsLoading(false));
     console.error("Lyrics not found");
   }
 }
-
-// quiet treason?</span></a><br><br>[Chorus: Taylor Swift]<br><a href="/31477616/Taylor-swift-fortnight/And-for-a-fortnight-there-we-were-forever"><span class="ReferentFragmentmobile__Highlight-sc-1y6pdqn-1 dvKMNT">And for a fortnight there, we were forever</span></a>
-
-// her</span></a><br><div data-exclude-from-selection="true" class="InreadContainer__Container-sc-19040w5-0 duLgkj PrimisPlayer__InreadContainer-sc-1tvdtf7-0 bmgXAs"><div class="PrimisPlayer__Container-sc-1tvdtf7-1 csMTdh"></div></div>
 
 // const testMarkup = (
 //   <div>

@@ -4,9 +4,11 @@ import { MdOutlinePerson } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
 import { ArtistFromApi, ArtistSimple } from "../../../types/apiObjects";
-import { setLyricsHashMap } from "../../FlagManagement/redux/flagManagementSlice";
 import {
-  setAnalysisResult,
+  resetAnalysisResult,
+  setLyricsHashMap,
+} from "../../FlagManagement/redux/flagManagementSlice";
+import {
   setArtistQuery,
   setLyrics,
   setSelectedArtist,
@@ -133,7 +135,7 @@ export default function ArtistInput(): React.JSX.Element {
     dispatch(setLyrics(null));
 
     // clear old analysis result
-    dispatch(setAnalysisResult(null));
+    dispatch(resetAnalysisResult());
 
     // setSelectedArtist to the new selection
     dispatch(setSelectedArtist(artist));
@@ -163,10 +165,10 @@ export default function ArtistInput(): React.JSX.Element {
   // console.log(artistsToShow);
 
   return (
-    <div ref={dropdownRef} className="w-full relative rounded-sm">
+    <div ref={dropdownRef} className="relative w-full rounded-sm">
       {/* vv INPUT vv */}
       <label
-        className={`flex items-center gap-2 bg-base-300 py-4 px-4 rounded-sm group border-[1px] border-transparent hover:border-primary hover:bg-primary/5 transition-colors duration-200 h-[58px] ${
+        className={`group flex h-[58px] items-center gap-2 rounded-sm border-[1px] border-transparent bg-base-300 px-4 py-4 transition-colors duration-200 hover:border-primary hover:bg-primary/5 ${
           songsLoading
             ? "pointer-events-none opacity-30"
             : "pointer-events-auto opacity-100"
@@ -175,9 +177,9 @@ export default function ArtistInput(): React.JSX.Element {
         <input
           disabled={songsLoading}
           type="text"
-          className={`grow bg-transparent outline-0 border-0 focus:outline-none focus:border-none ${
+          className={`grow border-0 bg-transparent outline-0 focus:border-none focus:outline-none ${
             selectedArtist?.name
-              ? "placeholder:text-white placeholder:font-bold"
+              ? "placeholder:font-bold placeholder:text-white"
               : "placeholder:text-neutral-content/50"
           }`}
           placeholder={selectedArtist?.name ? selectedArtist.name : "Artist"}
@@ -193,17 +195,17 @@ export default function ArtistInput(): React.JSX.Element {
         />
         <MdOutlinePerson
           size={18}
-          className="text-neutral-content/50 group-hover:text-primary transition-colors duration-200"
+          className="text-neutral-content/50 transition-colors duration-200 group-hover:text-primary"
         />
       </label>
       {/* vv DROPDOWN vv */}
       <ul
-        className={`dropdown-content bg-dropdownBg text-neutral-content z-10 absolute w-full h-fit max-h-[300px] bottom-0 rounded-sm top-16 overflow-scroll flex flex-col border-0 ${
+        className={`dropdown-content absolute bottom-0 top-16 z-10 flex h-fit max-h-[300px] w-full flex-col overflow-scroll rounded-sm border-0 bg-dropdownBg text-neutral-content ${
           artistQuery.length < 1 ? "p-0" : "p-2"
         } ${
           dropdownIsShown
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
         } transition-opacity duration-200`}
       >
         {artistQuery.length > 0 &&
@@ -213,7 +215,7 @@ export default function ArtistInput(): React.JSX.Element {
                 tabIndex={0}
                 onClick={() => handleArtistSelect(artist)}
                 onKeyDown={(e) => handleEnterKeyPress(e, artist)}
-                className="text-left cursor-pointer py-2 px-2 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 rounded-md focus:bg-primary outline-0"
+                className="cursor-pointer rounded-md border-0 px-2 py-2 text-left outline-0 transition-colors duration-200 hover:bg-primary/20 hover:text-white focus:bg-primary active:bg-primary/80"
                 key={artist.id}
               >
                 {artist.name}

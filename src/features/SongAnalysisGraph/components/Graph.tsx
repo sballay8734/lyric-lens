@@ -31,7 +31,10 @@ export default function Graph({
     (state: RootState) => state.flagManagement.flaggedFamilies,
   );
   const analysisResult = useAppSelector(
-    (state: RootState) => state.songSearchForm.analysisResult,
+    (state: RootState) => state.flagManagement.analysisResult,
+  );
+  const lyricsLoading = useAppSelector(
+    (state: RootState) => state.songSearchForm.lyricsLoading,
   );
 
   const [nodes, setNodes] = useState<GraphNode[]>([]);
@@ -85,7 +88,9 @@ export default function Graph({
         simulationRef.current.stop();
       }
     };
-  }, [presetId, lyrics, analysisResult?.result]);
+  }, [presetId, lyrics, lyricsLoading]);
+
+  // console.log(nodes);
 
   // TODO: Add separate useEffect for when lyrics/song changes
 
@@ -177,3 +182,10 @@ export default function Graph({
     </svg>
   );
 }
+
+// !TODO: **********************************************************************
+// HERES WHAT THE STATE FLOW SHOULD LOOK LIKE
+// 1. default profile is set for flaggedFamilies if no User preset
+// 2. On song select, analyze lyrics with current preset
+// 3. On preset change, RE-analyze lyrics with the new preset and UPDATE family occurances do NOT set the entire object.
+// 4.
