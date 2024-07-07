@@ -44,8 +44,8 @@ export default function ProfileSwitcher(): React.JSX.Element {
 
   return (
     <div className="dropdown dropdown-top relative w-full">
-      <div className="mt-2 flex w-full items-center justify-between gap-2 px-2">
-        <span className="text-faded col-span-2 mr-[2px] gap-2 place-self-start self-center text-sm">
+      <div className="flex min-h-12 w-full items-center justify-between gap-2 rounded-sm bg-black/40 px-2">
+        <span className="text-faded col-span-2 mr-[2px] gap-2 place-self-start self-center text-sm font-thin">
           Active Profile
         </span>
         <FaRightLong size={12} className="" />
@@ -56,7 +56,7 @@ export default function ProfileSwitcher(): React.JSX.Element {
           className="group btn pointer-events-auto h-auto min-h-6 flex-1 flex-nowrap justify-end gap-2 overflow-hidden border-none bg-transparent p-0 outline-none hover:bg-transparent"
         >
           {/* mTODO: letters like "g" and "j"'s bottoms are slightly chopped */}
-          <span className="block truncate text-xs text-primary transition-colors duration-200 group-hover:text-primary/70">
+          <span className="block truncate font-light text-primary transition-colors duration-200 group-hover:text-primary/70">
             {currentPreset?.presetName}
           </span>
           <FaAngleDown
@@ -67,13 +67,13 @@ export default function ProfileSwitcher(): React.JSX.Element {
       </div>
       <ul
         tabIndex={0}
-        className={`absolute bottom-[2.2rem] z-[998] flex w-full flex-col rounded-md bg-base-200 p-2 shadow ${dropdownIsShown ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"} transition-opacity duration-100`}
+        className={`customScrollbar absolute bottom-[3.2rem] z-[998] flex max-h-96 w-full flex-col overflow-auto rounded-md bg-base-100 p-2 shadow ${dropdownIsShown ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"} transition-opacity duration-100`}
       >
         {DEFAULT_FLAG_PROFILE_PRESETS &&
           DEFAULT_FLAG_PROFILE_PRESETS.map((preset: DefaultFlagPreset) => {
             return (
               <li
-                className={`py-3 text-sm ${preset.presetName === currentPreset?.presetName ? "bg-base-300" : ""} rounded-sm border-b-[1px] border-[#121417] transition-colors duration-100 last:border-transparent hover:bg-black focus:bg-black active:bg-black`}
+                className={`py-5 text-sm first:rounded-t-sm last:rounded-b-sm ${preset.presetName === currentPreset?.presetName ? "bg-base-300" : "bg-base-200"} border-b-[1px] border-[#121417] transition-colors duration-100 last:border-transparent hover:bg-black focus:bg-black active:bg-black`}
                 key={preset.presetId}
                 onClick={() => handleProfileSelection(preset)}
               >

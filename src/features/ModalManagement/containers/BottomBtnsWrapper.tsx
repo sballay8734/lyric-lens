@@ -39,7 +39,7 @@ export default function BottomBtnsWrapper(): React.JSX.Element {
 
   return (
     <div
-      className={`grid h-full w-full grid-cols-5 gap-2 ${
+      className={`grid h-full max-h-16 w-full grid-cols-5 gap-2 ${
         modalIsShowing
           ? "pointer-events-none opacity-0"
           : "pointer-events-auto opacity-100"

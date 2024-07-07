@@ -131,4 +131,10 @@ export const DEFAULT_FLAG_PROFILE_PRESETS: DefaultFlagPreset[] = [
       return acc;
     }, {}),
   },
+  {
+    presetId: "TEST_006",
+    presetName: "No Flags",
+    presetDescription: "Words like ...",
+    flaggedWords: {},
+  },
 ];

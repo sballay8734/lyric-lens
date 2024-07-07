@@ -1,6 +1,7 @@
+import * as d3 from "d3";
+
 import { FlaggedFamiliesObject } from "../../FlagManagement/redux/flagManagementSlice";
 import { GraphNode } from "../data/mockGraphData";
-import * as d3 from "d3";
 
 export function formatNodes(flaggedFamilies: FlaggedFamiliesObject) {
   return Object.keys(flaggedFamilies).map((w) => {
@@ -17,13 +18,45 @@ export function formatNodes(flaggedFamilies: FlaggedFamiliesObject) {
   });
 }
 
-export function boundaryForce(x1: number, y1: number, x2: number, y2: number) {
+export function boundaryForce(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  centerX: number,
+  centerY: number,
+  centerNodeRadius: number,
+) {
   let nodes: GraphNode[];
 
   function force() {
     for (const node of nodes) {
-      node.x = Math.max(x1 + node.radius, Math.min(x2 - node.radius, node.x!));
-      node.y = Math.max(y1 + node.radius, Math.min(y2 - node.radius, node.y!));
+      // First, apply the boundary constraints
+      let newX = Math.max(
+        x1 + node.radius,
+        Math.min(x2 - node.radius, node.x!),
+      );
+      let newY = Math.max(
+        y1 + node.radius,
+        Math.min(y2 - node.radius, node.y!),
+      );
+
+      // Then, check for overlap with the root node
+      const dx = newX - centerX;
+      const dy = newY - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const minDistance = centerNodeRadius + node.radius;
+
+      if (distance < minDistance) {
+        // If overlapping, move the node away from the root
+        const angle = Math.atan2(dy, dx);
+        newX = centerX + Math.cos(angle) * minDistance;
+        newY = centerY + Math.sin(angle) * minDistance;
+      }
+
+      // Update the node's position
+      node.x = newX;
+      node.y = newY;
     }
   }
 
@@ -41,6 +74,7 @@ export function initializeSimulation(
   links: any,
   width: number,
   height: number,
+  centerNodeRadius: number,
 ) {
   return d3
     .forceSimulation<GraphNode>(nodes)
@@ -63,5 +97,8 @@ export function initializeSimulation(
         .strength((d) => ((d as GraphNode).occurances > 0 ? 0.2 : 0.001)),
     ) // Add force to keep nodes within the viewport
     .force("link", d3.forceLink().links(links).distance(100).strength(0.1))
-    .force("boundary", boundaryForce(0, 0, width, height));
+    .force(
+      "boundary",
+      boundaryForce(0, 0, width, height, centerX, centerY, centerNodeRadius),
+    );
 }

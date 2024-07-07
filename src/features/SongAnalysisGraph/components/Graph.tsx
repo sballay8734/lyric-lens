@@ -10,6 +10,7 @@ import { analyzeLyrics } from "../../SongSearchForm/utils/analyzeLyrics";
 import { GraphNode, RootNode } from "../data/mockGraphData";
 import { useWindowSize } from "../hooks/graphHooks";
 import { formatNodes, initializeSimulation } from "../utils/d3";
+import { vulgarityToColorMap } from "../constants/graphConstants";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
@@ -128,6 +129,7 @@ export function ForceDirectedGraph({
       links,
       width,
       height,
+      centerNode.radius,
     ).on("tick", () => {
       setNodes([...nodesWithPositions]);
     });
@@ -150,26 +152,77 @@ export function ForceDirectedGraph({
       width="100%"
       height="100%"
     >
+      <defs>
+        <radialGradient id={`gradient-root`}>
+          <stop
+            offset="0%"
+            stopColor={
+              analysisResult?.result === "pass" ? "#82cb81" : "#ff8585"
+            }
+          />
+          <stop
+            offset="100%"
+            stopColor={
+              analysisResult?.result === "pass" ? "#34773f" : "#8f0000"
+            }
+          />
+        </radialGradient>
+      </defs>
       {/* Links */}
-      {nodes.map((node: GraphNode) => (
-        <AnimatedLink
-          key={`link-${node.id}`}
-          x1={centerNode.fx?.toString()!}
-          y1={centerNode.fy?.toString()!}
-          x2={node.x?.toString()!}
-          y2={node.y?.toString()!}
-          isConnected={node.occurances > 0}
-          lyrics={lyrics}
-        />
-      ))}
+      {nodes.map((node: GraphNode) => {
+        const nodeRadius =
+          node.occurances > 0
+            ? Math.max(Math.sqrt(node.occurances) * 4, MIN_RADIUS)
+            : 3;
+
+        // Calculate the angle between the center node and the current node
+        const dx = node.x! - centerNode.fx!;
+        const dy = node.y! - centerNode.fy!;
+        const angle = Math.atan2(dy, dx);
+
+        // Calculate the distance between the centers
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Calculate the point on the edge of the current node's circle
+        const edgeX = node.x! - (nodeRadius * dx) / distance;
+        const edgeY = node.y! - (nodeRadius * dy) / distance;
+
+        return (
+          <AnimatedLink
+            key={`link-${node.id}`}
+            x1={centerNode.fx?.toString()!}
+            y1={centerNode.fy?.toString()!}
+            x2={edgeX.toString()!}
+            y2={edgeY.toString()!}
+            isConnected={node.occurances > 0}
+            lyrics={lyrics}
+          />
+        );
+      })}
 
       {/* Root node */}
-      <circle
-        cx={centerNode.fx!}
-        cy={centerNode.fy!}
-        r={centerNode.radius}
-        fill="red"
-      />
+      <g>
+        <circle
+          cx={centerNode.fx!}
+          cy={centerNode.fy!}
+          r={centerNode.radius}
+          fill={`url(#gradient-root)` || "red"}
+          stroke={analysisResult?.result === "pass" ? "#167e31" : "#7e1616"}
+          strokeWidth={4}
+        />
+        <text
+          x={centerNode.fx!}
+          y={centerNode.fy!}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill={analysisResult?.result === "pass" ? "#16591a" : "#852020"}
+          fontSize={24}
+        >
+          {analysisResult?.result === "pass"
+            ? "CLEAN"
+            : analysisResult?.totalFlaggedWords}
+        </text>
+      </g>
 
       {/* Nodes */}
       {nodes.map((node) => (
@@ -194,7 +247,7 @@ interface LinkProps {
   lyrics: string | null;
 }
 
-const AnimatedLink = ({ x1, y1, x2, y2, isConnected, lyrics }: LinkProps) => {
+const AnimatedLink = ({ x1, y1, x2, y2, isConnected }: LinkProps) => {
   const style = useSpring({
     from: { opacity: 0, strokeWidth: 0 },
     to: {
@@ -245,11 +298,28 @@ const AnimatedNode = ({ node, isConnected, lyrics }: NodeProps) => {
 
   return (
     <g transform={`translate(${node.x}, ${node.y})`}>
+      <defs>
+        <radialGradient id={`gradient-${node.id}`}>
+          <stop
+            offset="0%"
+            stopColor={
+              vulgarityToColorMap[node.vulgarityLvl].startColor || "#9e0142"
+            }
+          />
+          <stop
+            offset="100%"
+            stopColor={
+              vulgarityToColorMap[node.vulgarityLvl].endColor || "#3c0019"
+            }
+          />
+        </radialGradient>
+      </defs>
       <animated.circle
         {...circleStyle}
         cx={0}
         cy={0}
-        fill={!isConnected ? "tomato" : "lightgray"}
+        fill={isConnected ? `url(#gradient-${node.id})` : "tomato"}
+        opacity={0.8}
       />
       <animated.text
         {...textStyle}
@@ -257,7 +327,7 @@ const AnimatedNode = ({ node, isConnected, lyrics }: NodeProps) => {
         y={0}
         textAnchor="middle"
         dominantBaseline="central"
-        fill="black"
+        fill="lightgray"
       >
         {node.family} ({node.occurances})
       </animated.text>

@@ -81,11 +81,11 @@ export default function LyricsModal(): React.JSX.Element {
                       )
                     ) {
                       return (
-                        <span
-                          key={wordIndex}
-                          className="rounded-sm bg-primary-content text-secondary"
-                        >
-                          {word}{" "}
+                        <span key={wordIndex}>
+                          <span className="rounded-sm bg-primary-content px-[2px] py-[1px] text-secondary">
+                            {word}
+                          </span>
+                          <span className="bg-none"> </span>
                         </span>
                       );
                     }
