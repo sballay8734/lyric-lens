@@ -7,7 +7,12 @@ import {
 } from "../../../constants/defaultProfiles";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import { setCurrentPreset } from "../redux/flagManagementSlice";
+import {
+  setCurrentPreset,
+  setFlaggedFamilies,
+} from "../redux/flagManagementSlice";
+import findFlaggedFamilies from "../utils/findFlaggedFamilies";
+import { updateFlaggedFamilies } from "../utils/updateFlaggedFamilies";
 
 export default function ProfileSwitcher(): React.JSX.Element {
   const dispatch = useAppDispatch();
@@ -16,11 +21,25 @@ export default function ProfileSwitcher(): React.JSX.Element {
   const currentPreset = useAppSelector(
     (state: RootState) => state.flagManagement.currentPreset,
   );
+  const lyricsHashMap = useAppSelector(
+    (state: RootState) => state.flagManagement.lyricsHashMap,
+  );
 
   function handleProfileSelection(preset: DefaultFlagPreset) {
     setDropdownIsShown(false);
 
     dispatch(setCurrentPreset(preset));
+
+    const flaggedFamilies = findFlaggedFamilies(preset);
+
+    if (lyricsHashMap) {
+      const updatedFlaggedFamilies = updateFlaggedFamilies(
+        flaggedFamilies,
+        lyricsHashMap,
+      );
+      console.log("FROM SWITCHER:", updatedFlaggedFamilies);
+      dispatch(setFlaggedFamilies(updatedFlaggedFamilies.flaggedFamilies));
+    }
   }
 
   return (

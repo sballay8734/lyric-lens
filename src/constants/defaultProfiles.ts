@@ -68,7 +68,7 @@ export const DEFAULT_FLAG_PROFILE_PRESETS: DefaultFlagPreset[] = [
   // REMOVE: THE BELOW PROFILES ARE JUST FOR TESTING
   {
     presetId: "TEST_001",
-    presetName: "Flag Words Where Vulgarity Level > 5",
+    presetName: "Flag Words Only If Vulgarity Level > 5",
     presetDescription: "Words like ...",
     flaggedWords: Object.keys(FLAGGABLE_WORDS_MASTER).reduce((acc, word) => {
       const { vulgarityLvl } = FLAGGABLE_WORDS_MASTER[word];
@@ -81,7 +81,7 @@ export const DEFAULT_FLAG_PROFILE_PRESETS: DefaultFlagPreset[] = [
   },
   {
     presetId: "TEST_002",
-    presetName: "Flag Words Where Vulgarity Level > 7",
+    presetName: "Flag Words Only If Vulgarity Level > 7",
     presetDescription: "Words like ...",
     flaggedWords: Object.keys(FLAGGABLE_WORDS_MASTER).reduce((acc, word) => {
       const { vulgarityLvl } = FLAGGABLE_WORDS_MASTER[word];
@@ -94,12 +94,38 @@ export const DEFAULT_FLAG_PROFILE_PRESETS: DefaultFlagPreset[] = [
   },
   {
     presetId: "TEST_003",
-    presetName: "Flag Words Where Vulgarity Level > 8",
+    presetName: "Flag Words Only If Vulgarity Level > 8",
     presetDescription: "Words like ...",
     flaggedWords: Object.keys(FLAGGABLE_WORDS_MASTER).reduce((acc, word) => {
       const { vulgarityLvl } = FLAGGABLE_WORDS_MASTER[word];
 
       if (vulgarityLvl >= 8) {
+        return { ...acc, [word]: { ...FLAGGABLE_WORDS_MASTER[word] } };
+      }
+      return acc;
+    }, {}),
+  },
+  {
+    presetId: "TEST_004",
+    presetName: "Flag Words Only If Vulgarity Level > 9",
+    presetDescription: "Words like ...",
+    flaggedWords: Object.keys(FLAGGABLE_WORDS_MASTER).reduce((acc, word) => {
+      const { vulgarityLvl } = FLAGGABLE_WORDS_MASTER[word];
+
+      if (vulgarityLvl >= 9) {
+        return { ...acc, [word]: { ...FLAGGABLE_WORDS_MASTER[word] } };
+      }
+      return acc;
+    }, {}),
+  },
+  {
+    presetId: "TEST_005",
+    presetName: "Flag Words Only If Vulgarity Level = 10",
+    presetDescription: "Words like ...",
+    flaggedWords: Object.keys(FLAGGABLE_WORDS_MASTER).reduce((acc, word) => {
+      const { vulgarityLvl } = FLAGGABLE_WORDS_MASTER[word];
+
+      if (vulgarityLvl === 10) {
         return { ...acc, [word]: { ...FLAGGABLE_WORDS_MASTER[word] } };
       }
       return acc;

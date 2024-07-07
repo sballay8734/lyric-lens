@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
+import { animated, useSpring } from "@react-spring/web";
 import * as d3 from "d3";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
 import LyricsModal from "../../ModalManagement/components/modals/LyricsModal";
-import { AnalysisResult } from "../../SongSearchForm/redux/songSearchFormSlice";
 import { analyzeLyrics } from "../../SongSearchForm/utils/analyzeLyrics";
 import { GraphNode, RootNode } from "../data/mockGraphData";
 import { useWindowSize } from "../hooks/graphHooks";
+import { formatNodes, initializeSimulation } from "../utils/d3";
 
 // Graph Wrapper
 export default function Graph(): React.JSX.Element {
@@ -37,8 +38,10 @@ export default function Graph(): React.JSX.Element {
     <div
       className={`MainGraph group flex h-full w-full flex-col items-center justify-center bg-[#000000] transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
     >
-      <ForceDirectedGraph lyrics={lyrics} analysisResult={analysisResult} />
-
+      <ForceDirectedGraph
+        presetId={currentPreset && currentPreset?.presetId}
+        lyrics={lyrics}
+      />
       <LyricsModal />
     </div>
   );
@@ -50,251 +53,216 @@ export default function Graph(): React.JSX.Element {
 // REMEMBER: D3 modules that operate on selections (including d3-selection, d3-transition, and d3-axis) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook.
 
 // RESOURCE FOR ABOVE - https://d3js.org/getting-started#d3-in-react
-
-const MAX_RADIUS = 50;
-
-export const ForceDirectedGraph: React.FC<{
+interface GraphProps {
+  presetId: string | null;
   lyrics: string | null;
-  analysisResult: AnalysisResult;
-}> = ({ lyrics, analysisResult }) => {
+}
+
+export function ForceDirectedGraph({
+  presetId,
+  lyrics,
+}: GraphProps): React.JSX.Element {
   const svgRef = useRef<SVGSVGElement>(null);
   const windowSize = useWindowSize();
-  const currentPresetId = useAppSelector(
-    (state: RootState) => state.flagManagement.currentPreset?.presetId,
-  );
   const flaggedFamilies = useAppSelector(
     (state: RootState) => state.flagManagement.flaggedFamilies,
   );
+  const analysisResult = useAppSelector(
+    (state: RootState) => state.songSearchForm.analysisResult,
+  );
 
+  const [nodes, setNodes] = useState<GraphNode[]>([]);
+  const [links, setLinks] = useState<any[]>([]);
+  const simulationRef = useRef<d3.Simulation<GraphNode, undefined> | null>(
+    null,
+  );
+
+  // Set up dimensions
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const centerX = width / 2;
+  const centerY = height / 2;
+
+  // Create center node
+  const centerNode: RootNode = {
+    id: "root",
+    family: null,
+    occurances: null,
+    vulgarityLvl: null,
+    category: null,
+    radius: 50, // TODO: should get bigger with more curse words
+    fx: centerX,
+    fy: centerY,
+  };
+
+  // TODO: This should UPDATE the node positions and NOT generate new nodes
   useEffect(() => {
     if (!flaggedFamilies || !svgRef.current) return () => {};
 
-    // Set up dimensions
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const centerX = width / 2;
-    const centerY = height / 2;
-
-    // console.log(flaggedFamilies);
-
     // Format nodes from flaggedFamilies
-    const formattedNodes: GraphNode[] = Object.keys(flaggedFamilies).map(
-      (w) => {
-        const { id, family, occurances, vulgarityLvl, category } =
-          flaggedFamilies[w];
-        return {
-          id,
-          family,
-          occurances,
-          vulgarityLvl,
-          category,
-          radius: 20 + occurances * 1.2,
-        };
-      },
-    );
+    const formattedNodes: GraphNode[] = formatNodes(flaggedFamilies);
 
-    // console.log(formattedNodes);
+    // Add x and y coordinates to each node and include center node
+    const nodesWithPositions = formattedNodes.map((node) => ({
+      ...node,
+      x:
+        node.occurances > 0
+          ? centerX + (Math.random() * 100 - 50)
+          : Math.random() * windowSize.width,
+      y:
+        node.occurances > 0
+          ? centerY + (Math.random() * 100 - 50)
+          : Math.random() * windowSize.height,
+    }));
 
-    // Create center node
-    const centerNode: RootNode = {
-      id: "root",
-      family: null,
-      occurances: null,
-      vulgarityLvl: null,
-      category: null,
-      radius: 65, // TODO: should get bigger with more curse words
-      fx: centerX,
-      fy: centerY,
-    };
+    setNodes(nodesWithPositions);
 
-    // Set up color scale
-    const colors = {
-      0: "#9dbcda",
-      1: "#9dbcda",
-      2: "#9dbcda",
-      3: "#8c96c6",
-      4: "#8c96c6",
-      5: "#8c6bb1",
-      6: "#8c6bb1",
-      7: "#88419d",
-      8: "#88419d",
-      9: "#4d004b",
-      10: "#4d004b",
-    };
+    if (simulationRef.current) {
+      simulationRef.current.stop();
+    }
 
-    // Combine nodes and create links
-    const nodes = [centerNode, ...formattedNodes];
-    const links = formattedNodes
-      .filter((node) => node.occurances > 0)
-      .map((node) => ({ source: centerNode, target: node }));
-
-    // Create a set of connected node IDs
-    const connectedNodeIds = new Set<string>();
-    links.forEach((link) => {
-      connectedNodeIds.add((link.source as GraphNode | RootNode).id);
-      connectedNodeIds.add((link.target as GraphNode | RootNode).id);
+    const simulation = initializeSimulation(
+      nodesWithPositions,
+      centerX,
+      centerY,
+      links,
+      width,
+      height,
+    ).on("tick", () => {
+      setNodes([...nodesWithPositions]);
     });
 
-    // Set up force simulation
-    const simulation = d3
-      .forceSimulation(nodes)
-      .force(
-        "link",
-        d3.forceLink(links).id((d) => (d as GraphNode | RootNode).id),
-      )
-      .force("charge", d3.forceManyBody().strength(-700))
-      .force("center", d3.forceCenter(centerX, centerY))
-      .force(
-        "collision",
-        d3.forceCollide().radius((d) => (d as GraphNode | RootNode).radius),
-      )
-      .force(
-        "x",
-        d3
-          .forceX(centerX)
-          .strength((d) => ((d as GraphNode).occurances > 0 ? 0.1 : 0.01)),
-      )
-      .force(
-        "y",
-        d3
-          .forceY(centerY)
-          .strength((d) => ((d as GraphNode).occurances > 0 ? 0.1 : 0.01)),
-      );
+    simulationRef.current = simulation;
 
-    // Set up SVG
-    const svg = d3.select(svgRef.current);
-    svg.selectAll("*").remove(); // Clear previous content
-    svg
-      .attr("viewBox", [0, 0, width, height])
-      .attr("width", width)
-      .attr("height", height)
-      .attr("style", "max-width: 100%; height: auto;");
-
-    // Create links
-    const link = svg
-      .append("g")
-      .attr("stroke", "#999")
-      .attr("stroke-opacity", 0.6)
-      .selectAll("line")
-      .data(links)
-      .join("line")
-      .attr("stroke-width", 0.4);
-
-    // Create nodes
-    const node = svg
-      .append("g")
-      .selectAll("circle")
-      .data(nodes)
-      .join("circle")
-      .attr("r", (d) =>
-        Math.min(
-          connectedNodeIds.has((d as GraphNode | RootNode).id)
-            ? (d as GraphNode | RootNode).radius
-            : (d as GraphNode | RootNode).radius * 0.7,
-          MAX_RADIUS, // Replace with your desired maximum radius value
-        ),
-      )
-      .attr("fill", (d) =>
-        (d as GraphNode | RootNode).id === "root" // Root node color
-          ? analysisResult && analysisResult.result === "pass"
-            ? "#22c55e"
-            : "#a82f27"
-          : connectedNodeIds.has((d as GraphNode | RootNode).id)
-            ? colors[(d as GraphNode).vulgarityLvl]
-            : "#707070",
-      )
-      .attr("stroke", (d) =>
-        (d as GraphNode | RootNode).id === "root"
-          ? analysisResult && analysisResult.result === "pass"
-            ? "#2bff79"
-            : "#f73b2f" // Root node border
-          : connectedNodeIds.has((d as GraphNode | RootNode).id)
-            ? "#cd75e6"
-            : "#333333",
-      )
-      .attr("stroke-width", (d) =>
-        (d as GraphNode | RootNode).id === "root"
-          ? analysisResult && analysisResult.result === "pass"
-            ? 5
-            : 5
-          : connectedNodeIds.has((d as GraphNode | RootNode).id)
-            ? 3
-            : 1,
-      )
-      .attr("opacity", (d) =>
-        connectedNodeIds.has((d as GraphNode | RootNode).id) ? 1 : 0.5,
-      );
-
-    // Create node groups for text
-    const nodeGroup = svg.append("g").selectAll("g").data(nodes).join("g");
-
-    // Add text to nodes
-    nodeGroup
-      .append("text")
-      .text((d) =>
-        (d as GraphNode).occurances === 0
-          ? d.family
-          : d.category === null // center node
-            ? analysisResult === null
-              ? "N/A"
-              : analysisResult.totalFlaggedWords
-            : `${d.family} (${d.occurances})` || "",
-      )
-      .attr("text-anchor", "middle")
-      .attr("dy", ".35em")
-      .attr(
-        "font-size",
-        (d) =>
-          `${(d as GraphNode | RootNode).id === "root" ? "30" : d.radius > MAX_RADIUS ? MAX_RADIUS / 3 : d.radius / 3}px`,
-      )
-      .attr(
-        "fill",
-        (d) =>
-          `${(d as GraphNode | RootNode).id === "root" ? (analysisResult?.result === "pass" ? "#003800" : "#3b0000") : "black"}`,
-      );
-
-    // Add titles to nodes
-    node.append("title").text((d) => (d as GraphNode).family || "");
-
-    // Update positions on each tick of the simulation
-    simulation.on("tick", () => {
-      // Update link positions
-      link
-        .attr("x1", (d) => (d.source as any).x)
-        .attr("y1", (d) => (d.source as any).y)
-        .attr("x2", (d) => (d.target as any).x)
-        .attr("y2", (d) => (d.target as any).y);
-
-      // Update node positions
-      node
-        .attr("cx", (d) => {
-          const r = (d as GraphNode | RootNode).radius;
-          const padding = 0; // Adjust the padding value as needed
-          d.x = Math.max(r + padding, Math.min(width - r - padding, d.x!));
-          return d.x!;
-        })
-        .attr("cy", (d) => {
-          const r = (d as GraphNode | RootNode).radius;
-          const padding = 0; // Adjust the padding value as needed
-          d.y = Math.max(r + padding, Math.min(height - r - padding, d.y!));
-          return d.y!;
-        });
-
-      // Update node group positions
-      nodeGroup.attr(
-        "transform",
-        (d) => `translate(${(d as any).x},${(d as any).y})`,
-      );
-    });
-
-    // Cleanup function
     return () => {
-      simulation.stop();
-      svg.selectAll("*").remove(); // Clean up on unmount
+      if (simulationRef.current) {
+        simulationRef.current.stop();
+      }
     };
-  }, [lyrics, analysisResult?.totalFlaggedWords, windowSize, currentPresetId]);
+  }, [presetId, lyrics, analysisResult?.result]);
 
-  return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
+  // TODO: Add separate useEffect for when lyrics/song changes
+
+  return (
+    <svg
+      ref={svgRef}
+      viewBox={`0 0 ${windowSize.width} ${windowSize.height}`}
+      width="100%"
+      height="100%"
+    >
+      {/* Links */}
+      {nodes.map((node: GraphNode) => (
+        <AnimatedLink
+          key={`link-${node.id}`}
+          x1={centerNode.fx?.toString()!}
+          y1={centerNode.fy?.toString()!}
+          x2={node.x?.toString()!}
+          y2={node.y?.toString()!}
+          isConnected={node.occurances > 0}
+          lyrics={lyrics}
+        />
+      ))}
+
+      {/* Root node */}
+      <circle
+        cx={centerNode.fx!}
+        cy={centerNode.fy!}
+        r={centerNode.radius}
+        fill="red"
+      />
+
+      {/* Nodes */}
+      {nodes.map((node) => (
+        <AnimatedNode
+          key={node.id}
+          node={node}
+          isConnected={node.occurances > 0}
+          lyrics={lyrics}
+        />
+      ))}
+    </svg>
+  );
+}
+
+// LINKS **********************************************************************
+interface LinkProps {
+  x1: string;
+  y1: string;
+  x2: string;
+  y2: string;
+  isConnected: boolean;
+  lyrics: string | null;
+}
+
+const AnimatedLink = ({ x1, y1, x2, y2, isConnected, lyrics }: LinkProps) => {
+  const style = useSpring({
+    from: { opacity: 0, strokeWidth: 0 },
+    to: {
+      opacity: isConnected ? 1 : 0,
+      strokeWidth: isConnected ? 1 : 0,
+    },
+    config: { duration: 1000 },
+  });
+
+  return (
+    <animated.line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#999" {...style} />
+  );
+};
+
+// NODES **********************************************************************
+interface NodeProps {
+  node: GraphNode;
+  isConnected: boolean;
+  lyrics: string | null;
+}
+
+// const MAX_RADIUS = 50;
+const MIN_RADIUS = 15;
+
+const AnimatedNode = ({ node, isConnected, lyrics }: NodeProps) => {
+  const [circleRadius, setCircleRadius] = useState(MIN_RADIUS);
+  const wasConnected = useRef(false);
+
+  const circleStyle = useSpring({
+    r: isConnected ? Math.max(Math.sqrt(node.occurances) * 4, MIN_RADIUS) : 3,
+    opacity: isConnected ? 1 : 0.5,
+    config: { duration: 500 },
+    onChange: ({ value }) => {
+      setCircleRadius(value.r); // Update the state with the new radius value
+    },
+  });
+
+  const textStyle = useSpring({
+    opacity: isConnected ? 1 : 0,
+    fontSize: Math.min(Math.min(circleRadius / 3.5, 12)),
+    config: { duration: 500 },
+  });
+
+  useEffect(() => {
+    wasConnected.current = isConnected;
+    setCircleRadius(circleStyle.r.get());
+  }, [isConnected, lyrics]);
+
+  return (
+    <g transform={`translate(${node.x}, ${node.y})`}>
+      <animated.circle
+        {...circleStyle}
+        cx={0}
+        cy={0}
+        fill={!isConnected ? "tomato" : "lightgray"}
+      />
+      <animated.text
+        {...textStyle}
+        x={0}
+        y={0}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill="black"
+      >
+        {node.family} ({node.occurances})
+      </animated.text>
+    </g>
+  );
 };
 
 // D3 Graphs to check out ****************************************************
@@ -305,6 +273,8 @@ export const ForceDirectedGraph: React.FC<{
 // Other possible options: ***************************************************
 // Circle Packing - https://observablehq.com/@d3/bubble-chart/2?intent=fork
 // Bubble Chart -
+
+// !TODO: MAJOR OPTIMIZATIONS NEEDED HERE
 
 // !TODO: Some nodes drift under overlay if there are alot of curse words
 

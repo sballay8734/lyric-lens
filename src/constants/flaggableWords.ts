@@ -712,14 +712,14 @@ export const FLAGGABLE_WORDS_MASTER: FlaggableWordsObject = {
 
   // "cock" & variations (Baseline 7) *********************************
   cock: {
-    id: "SW069",
+    id: "SW080",
     vulgarityLvl: 7,
     category: ["sexual"],
     family: "cock",
     isRootWord: true,
   },
   cocks: {
-    id: "SW069a",
+    id: "SW080a",
     vulgarityLvl: 7,
     category: ["sexual"],
     family: "cock",
@@ -852,7 +852,7 @@ export const FLAGGABLE_WORDS_MASTER: FlaggableWordsObject = {
 
   // "god" & variations (Baseline 1) *********************************
   god: {
-    id: "SW075",
+    id: "SW081",
     vulgarityLvl: 1,
     category: ["general"],
     family: "god",

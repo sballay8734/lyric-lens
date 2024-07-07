@@ -30,6 +30,7 @@ export default function Home(): React.JSX.Element {
     (state: RootState) => state.flagManagement.flaggedFamilies,
   );
 
+  // !TODO: The issue is this: The preset is updating but flaggedFamilies is not. You should use flaggedFamilies ONLY if you need to OR as a way to update the words occurances
   useEffect(() => {
     const curPreset = currentPreset || FALLBACK_PRESET;
 
@@ -39,6 +40,7 @@ export default function Home(): React.JSX.Element {
       dispatch(setDefaultPresets(DEFAULT_FLAG_PROFILE_PRESETS));
     }
 
+    // if there are no flagged families, set them to a default profile
     if (flaggedFamilies === null) {
       const initialFlaggedFamilies = findFlaggedFamilies(curPreset);
       dispatch(setFlaggedFamilies(initialFlaggedFamilies));
