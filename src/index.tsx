@@ -38,6 +38,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // MVP TODO *******************************************************************
 // NEXT WORK SESSION
+// TODO: NEW PLAN - All possible families should ALWAYS be rendered on the screen (only their opacity and position should change) This means you won't have to keep setting flagged words and cause re-rendering. Just change a flag (that you need to add) to true or false based on if the word is in the song.
+
 // !TODO: Make box for words that are not in the song but are in the flagged list (this is good for user feedback)
 
 // !TODO: Node positions should NOT reset on song change or preset change.
