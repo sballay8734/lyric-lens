@@ -40,6 +40,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // NEXT WORK SESSION
 // TODO: NEW PLAN - All possible families should ALWAYS be rendered on the screen (only their opacity and position should change) This means you won't have to keep setting flagged words and cause re-rendering. Just change a flag (that you need to add) to true or false based on if the word is in the song.
 
+// So new flow looks like this...
+// 1. On initial load, set the flagged families to ALL possible flagged families
+// 2. When a preset is selected, JUST update the preset and maybe an "isInPreset" flag inside flagged families
+// 3. When a song is selected, set all occurances to 0, loop through the words and the preset, but only do something if the words family "isInPreset"
+
 // !TODO: Make box for words that are not in the song but are in the flagged list (this is good for user feedback)
 
 // !TODO: Node positions should NOT reset on song change or preset change.
@@ -92,9 +97,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 // V 2.0 (Long term features) *************************************************
 
-// CURRENT ISSUE **************************************************************
-// On initial song selection, nodes are not created BUT flagged families is updating
-
-// When preset is changed, it works
-
-// When song is changed, it does not work until you change the preset
+// REMEMBER: Dispatches are synchronous as long as the function are pure.
+// So if you need to dispatch 2 actions with the second action depending on the state from the first action, THAT IS FINE as long as they are PURE

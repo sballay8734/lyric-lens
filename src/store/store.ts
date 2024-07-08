@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import wordFamilyManagementReducer from "../features/_NewArcitecture/redux/wordFamilyManagementSlice";
 import flagManagementReducer from "../features/FlagManagement/redux/flagManagementSlice";
 import modalManagementReducer from "../features/ModalManagement/redux/modalManagementSlice";
 import songSearchFormReducer from "../features/SongSearchForm/redux/songSearchFormSlice";
@@ -9,6 +10,7 @@ export const store = configureStore({
     songSearchForm: songSearchFormReducer,
     modalManagement: modalManagementReducer,
     flagManagement: flagManagementReducer,
+    wordFamilyManagement: wordFamilyManagementReducer,
   },
 });
 

@@ -10,7 +10,7 @@ import {
   VulgarityLevel,
 } from "../../../data/sensitiveWordMap";
 import { HashMap } from "../../SongAnalysisGraph/types/graphTypes";
-import findFlaggedFamilies from "../utils/findFlaggedFamilies";
+import findFlaggedFamilies from "../utils/getFlaggedFamilies";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
 
