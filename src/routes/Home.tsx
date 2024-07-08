@@ -2,17 +2,20 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { DEFAULT_FLAG_PROFILE_PRESETS } from "../constants/defaultProfiles";
+import { FLAGGABLE_WORDS_MASTER } from "../constants/flaggableWords";
+import {
+  setPreset,
+  setWordFamilies,
+} from "../features/_NewArcitecture/redux/wordFamilyManagementSlice";
 import {
   setCurrentPreset,
   setFlaggedFamilies,
 } from "../features/FlagManagement/redux/flagManagementSlice";
-import findFlaggedFamilies from "../features/FlagManagement/utils/getFlaggedFamilies";
 import getFlaggedFamilies from "../features/FlagManagement/utils/getFlaggedFamilies";
 import GraphWrapper from "../features/SongAnalysisGraph/components/GraphWrapper";
 import Overlay from "../features/SongAnalysisGraph/components/Overlay";
-import { FLAGGABLE_WORDS_MASTER } from "../constants/flaggableWords";
 
-const FALLBACK_PRESET = DEFAULT_FLAG_PROFILE_PRESETS[0];
+const FALLBACK_PRESET = DEFAULT_FLAG_PROFILE_PRESETS[5];
 
 export default function Home(): React.JSX.Element {
   const dispatch = useDispatch();
@@ -20,7 +23,9 @@ export default function Home(): React.JSX.Element {
   // !TODO: Need to eventually update this to use the users preferred preset before using the fallback
   useEffect(() => {
     const wordFamilies = getFlaggedFamilies(FLAGGABLE_WORDS_MASTER);
-    console.log(wordFamilies);
+    dispatch(setWordFamilies(wordFamilies));
+    dispatch(setPreset(FALLBACK_PRESET));
+
     // OLD LOGIC
     dispatch(setCurrentPreset(FALLBACK_PRESET));
 

@@ -1,12 +1,9 @@
-import {
-  FLAGGABLE_WORDS_MASTER,
-  FlaggableWordsObject,
-} from "../../../constants/flaggableWords";
+import { FlaggableWordsObject } from "../../../constants/flaggableWords";
 import {
   SensitiveWordCategory,
   VulgarityLevel,
 } from "../../../data/sensitiveWordMap";
-import { wordInFam } from "../../_NewArcitecture/redux/wordFamilyManagementSlice";
+import { WordInFam } from "../../_NewArcitecture/redux/wordFamilyManagementSlice";
 
 interface FlaggableFamilies {
   [family: string]: {
@@ -14,10 +11,9 @@ interface FlaggableFamilies {
     vulgarityLvl: VulgarityLevel; // 0-10
     category: SensitiveWordCategory[];
     family: string;
-    isRootWord: boolean;
 
     isInPreset: boolean;
-    familyWords: wordInFam[];
+    familyWords: WordInFam[];
     occurances: number;
   };
 }
@@ -33,7 +29,6 @@ export default function getFlaggedFamilies(
         vulgarityLvl: wordData.vulgarityLvl,
         category: wordData.category,
         family: wordData.family,
-        isRootWord: wordData.isRootWord,
 
         isInPreset: false,
         familyWords: [{ word: word, wordIsFlagged: true }],

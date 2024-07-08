@@ -7,20 +7,20 @@ import {
 } from "../../../constants/defaultProfiles";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import { setCurrentPreset } from "../redux/flagManagementSlice";
+import { setPreset } from "../../_NewArcitecture/redux/wordFamilyManagementSlice";
 
 export default function ProfileSwitcher(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(false);
 
   const currentPreset = useAppSelector(
-    (state: RootState) => state.flagManagement.currentPreset,
+    (state: RootState) => state.wordFamilyManagement.activePreset,
   );
 
   function handleProfileSelection(preset: DefaultFlagPreset) {
     setDropdownIsShown(false);
 
-    dispatch(setCurrentPreset(preset));
+    dispatch(setPreset(preset));
   }
 
   return (

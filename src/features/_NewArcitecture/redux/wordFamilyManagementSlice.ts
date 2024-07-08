@@ -1,17 +1,25 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import {
+  FLAGGABLE_WORDS_MASTER,
+  FlaggableWordsObject,
+} from "../../../constants/flaggableWords";
+import {
   SensitiveWordCategory,
   VulgarityLevel,
 } from "../../../data/sensitiveWordMap";
 
-export type wordInFam = { word: string; wordIsFlagged: boolean };
+export type WordInFam = { word: string; wordIsFlagged: boolean };
+
+type LyricHash = {
+  [word: string]: number; // number of occurances
+};
 
 export type WordFamiliesObj = {
   [family: string]: {
     id: string;
     family: string;
-    words?: wordInFam[]; // TODO: Eventually you will use this to allow users to select/deselect specific words in a family (they might not want to flag all of them)
+    familyWords: WordInFam[]; // TODO: Eventually you will use this to allow users to select/deselect specific words in a family (they might not want to flag all of them)
     occurances: number;
     vulgarityLvl: VulgarityLevel;
     category: SensitiveWordCategory[];
@@ -24,19 +32,21 @@ interface FlagPreset {
   presetId: string;
   presetName: string;
   presetDescription: string;
-  flaggedWords: WordFamiliesObj;
+  flaggedWords: FlaggableWordsObject;
 }
 
 // Define type for slice state
 interface WordFamilyManagementState {
   wordFamilies: WordFamiliesObj | null;
   activePreset: FlagPreset | null;
+  lyricHash: LyricHash | null;
 }
 
 // Define initial state
 const initialState: WordFamilyManagementState = {
   wordFamilies: null,
   activePreset: null,
+  lyricHash: null,
 };
 
 export const wordFamilyManagementSlice = createSlice({
@@ -48,13 +58,55 @@ export const wordFamilyManagementSlice = createSlice({
       state.wordFamilies = action.payload;
     },
 
-    setPreset: (state) => {
-      // loop through wordFamilies keys
-      // if (wordFamily[key]) is in preset
-      // set isInPreset = true for that family
+    // will never be set to null
+    setPreset: (state, action: PayloadAction<FlagPreset>) => {
+      const preset = action.payload;
+      state.activePreset = preset;
+
+      const wordFamilies = state.wordFamilies;
+
+      if (wordFamilies) {
+        Object.entries(wordFamilies).forEach(([fam, famData]) => {
+          // if family is in preset, set isInPreset to true
+          if (preset.flaggedWords[fam]) {
+            wordFamilies[fam].isInPreset = true;
+          } else {
+            // otherwise set it to false
+            wordFamilies[fam].isInPreset = false;
+          }
+        });
+      }
     },
 
-    updateOccurances: (state) => {
+    // will only be null on initial load so payload CANNOT be null
+    setLyricsHash: (state, action: PayloadAction<LyricHash>) => {
+      state.lyricHash = action.payload;
+    },
+
+    // when song changes (setLyricsHash SHOULD BE DISPATCHED RIGHT BEFORE)
+    updateOccurancesOnSongChange: (state) => {
+      const flaggableWords = FLAGGABLE_WORDS_MASTER;
+      const wordFamilies = state.wordFamilies;
+      const lyricHash = state.lyricHash;
+
+      Object.entries(flaggableWords).forEach(([word, wordData]) => {
+        // if word is in hash AND wordFamilies
+        if (
+          lyricHash &&
+          wordFamilies &&
+          lyricHash[word] &&
+          wordFamilies[word]
+        ) {
+          wordFamilies[word].occurances = lyricHash[word];
+        } else if (lyricHash && wordFamilies) {
+          // otherwise set it to false
+          wordFamilies[word].occurances = 0;
+        }
+      });
+    },
+
+    // when song changes
+    updateOccurancesPresetChange: (state) => {
       // loop through wordFamily keys
       // if wordFamily[key] is NOT in preset
       // SKIP
@@ -63,7 +115,11 @@ export const wordFamilyManagementSlice = createSlice({
   },
 });
 
-export const { setWordFamilies, setPreset, updateOccurances } =
-  wordFamilyManagementSlice.actions;
+export const {
+  setWordFamilies,
+  setPreset,
+  updateOccurancesOnSongChange,
+  updateOccurancesPresetChange,
+} = wordFamilyManagementSlice.actions;
 
 export default wordFamilyManagementSlice.reducer;
