@@ -44,14 +44,8 @@ export default function Graph(): React.JSX.Element {
     // Add x and y coordinates to each node and include center node
     const nodesWithPositions = formattedNodes.map((node) => ({
       ...node,
-      x:
-        node.occurances > 0
-          ? centerX + (Math.random() * 100 - 50)
-          : Math.random() * windowSize.width,
-      y:
-        node.occurances > 0
-          ? centerY + (Math.random() * 100 - 50)
-          : Math.random() * windowSize.height,
+      x: node.occurances > 0 ? centerX / 2 : centerX / 2,
+      y: node.occurances > 0 ? centerY / 2 : centerY / 2,
     }));
 
     setNodes(nodesWithPositions);

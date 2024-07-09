@@ -86,26 +86,30 @@ export function initializeSimulation(
   height: number,
   centerNodeRadius: number,
 ) {
-  return d3
-    .forceSimulation<GraphNode>(nodes)
-    .force("center", d3.forceCenter(centerX, centerY + 250))
-    .force("charge", d3.forceManyBody().strength(10))
-    .force("collide", d3.forceCollide().radius(10))
-    .force(
-      "x",
-      d3
-        .forceX(centerX)
-        .strength((d) => ((d as GraphNode).occurances > 0 ? 0.2 : 0.01)),
-    ) // Add force to keep nodes within the viewport
-    .force(
-      "y",
-      d3
-        .forceY(centerY)
-        .strength((d) => ((d as GraphNode).occurances > 0 ? 0.2 : 0.05)),
-    ) // Add force to keep nodes within the viewport
-    .force("link", d3.forceLink().links(links).distance(100).strength(0.1))
-    .force(
-      "boundary",
-      boundaryForce(0, 0, width, height, centerX, centerY, centerNodeRadius),
-    );
+  return (
+    d3
+      .forceSimulation<GraphNode>(nodes)
+      // .force("center", d3.forceCenter(centerX, centerY))
+      .force("charge", d3.forceManyBody().strength(10))
+      .force("collide", d3.forceCollide().radius(5))
+      .force(
+        "x",
+        d3
+          .forceX(centerX)
+          .strength((d) => ((d as GraphNode).occurances > 0 ? 0.2 : 0.05)),
+      ) // Add force to keep nodes within the viewport
+      .force(
+        "y",
+        d3
+          .forceY((d) =>
+            (d as GraphNode).occurances > 0 ? centerY : centerY + 300,
+          )
+          .strength((d) => ((d as GraphNode).occurances > 0 ? 0.2 : 0.05)),
+      ) // Add force to keep nodes within the viewport
+      .force("link", d3.forceLink().links(links).distance(100).strength(0.1))
+      .force(
+        "boundary",
+        boundaryForce(0, 0, width, height, centerX, centerY, centerNodeRadius),
+      )
+  );
 }
