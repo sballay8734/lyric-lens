@@ -77,6 +77,7 @@ const WordNode = ({ node }: NodeProps) => {
       </defs>
       <animated.circle
         {...circleStyle}
+        // !TODO: I THINK THIS IS WHERE YOU PASS THE FLUID VALUE!!!
         cx={0}
         cy={0}
         fill={isConnected && isFlagged ? `url(#gradient-${node.id})` : "tomato"}
