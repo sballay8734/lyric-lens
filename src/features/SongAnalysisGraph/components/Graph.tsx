@@ -161,7 +161,7 @@ export default function Graph(): React.JSX.Element {
         </text>
       </g>
       {/* Rect for words not in song *************************************** */}
-      <rect
+      {/* <rect
         x={rectGroup.x}
         y={rectGroup.y}
         width={rectGroup.width}
@@ -170,7 +170,7 @@ export default function Graph(): React.JSX.Element {
         fill={rectGroup.fill}
         stroke={rectGroup.stroke}
         strokeWidth={rectGroup.strokeWidth}
-      />
+      /> */}
 
       {/* Nodes */}
       {nodes.map((node) => (

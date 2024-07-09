@@ -88,23 +88,20 @@ export function initializeSimulation(
 ) {
   return d3
     .forceSimulation<GraphNode>(nodes)
-    .force("center", d3.forceCenter(centerX, centerY))
-    .force("charge", d3.forceManyBody().strength(-100))
-    .force(
-      "collide",
-      d3.forceCollide().radius((d) => (d as GraphNode).radius),
-    )
+    .force("center", d3.forceCenter(centerX, centerY + 250))
+    .force("charge", d3.forceManyBody().strength(10))
+    .force("collide", d3.forceCollide().radius(10))
     .force(
       "x",
       d3
         .forceX(centerX)
-        .strength((d) => ((d as GraphNode).occurances > 0 ? 0.2 : 0.001)),
+        .strength((d) => ((d as GraphNode).occurances > 0 ? 0.2 : 0.01)),
     ) // Add force to keep nodes within the viewport
     .force(
       "y",
       d3
         .forceY(centerY)
-        .strength((d) => ((d as GraphNode).occurances > 0 ? 0.2 : 0.001)),
+        .strength((d) => ((d as GraphNode).occurances > 0 ? 0.2 : 0.05)),
     ) // Add force to keep nodes within the viewport
     .force("link", d3.forceLink().links(links).distance(100).strength(0.1))
     .force(

@@ -33,8 +33,8 @@ export default function SongInput(): React.JSX.Element {
   const songsLoading = useAppSelector(
     (state: RootState) => state.songSearchForm.songsLoading,
   );
-  const flaggedFamilies = useAppSelector(
-    (state: RootState) => state.flagManagement.flaggedFamilies,
+  const flaggedWords = useAppSelector(
+    (state: RootState) => state.wordFamilyManagement.flaggedWords,
   );
 
   // !TODO: MOVE BELOW STATE TO REDUX
@@ -150,8 +150,8 @@ export default function SongInput(): React.JSX.Element {
     const getLyricsQuery = `${publicUrl}${lyricsPath}`;
 
     // fetch, parse, and dispatch lyrics to redux
-    if (flaggedFamilies) {
-      fetchAndParseLyrics(getLyricsQuery, dispatch, flaggedFamilies);
+    if (flaggedWords) {
+      fetchAndParseLyrics(getLyricsQuery, dispatch, flaggedWords);
     } else {
       console.error("There are no flagged families!");
     }
