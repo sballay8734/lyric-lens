@@ -7,7 +7,10 @@ import {
 } from "../../../constants/defaultProfiles";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import { setPreset } from "../../_NewArcitecture/redux/wordFamilyManagementSlice";
+import {
+  setPreset,
+  updateOccurances,
+} from "../../_NewArcitecture/redux/wordFamilyManagementSlice";
 
 export default function ProfileSwitcher(): React.JSX.Element {
   const dispatch = useAppDispatch();
@@ -21,6 +24,7 @@ export default function ProfileSwitcher(): React.JSX.Element {
     setDropdownIsShown(false);
 
     dispatch(setPreset(preset));
+    dispatch(updateOccurances());
   }
 
   return (

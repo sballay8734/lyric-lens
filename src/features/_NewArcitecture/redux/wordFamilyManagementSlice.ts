@@ -1,9 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import {
-  FLAGGABLE_WORDS_MASTER,
-  FlaggableWordsObject,
-} from "../../../constants/flaggableWords";
+import { FlaggableWordsObject } from "../../../constants/flaggableWords";
 import {
   SensitiveWordCategory,
   VulgarityLevel,
@@ -35,9 +32,23 @@ interface FlagPreset {
   flaggedWords: FlaggableWordsObject;
 }
 
+export interface FlaggedWords {
+  [word: string]: {
+    id: string;
+    vulgarityLvl: VulgarityLevel; // 0-10
+    category: SensitiveWordCategory[];
+    family: string;
+    isRootWord: boolean;
+
+    isFlagged: boolean;
+    occurances: number;
+  };
+}
+
 // Define type for slice state
 interface WordFamilyManagementState {
   wordFamilies: WordFamiliesObj | null;
+  flaggedWords: FlaggedWords | null;
   activePreset: FlagPreset | null;
   lyricHash: LyricHash | null;
 }
@@ -45,6 +56,7 @@ interface WordFamilyManagementState {
 // Define initial state
 const initialState: WordFamilyManagementState = {
   wordFamilies: null,
+  flaggedWords: null,
   activePreset: null,
   lyricHash: null,
 };
@@ -53,9 +65,13 @@ export const wordFamilyManagementSlice = createSlice({
   name: "wordFamilyManagement",
   initialState,
   reducers: {
-    // This should only run on initial load. After initial load, "isInPreset" will be changed to reflect active Families
     setWordFamilies: (state, action: PayloadAction<WordFamiliesObj | null>) => {
       state.wordFamilies = action.payload;
+    },
+
+    // this should ONLY run on initial load. update should be used after
+    setFlaggedWords: (state, action: PayloadAction<FlaggedWords | null>) => {
+      state.flaggedWords = action.payload;
     },
 
     // will never be set to null
@@ -63,16 +79,34 @@ export const wordFamilyManagementSlice = createSlice({
       const preset = action.payload;
       state.activePreset = preset;
 
-      const wordFamilies = state.wordFamilies;
+      const flaggedWords = state.flaggedWords;
 
-      if (wordFamilies) {
-        Object.entries(wordFamilies).forEach(([fam, famData]) => {
-          // if family is in preset, set isInPreset to true
-          if (preset.flaggedWords[fam]) {
-            wordFamilies[fam].isInPreset = true;
+      if (flaggedWords) {
+        Object.entries(flaggedWords).forEach(([word, wordData]) => {
+          // if word is in preset, set is preset to true
+          if (preset.flaggedWords[word]) {
+            flaggedWords[word].isFlagged = true;
           } else {
             // otherwise set it to false
-            wordFamilies[fam].isInPreset = false;
+            flaggedWords[word].isFlagged = false;
+          }
+        });
+      }
+    },
+    // when song changes (setLyricsHash SHOULD BE DISPATCHED RIGHT BEFORE)
+    updateOccurances: (state) => {
+      const flaggedWords = state.flaggedWords;
+      const lyricHash = state.lyricHash;
+
+      if (flaggedWords && lyricHash) {
+        Object.entries(flaggedWords).forEach(([word, wordData]) => {
+          // if word isn't flagged, skip (ACTUALLY, you probably still want to keep track of this, just don't count it in the final count)
+          // if (wordData.isFlagged === false) return
+
+          if (lyricHash[word]) {
+            flaggedWords[word].occurances = lyricHash[word];
+          } else {
+            flaggedWords[word].occurances = 0;
           }
         });
       }
@@ -82,44 +116,15 @@ export const wordFamilyManagementSlice = createSlice({
     setLyricsHash: (state, action: PayloadAction<LyricHash>) => {
       state.lyricHash = action.payload;
     },
-
-    // when song changes (setLyricsHash SHOULD BE DISPATCHED RIGHT BEFORE)
-    updateOccurancesOnSongChange: (state) => {
-      const flaggableWords = FLAGGABLE_WORDS_MASTER;
-      const wordFamilies = state.wordFamilies;
-      const lyricHash = state.lyricHash;
-
-      Object.entries(flaggableWords).forEach(([word, wordData]) => {
-        // if word is in hash AND wordFamilies
-        if (
-          lyricHash &&
-          wordFamilies &&
-          lyricHash[word] &&
-          wordFamilies[word]
-        ) {
-          wordFamilies[word].occurances = lyricHash[word];
-        } else if (lyricHash && wordFamilies) {
-          // otherwise set it to false
-          wordFamilies[word].occurances = 0;
-        }
-      });
-    },
-
-    // when song changes
-    updateOccurancesPresetChange: (state) => {
-      // loop through wordFamily keys
-      // if wordFamily[key] is NOT in preset
-      // SKIP
-      // otherwise, set the occurances for that family
-    },
   },
 });
 
 export const {
   setWordFamilies,
+  setFlaggedWords,
   setPreset,
-  updateOccurancesOnSongChange,
-  updateOccurancesPresetChange,
+  setLyricsHash,
+  updateOccurances,
 } = wordFamilyManagementSlice.actions;
 
 export default wordFamilyManagementSlice.reducer;

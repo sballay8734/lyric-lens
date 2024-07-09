@@ -1,9 +1,12 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
 import {
+  setLyricsHash,
+  updateOccurances,
+} from "../../_NewArcitecture/redux/wordFamilyManagementSlice";
+import {
   FlaggedFamiliesObject,
   setLyricsHashMap,
-  updateFamilyOccurances,
 } from "../../FlagManagement/redux/flagManagementSlice";
 import { HashMap } from "../../SongAnalysisGraph/types/graphTypes";
 
@@ -41,7 +44,7 @@ export function analyzeLyrics(
   });
 
   // store hashMap for highlighting words on lyrics sheet
-  dispatch(setLyricsHashMap(hashMap));
+  dispatch(setLyricsHash(hashMap));
 
-  dispatch(updateFamilyOccurances({ hashMap }));
+  dispatch(updateOccurances());
 }
