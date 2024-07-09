@@ -17,39 +17,29 @@ import { GraphNode } from "../data/mockGraphData";
 import { useWindowSize } from "../hooks/graphHooks";
 import { formatNodes, initializeSimulation } from "../utils/d3";
 
-interface GraphProps {
-  presetId: string | null;
-  lyrics: string | null;
-}
-
-export default function Graph({
-  presetId,
-  lyrics,
-}: GraphProps): React.JSX.Element {
+export default function Graph(): React.JSX.Element {
   const svgRef = useRef<SVGSVGElement>(null);
   const windowSize = useWindowSize();
-  const flaggedFamilies = useAppSelector(
-    (state: RootState) => state.flagManagement.flaggedFamilies,
+  const flaggedWords = useAppSelector(
+    (state: RootState) => state.wordFamilyManagement.flaggedWords,
   );
+
   const analysisResult = useAppSelector(
     (state: RootState) => state.flagManagement.analysisResult,
   );
-  const lyricsLoading = useAppSelector(
-    (state: RootState) => state.songSearchForm.lyricsLoading,
-  );
 
   const [nodes, setNodes] = useState<GraphNode[]>([]);
-  const [links, setLinks] = useState<any[]>([]);
+  const [links, _] = useState<any[]>([]);
   const simulationRef = useRef<d3.Simulation<GraphNode, undefined> | null>(
     null,
   );
 
   // TODO: This should UPDATE the node positions and NOT generate new nodes
   useEffect(() => {
-    if (!flaggedFamilies || !svgRef.current) return () => {};
+    if (!flaggedWords || !svgRef.current) return () => {};
 
     // Format nodes from flaggedFamilies
-    const formattedNodes: GraphNode[] = formatNodes(flaggedFamilies);
+    const formattedNodes: GraphNode[] = formatNodes(flaggedWords);
 
     // Add x and y coordinates to each node and include center node
     const nodesWithPositions = formattedNodes.map((node) => ({
@@ -89,7 +79,7 @@ export default function Graph({
         simulationRef.current.stop();
       }
     };
-  }, [presetId, lyrics, lyricsLoading]);
+  }, [flaggedWords]);
 
   // console.log(nodes);
 
@@ -139,12 +129,11 @@ export default function Graph({
         return (
           <NodeLink
             key={`link-${node.id}`}
+            node={node}
             x1={centerNode.fx?.toString()!}
             y1={centerNode.fy?.toString()!}
             x2={edgeX.toString()!}
             y2={edgeY.toString()!}
-            isConnected={node.occurances > 0}
-            lyrics={lyrics}
           />
         );
       })}
@@ -185,12 +174,7 @@ export default function Graph({
 
       {/* Nodes */}
       {nodes.map((node) => (
-        <WordNode
-          key={node.id}
-          node={node}
-          isConnected={node.occurances > 0}
-          lyrics={lyrics}
-        />
+        <WordNode key={node.id} node={node} />
       ))}
     </svg>
   );

@@ -7,10 +7,14 @@ import {
 
 export type GraphNode = SimulationNodeDatum & {
   id: string;
-  family: string;
-  occurances: number; // if occurances === 0 don't connect to center
+  word: string;
   vulgarityLvl: VulgarityLevel;
   category: SensitiveWordCategory[];
+  family: string;
+  isRootWord: boolean;
+
+  isFlagged: boolean;
+  occurances: number; // if occurances === 0 don't connect to center
   radius: number;
 };
 

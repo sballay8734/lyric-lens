@@ -639,7 +639,7 @@ export const FLAGGABLE_WORDS_MASTER: FlaggableWordsObject = {
     isRootWord: true,
   },
   anus: {
-    id: "SW064",
+    id: "SW064a",
     vulgarityLvl: 7,
     category: ["sexual"],
     family: "anal",

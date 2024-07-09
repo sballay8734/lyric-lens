@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-
 import Graph from "./Graph";
 import { useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
@@ -7,12 +6,6 @@ import LyricsModal from "../../ModalManagement/components/modals/LyricsModal";
 
 // Graph Wrapper
 export default function GraphWrapper(): React.JSX.Element {
-  const lyrics = useAppSelector(
-    (state: RootState) => state.songSearchForm.lyrics,
-  );
-  const currentPreset = useAppSelector(
-    (state: RootState) => state.flagManagement.currentPreset,
-  );
   const selectedSong = useAppSelector(
     (state: RootState) => state.songSearchForm.selectedSong,
   );
@@ -24,10 +17,7 @@ export default function GraphWrapper(): React.JSX.Element {
     <div
       className={`MainGraph group flex h-full w-full flex-col items-center justify-center bg-[#000000] transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
     >
-      <Graph
-        presetId={currentPreset && currentPreset?.presetId}
-        lyrics={lyrics}
-      />
+      <Graph />
       <LyricsModal />
     </div>
   );

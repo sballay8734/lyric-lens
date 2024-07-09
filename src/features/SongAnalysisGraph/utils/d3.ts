@@ -1,18 +1,28 @@
 import * as d3 from "d3";
 
-import { FlaggedFamiliesObject } from "../../FlagManagement/redux/flagManagementSlice";
+import { FlaggedWords } from "../../_NewArcitecture/redux/wordFamilyManagementSlice";
 import { GraphNode } from "../data/mockGraphData";
 
-export function formatNodes(flaggedFamilies: FlaggedFamiliesObject) {
-  return Object.keys(flaggedFamilies).map((w) => {
-    const { id, family, occurances, vulgarityLvl, category } =
-      flaggedFamilies[w];
-    return {
+export function formatNodes(flaggedWords: FlaggedWords) {
+  return Object.entries(flaggedWords).map(([w, wData]) => {
+    const {
       id,
       family,
       occurances,
       vulgarityLvl,
       category,
+      isFlagged,
+      isRootWord,
+    } = flaggedWords[w];
+    return {
+      id,
+      word: w,
+      family,
+      occurances,
+      vulgarityLvl,
+      category,
+      isFlagged,
+      isRootWord,
       radius: 20 + occurances * 1.2,
     };
   });

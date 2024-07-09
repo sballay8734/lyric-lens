@@ -1,20 +1,39 @@
 import { animated, useSpring } from "@react-spring/web";
+import { useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
+import { GraphNode } from "../data/mockGraphData";
 
 interface LinkProps {
   x1: string;
   y1: string;
   x2: string;
   y2: string;
-  isConnected: boolean;
-  lyrics: string | null;
+  node: GraphNode;
 }
 
-const NodeLink = ({ x1, y1, x2, y2, isConnected }: LinkProps) => {
+const NodeLink = ({ x1, y1, x2, y2, node }: LinkProps) => {
+  const wordOccurances = useAppSelector((state: RootState) => {
+    const flaggedWords = state.wordFamilyManagement.flaggedWords;
+    if (flaggedWords && flaggedWords[node.word]) {
+      return flaggedWords[node.word].occurances;
+    }
+  });
+
+  const wordIsFlagged = useAppSelector((state: RootState) => {
+    const flaggedWords = state.wordFamilyManagement.flaggedWords;
+    if (flaggedWords && flaggedWords[node.word]) {
+      return flaggedWords[node.word].isFlagged;
+    }
+  });
+
+  const isConnected = wordOccurances && wordOccurances > 0 ? true : false;
+  const isFlagged = wordIsFlagged;
+
   const style = useSpring({
     from: { opacity: 0, strokeWidth: 0 },
     to: {
-      opacity: isConnected ? 1 : 0,
-      strokeWidth: isConnected ? 1 : 0,
+      opacity: isConnected && isFlagged ? 1 : 0,
+      strokeWidth: isConnected && isFlagged ? 1 : 0,
     },
     config: { duration: 1000 },
   });
