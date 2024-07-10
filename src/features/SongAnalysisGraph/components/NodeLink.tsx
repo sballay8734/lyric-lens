@@ -17,7 +17,7 @@ const NodeLink = ({ x1, y1, x2, y2, node }: LinkProps) => {
       opacity: 1,
       strokeWidth: 1,
     },
-    config: { duration: 1000 },
+    config: { duration: 500 },
   });
 
   // if (node.occurances === 0) return null;

@@ -19,12 +19,12 @@ const WordNode = ({ node }: NodeProps) => {
       node.occurances > 0
         ? Math.max(Math.log(node.occurances + 2) * 6, MIN_NODE_RADIUS)
         : 3,
-    opacity: 1,
+    opacity: node.occurances > 0 ? 1 : 0,
     config: { duration: 500 },
   });
 
   const textStyle = useSpring({
-    opacity: 1,
+    opacity: node.occurances > 0 ? 1 : 0,
     fontSize: node.occurances > 0 ? Math.min(node.radius / 3, 10) : 0,
     config: { duration: 500 },
   });
