@@ -16,6 +16,8 @@ export const vulgarityToColorMap: {
   10: { startColor: "#77344e", endColor: "#cb81a0" },
 };
 
+export const defaultGradient = { startColor: "#9e0142", endColor: "#3c0019" };
+
 export const MAX_NODE_RADIUS = 50;
 export const MIN_NODE_RADIUS = 25;
 
@@ -28,10 +30,14 @@ export const centerY = height / 4.5;
 // Center node obj
 export const centerNode: RootNode = {
   id: "root",
-  family: null,
-  occurances: null,
+  word: null,
   vulgarityLvl: null,
   category: null,
+  family: null,
+  isRootWord: null,
+
+  isFlagged: null,
+  occurances: null,
   radius: 60, // TODO: should get bigger with more curse words
   fx: centerX,
   fy: centerY,

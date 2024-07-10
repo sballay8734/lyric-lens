@@ -1,8 +1,6 @@
 import { animated, useSpring } from "@react-spring/web";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-import { useAppSelector } from "../../../hooks/hooks";
-import { RootState } from "../../../store/store";
 import {
   MIN_NODE_RADIUS,
   vulgarityToColorMap,
@@ -14,47 +12,25 @@ interface NodeProps {
 }
 
 const WordNode = ({ node }: NodeProps) => {
-  const [circleRadius, setCircleRadius] = useState(MIN_NODE_RADIUS);
   const wasConnected = useRef(false);
-
-  const wordOccurances = useAppSelector((state: RootState) => {
-    const flaggedWords = state.wordFamilyManagement.flaggedWords;
-    if (flaggedWords && flaggedWords[node.word]) {
-      return flaggedWords[node.word].occurances;
-    }
-  });
-
-  const wordIsFlagged = useAppSelector((state: RootState) => {
-    const flaggedWords = state.wordFamilyManagement.flaggedWords;
-    if (flaggedWords && flaggedWords[node.word]) {
-      return flaggedWords[node.word].isFlagged;
-    }
-  });
-
-  const isConnected = wordOccurances && wordOccurances > 0 ? true : false;
-  const isFlagged = wordIsFlagged;
 
   const circleStyle = useSpring({
     r:
-      isConnected && isFlagged
-        ? Math.max(Math.log(node.occurances + 2) * 12, MIN_NODE_RADIUS)
+      node.occurances > 0
+        ? Math.max(Math.log(node.occurances + 2) * 6, MIN_NODE_RADIUS)
         : 3,
-    opacity: isConnected && isFlagged ? 1 : 0.5,
+    opacity: 1,
     config: { duration: 500 },
-    onChange: ({ value }) => {
-      setCircleRadius(value.r); // Update the state with the new radius value
-    },
   });
 
   const textStyle = useSpring({
-    opacity: isConnected && isFlagged ? 1 : 0,
-    fontSize: Math.min(Math.min(circleRadius / 3.5, 12)),
+    opacity: 1,
+    fontSize: node.occurances > 0 ? Math.min(node.radius / 3, 10) : 0,
     config: { duration: 500 },
   });
 
   useEffect(() => {
-    wasConnected.current = isConnected;
-    setCircleRadius(circleStyle.r.get());
+    wasConnected.current = node.occurances > 0;
   }, []);
 
   return (
@@ -64,13 +40,17 @@ const WordNode = ({ node }: NodeProps) => {
           <stop
             offset="0%"
             stopColor={
-              vulgarityToColorMap[node.vulgarityLvl].startColor || "#9e0142"
+              (node.vulgarityLvl &&
+                vulgarityToColorMap[node.vulgarityLvl].startColor) ||
+              "#9e0142"
             }
           />
           <stop
             offset="100%"
             stopColor={
-              vulgarityToColorMap[node.vulgarityLvl].endColor || "#3c0019"
+              (node.vulgarityLvl &&
+                vulgarityToColorMap[node.vulgarityLvl].endColor) ||
+              "#3c0019"
             }
           />
         </radialGradient>
@@ -80,8 +60,12 @@ const WordNode = ({ node }: NodeProps) => {
         // !TODO: I THINK THIS IS WHERE YOU PASS THE FLUID VALUE!!!
         cx={0}
         cy={0}
-        fill={isConnected && isFlagged ? `url(#gradient-${node.id})` : "tomato"}
-        opacity={0.8}
+        fill={
+          node.occurances > 0 && node.isFlagged
+            ? `url(#gradient-${node.id})`
+            : "tomato"
+        }
+        opacity={node.occurances > 0 ? 1 : 0.7}
       />
       <animated.text
         {...textStyle}

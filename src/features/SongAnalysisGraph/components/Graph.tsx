@@ -1,3 +1,5 @@
+import * as d3 from "d3";
+import { SimulationLinkDatum, SimulationNodeDatum } from "d3";
 import { useEffect, useRef, useState } from "react";
 
 import NodeLink from "./NodeLink";
@@ -13,9 +15,9 @@ import {
   rectGroup,
   width,
 } from "../constants/graphConstants";
-import { GraphNode } from "../data/mockGraphData";
+import { GraphNode, RootNode } from "../data/mockGraphData";
 import { useWindowSize } from "../hooks/graphHooks";
-import { formatNodes, initializeSimulation } from "../utils/d3";
+import { formatNodes, generateLinks } from "../utils/d3";
 
 export default function Graph(): React.JSX.Element {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -39,31 +41,42 @@ export default function Graph(): React.JSX.Element {
     if (!flaggedWords || !svgRef.current) return () => {};
 
     // Format nodes from flaggedFamilies
-    const formattedNodes: GraphNode[] = formatNodes(flaggedWords);
-
-    // Add x and y coordinates to each node and include center node
-    const nodesWithPositions = formattedNodes.map((node) => ({
-      ...node,
-      x: node.occurances > 0 ? centerX / 2 : centerX / 2,
-      y: node.occurances > 0 ? centerY / 2 : centerY / 2,
-    }));
-
-    setNodes(nodesWithPositions);
+    const formattedNodes: GraphNode[] = [
+      // mTODO: ts error, not causing any issues
+      centerNode,
+      ...formatNodes(flaggedWords, width, height, centerX, centerY),
+    ];
+    const genLinks: SimulationLinkDatum<SimulationNodeDatum>[] =
+      generateLinks(formattedNodes);
 
     if (simulationRef.current) {
       simulationRef.current.stop();
     }
 
-    const simulation = initializeSimulation(
-      nodesWithPositions,
-      centerX,
-      centerY,
-      links,
-      width,
-      height,
-      centerNode.radius,
-    ).on("tick", () => {
-      setNodes([...nodesWithPositions]);
+    const simulation = d3
+      .forceSimulation(formattedNodes)
+      .force(
+        "link",
+        d3
+          .forceLink(genLinks)
+          .distance(75)
+          .id((d: any) => d.id),
+      )
+      .force(
+        "collide",
+        d3
+          .forceCollide()
+          .radius((d) => ((d as GraphNode).occurances > 0 ? 9 : 0)),
+      )
+      .force(
+        "charge",
+        d3
+          .forceManyBody()
+          .strength((d) => ((d as GraphNode).occurances > 0 ? 9 : 0)),
+      );
+
+    simulation.on("tick", () => {
+      setNodes([...simulation.nodes()]); // Update node positions on each tick
     });
 
     simulationRef.current = simulation;
@@ -109,16 +122,23 @@ export default function Graph(): React.JSX.Element {
             ? Math.max(Math.log(node.occurances + 2) * 12, MIN_NODE_RADIUS)
             : 3;
 
+        // Ensure centerNode.fx and centerNode.fy are numbers
+        const centerX = Number(centerNode.fx) || 0;
+        const centerY = Number(centerNode.fy) || 0;
+
         // Calculate the angle between the center node and the current node
-        const dx = node.x! - centerNode.fx!;
-        const dy = node.y! - centerNode.fy!;
+        const dx = (node.x || 0) - centerX;
+        const dy = (node.y || 0) - centerY;
 
         // Calculate the distance between the centers
         const distance = Math.sqrt(dx * dx + dy * dy);
 
+        // Avoid division by zero
+        if (distance === 0) return null;
+
         // Calculate the point on the edge of the current node's circle
-        const edgeX = node.x! - (nodeRadius * dx) / distance;
-        const edgeY = node.y! - (nodeRadius * dy) / distance;
+        const edgeX = (node.x || 0) - (nodeRadius * dx) / distance;
+        const edgeY = (node.y || 0) - (nodeRadius * dy) / distance;
 
         return (
           <NodeLink
