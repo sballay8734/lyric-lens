@@ -1,21 +1,29 @@
 /* eslint-disable react/prop-types */
 import Graph from "./Graph";
-import { useAppSelector } from "../../../hooks/hooks";
-import { RootState } from "../../../store/store";
+// import { useAppSelector } from "../../../hooks/hooks";
+// import { RootState } from "../../../store/store";
 import LyricsModal from "../../ModalManagement/components/modals/LyricsModal";
 
 // Graph Wrapper
 export default function GraphWrapper(): React.JSX.Element {
-  const selectedSong = useAppSelector(
-    (state: RootState) => state.songSearchForm.selectedSong,
-  );
-  const analysisResult = useAppSelector(
-    (state: RootState) => state.flagManagement.analysisResult,
-  );
+  // const selectedSong = useAppSelector(
+  //   (state: RootState) => state.songSearchForm.selectedSong,
+  // );
+  // const analysisResult = useAppSelector(
+  //   (state: RootState) => state.flagManagement.analysisResult,
+  // );
+
+  console.log("Running WRAPPER");
 
   return (
+    // <div
+    //   className={`MainGraph group flex h-full w-full flex-col items-center justify-center bg-[#000000] transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
+    // >
+    //   <Graph />
+    //   <LyricsModal />
+    // </div>
     <div
-      className={`MainGraph group flex h-full w-full flex-col items-center justify-center bg-[#000000] transition-colors duration-200 ${!selectedSong ? "" : analysisResult?.result === "pass" ? "animate-pulse-shadow-green" : "animate-pulse-shadow-red"}`}
+      className={`MainGraph group flex h-full w-full flex-col items-center justify-center bg-[#000000] transition-colors duration-200`}
     >
       <Graph />
       <LyricsModal />

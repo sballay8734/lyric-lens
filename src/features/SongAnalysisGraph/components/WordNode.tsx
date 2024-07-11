@@ -1,40 +1,86 @@
 import { animated, useSpring } from "@react-spring/web";
 import { useEffect, useRef } from "react";
 
+import { useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../store/store";
 import {
+  centerX,
+  centerY,
   MIN_NODE_RADIUS,
   vulgarityToColorMap,
 } from "../constants/graphConstants";
 import { GraphNode } from "../data/mockGraphData";
+import React from "react";
 
 interface NodeProps {
   node: GraphNode;
+  index: number;
+  totalNodes: number;
 }
 
-const WordNode = ({ node }: NodeProps) => {
-  const wasConnected = useRef(false);
+const WordNode = ({ node, index, totalNodes }: NodeProps) => {
+  const wordIsFlagged = useAppSelector((state: RootState) => {
+    return (
+      state.wordFamilyManagement.flaggedWords &&
+      state.wordFamilyManagement.flaggedWords[node.word].isFlagged
+    );
+  });
+  const wordOccurs = useAppSelector((state: RootState) => {
+    return (
+      state.wordFamilyManagement.flaggedWords &&
+      state.wordFamilyManagement.flaggedWords[node.word].occurances > 0
+    );
+  });
+
+  // console.log(node.word, wordIsFlagged, wordOccurs);
 
   const circleStyle = useSpring({
-    r:
-      node.occurances > 0 && node.isFlagged
-        ? Math.max(Math.log(node.occurances + 2) * 6, MIN_NODE_RADIUS)
-        : 3,
-    opacity: node.occurances > 0 ? 1 : 0,
+    r: wordOccurs && wordIsFlagged ? Math.max(1 * 6, MIN_NODE_RADIUS) : 3,
+    opacity: wordOccurs ? 1 : 0.5,
     config: { duration: 500 },
   });
 
   const textStyle = useSpring({
-    opacity: node.occurances > 0 && node.isFlagged ? 1 : 0,
-    fontSize: node.occurances > 0 ? Math.min(node.radius / 3, 10) : 0,
+    opacity: wordOccurs && wordIsFlagged ? 1 : 0,
+    fontSize: wordOccurs ? Math.min(node.radius / 3, 10) : 0,
     config: { duration: 500 },
   });
 
-  useEffect(() => {
-    wasConnected.current = node.occurances > 0;
-  }, []);
+  const circleRadius = 75;
+  const angle = (index / totalNodes) * 2 * Math.PI;
+  const xValue = Math.cos(angle) * circleRadius + centerX;
+  const yValue = getYValue();
+
+  function getYValue() {
+    // if node is flagged AND in song
+    if (wordIsFlagged && wordOccurs) {
+      return Math.sin(angle) * circleRadius + centerY;
+    }
+    // if node is flagged AND NOT in song
+    if (wordIsFlagged && !wordOccurs) {
+      return Math.sin(angle) * circleRadius + 2.3 * centerY;
+    }
+
+    // if node is NOT flagged but IS in song
+    if (!wordIsFlagged && wordOccurs) {
+      return Math.sin(angle) * circleRadius + 2.3 * centerY;
+    }
+
+    // if node is NOT flagged and NOT in song
+    if (!wordIsFlagged && !wordOccurs) {
+      return Math.sin(angle) * circleRadius + 2.3 * centerY;
+    }
+  }
+
+  const position = useSpring({
+    y: yValue,
+    config: { tension: 170, friction: 26 },
+  });
+
+  if (node.id === "root") return;
 
   return (
-    <g transform={`translate(${node.x}, ${node.y})`}>
+    <animated.g transform={position.y!.to((y) => `translate(${xValue}, ${y})`)}>
       <defs>
         <radialGradient id={`gradient-${node.id}`}>
           <stop
@@ -61,11 +107,9 @@ const WordNode = ({ node }: NodeProps) => {
         cx={0}
         cy={0}
         fill={
-          node.occurances > 0 && node.isFlagged
-            ? `url(#gradient-${node.id})`
-            : "tomato"
+          wordOccurs && wordIsFlagged ? `url(#gradient-${node.id})` : "tomato"
         }
-        opacity={node.occurances > 0 ? 1 : 0.7}
+        opacity={wordOccurs ? 1 : 0.7}
       />
       <animated.text
         {...textStyle}
@@ -77,8 +121,8 @@ const WordNode = ({ node }: NodeProps) => {
       >
         {node.word} ({node.occurances})
       </animated.text>
-    </g>
+    </animated.g>
   );
 };
 
-export default WordNode;
+export default React.memo(WordNode);

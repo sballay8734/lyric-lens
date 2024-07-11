@@ -1,98 +1,25 @@
-import * as d3 from "d3";
-import { SimulationLinkDatum, SimulationNodeDatum } from "d3";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-import NodeLink from "./NodeLink";
-import WordNode from "./WordNode";
+import Nodes from "./Nodes";
+import RootNode from "./RootNode";
 import { useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import {
-  centerNode,
-  centerX,
-  centerY,
-  height,
-  MIN_NODE_RADIUS,
-  width,
-} from "../constants/graphConstants";
-import { GraphNode } from "../data/mockGraphData";
 import { useWindowSize } from "../hooks/graphHooks";
-import { formatNodes, generateLinks } from "../utils/d3";
 
 export default function Graph(): React.JSX.Element {
   const svgRef = useRef<SVGSVGElement>(null);
   const windowSize = useWindowSize();
-  const flaggedWords = useAppSelector(
-    (state: RootState) => state.wordFamilyManagement.flaggedWords,
-  );
 
   const analysisResult = useAppSelector(
     (state: RootState) => state.flagManagement.analysisResult,
   );
 
-  const [nodes, setNodes] = useState<GraphNode[]>([]);
-  const [links, setLinks] = useState<any[]>([]);
-  const simulationRef = useRef<d3.Simulation<GraphNode, undefined> | null>(
-    null,
-  );
+  console.log("RENDERING GRAPH");
 
   // TODO: This should UPDATE the node positions and NOT generate new nodes
   useEffect(() => {
-    if (!flaggedWords || !svgRef.current) return () => {};
-
-    // Format nodes from flaggedFamilies
-    const formattedNodes: GraphNode[] = [
-      // mTODO: ts error, not causing any issues
-      centerNode,
-      ...formatNodes(flaggedWords, width, height, centerX, centerY),
-    ];
-    const genLinks: SimulationLinkDatum<SimulationNodeDatum>[] =
-      generateLinks(formattedNodes);
-
-    setLinks(genLinks);
-
-    if (simulationRef.current) {
-      simulationRef.current.stop();
-    }
-
-    const simulation = d3
-      .forceSimulation(formattedNodes)
-      .force("charge", d3.forceManyBody())
-      // .force("x", d3.forceX())
-      // .force("y", d3.forceY())
-      .force(
-        "link",
-        d3
-          .forceLink(genLinks)
-          .distance(50)
-          .id((d: any) => d.id),
-      )
-      .force(
-        "collide",
-        d3
-          .forceCollide()
-          .radius((d) => ((d as GraphNode).occurances > 0 ? 9 : 0)),
-      )
-      .force(
-        "charge",
-        d3
-          .forceManyBody()
-          .strength((d) => ((d as GraphNode).occurances > 0 ? 9 : 0)),
-      );
-
-    simulation.on("tick", () => {
-      setNodes([...simulation.nodes()]); // Update node positions on each tick
-    });
-
-    console.log(flaggedWords);
-
-    simulationRef.current = simulation;
-
-    return () => {
-      if (simulationRef.current) {
-        simulationRef.current.stop();
-      }
-    };
-  }, [flaggedWords]);
+    if (!svgRef.current) return;
+  }, []);
 
   return (
     <svg
@@ -118,9 +45,9 @@ export default function Graph(): React.JSX.Element {
         </radialGradient>
       </defs>
       {/* Links */}
-      {nodes.map((node: GraphNode) => {
+      {/* {nodes.map((node: GraphNode) => {
         const nodeRadius =
-          node.occurances > 0
+          node.occurances > 0 && node.isFlagged
             ? Math.max(Math.log(node.occurances + 2) * 12, MIN_NODE_RADIUS)
             : 3;
 
@@ -142,56 +69,24 @@ export default function Graph(): React.JSX.Element {
         const edgeX = (node.x || 0) - (nodeRadius * dx) / distance;
         const edgeY = (node.y || 0) - (nodeRadius * dy) / distance;
 
-        return (
-          <NodeLink
-            key={`link-${node.id}`}
-            node={node}
-            x1={centerNode.fx?.toString()!}
-            y1={centerNode.fy?.toString()!}
-            x2={edgeX.toString()!}
-            y2={edgeY.toString()!}
-          />
-        );
-      })}
+        if (node.occurances > 0 && node.isFlagged) {
+          return (
+            <NodeLink
+              key={`link-${node.id}`}
+              node={node}
+              x1={centerNode.fx?.toString()!}
+              y1={centerNode.fy?.toString()!}
+              x2={edgeX.toString()!}
+              y2={edgeY.toString()!}
+            />
+          );
+        } else return null;
+      })} */}
       {/* Root node ******************************************************* */}
-      <g>
-        <circle
-          cx={centerNode.fx!}
-          cy={centerNode.fy!}
-          r={centerNode.radius}
-          fill={`url(#gradient-root)` || "red"}
-          stroke={analysisResult?.result === "pass" ? "#167e31" : "#7e1616"}
-          strokeWidth={4}
-        />
-        <text
-          x={centerNode.fx!}
-          y={centerNode.fy!}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fill={analysisResult?.result === "pass" ? "#16591a" : "#852020"}
-          fontSize={28}
-        >
-          {analysisResult?.result === "pass"
-            ? "CLEAN"
-            : analysisResult?.totalFlaggedWords}
-        </text>
-      </g>
-      {/* Rect for words not in song *************************************** */}
-      {/* <rect
-        x={rectGroup.x}
-        y={rectGroup.y}
-        width={rectGroup.width}
-        height={rectGroup.height}
-        rx={rectGroup.rx}
-        fill={rectGroup.fill}
-        stroke={rectGroup.stroke}
-        strokeWidth={rectGroup.strokeWidth}
-      /> */}
+      <RootNode />
 
       {/* Nodes */}
-      {nodes.map((node) => (
-        <WordNode key={node.id} node={node} />
-      ))}
+      <Nodes />
     </svg>
   );
 }

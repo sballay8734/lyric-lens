@@ -24,6 +24,8 @@ export default function Home(): React.JSX.Element {
     dispatch(setPreset(FALLBACK_PRESET));
   }, [dispatch]);
 
+  console.log("Running HOME");
+
   return (
     <>
       <div className="relative flex h-full w-full flex-col justify-between gap-2">

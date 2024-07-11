@@ -83,12 +83,16 @@ export const wordFamilyManagementSlice = createSlice({
 
       if (flaggedWords) {
         Object.entries(flaggedWords).forEach(([word, wordData]) => {
-          // if word is in preset, set is preset to true
-          if (preset.flaggedWords[word]) {
+          // only set to true if it needs to be true and is false
+          if (preset.flaggedWords[word] && !flaggedWords[word].isFlagged) {
             flaggedWords[word].isFlagged = true;
-          } else {
-            // otherwise set it to false
+          } else if (
+            !preset.flaggedWords[word] &&
+            flaggedWords[word].isFlagged
+          ) {
             flaggedWords[word].isFlagged = false;
+          } else {
+            // do nothing
           }
         });
       }
