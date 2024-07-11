@@ -1,16 +1,14 @@
 import { animated, useSpring } from "@react-spring/web";
-import { useEffect, useRef } from "react";
+import React from "react";
 
 import { useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
 import {
   centerX,
   centerY,
-  MIN_NODE_RADIUS,
   vulgarityToColorMap,
 } from "../constants/graphConstants";
 import { GraphNode } from "../data/mockGraphData";
-import React from "react";
 
 interface NodeProps {
   node: GraphNode;
@@ -35,7 +33,7 @@ const WordNode = ({ node, index, totalNodes }: NodeProps) => {
   // console.log(node.word, wordIsFlagged, wordOccurs);
 
   const circleStyle = useSpring({
-    r: wordOccurs && wordIsFlagged ? Math.max(1 * 6, MIN_NODE_RADIUS) : 3,
+    r: wordOccurs && wordIsFlagged ? 15 : 3,
     opacity: wordOccurs ? 1 : 0.5,
     config: { duration: 500 },
   });
@@ -43,18 +41,18 @@ const WordNode = ({ node, index, totalNodes }: NodeProps) => {
   const textStyle = useSpring({
     opacity: wordOccurs && wordIsFlagged ? 1 : 0,
     fontSize: wordOccurs ? Math.min(node.radius / 3, 10) : 0,
-    config: { duration: 500 },
+    config: { duration: 300 },
   });
 
   const circleRadius = 75;
   const angle = (index / totalNodes) * 2 * Math.PI;
-  const xValue = Math.cos(angle) * circleRadius + centerX;
+  const xValue = getXValue();
   const yValue = getYValue();
 
   function getYValue() {
     // if node is flagged AND in song
     if (wordIsFlagged && wordOccurs) {
-      return Math.sin(angle) * circleRadius + centerY;
+      return Math.sin(angle) * (circleRadius * 1.5) + centerY;
     }
     // if node is flagged AND NOT in song
     if (wordIsFlagged && !wordOccurs) {
@@ -69,6 +67,27 @@ const WordNode = ({ node, index, totalNodes }: NodeProps) => {
     // if node is NOT flagged and NOT in song
     if (!wordIsFlagged && !wordOccurs) {
       return Math.sin(angle) * circleRadius + 2.3 * centerY;
+    }
+  }
+
+  function getXValue() {
+    // if node is flagged AND in song
+    if (wordIsFlagged && wordOccurs) {
+      return Math.cos(angle) * (circleRadius * 1.5) + centerX;
+    }
+    // if node is flagged AND NOT in song
+    if (wordIsFlagged && !wordOccurs) {
+      return Math.cos(angle) * circleRadius + centerX;
+    }
+
+    // if node is NOT flagged but IS in song
+    if (!wordIsFlagged && wordOccurs) {
+      return Math.cos(angle) * circleRadius + centerX;
+    }
+
+    // if node is NOT flagged and NOT in song
+    if (!wordIsFlagged && !wordOccurs) {
+      return Math.cos(angle) * circleRadius + centerX;
     }
   }
 
@@ -103,7 +122,6 @@ const WordNode = ({ node, index, totalNodes }: NodeProps) => {
       </defs>
       <animated.circle
         {...circleStyle}
-        // !TODO: I THINK THIS IS WHERE YOU PASS THE FLUID VALUE!!!
         cx={0}
         cy={0}
         fill={
@@ -126,3 +144,7 @@ const WordNode = ({ node, index, totalNodes }: NodeProps) => {
 };
 
 export default React.memo(WordNode);
+
+// !TODO: FIX X ANIMATION
+
+// !TODO: WORDS NO LONGER HIGHLIGHT IN LYRICS SHEET
