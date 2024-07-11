@@ -20,7 +20,7 @@ const NodeLink = ({ x1, y1, x2, y2, node }: LinkProps) => {
     config: { duration: 500 },
   });
 
-  // if (node.occurances === 0) return null;
+  if (node.occurances === 0) return null;
 
   return (
     <animated.line

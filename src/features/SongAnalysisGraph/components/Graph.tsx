@@ -12,10 +12,9 @@ import {
   centerY,
   height,
   MIN_NODE_RADIUS,
-  rectGroup,
   width,
 } from "../constants/graphConstants";
-import { GraphNode, RootNode } from "../data/mockGraphData";
+import { GraphNode } from "../data/mockGraphData";
 import { useWindowSize } from "../hooks/graphHooks";
 import { formatNodes, generateLinks } from "../utils/d3";
 
@@ -31,7 +30,7 @@ export default function Graph(): React.JSX.Element {
   );
 
   const [nodes, setNodes] = useState<GraphNode[]>([]);
-  const [links, _] = useState<any[]>([]);
+  const [links, setLinks] = useState<any[]>([]);
   const simulationRef = useRef<d3.Simulation<GraphNode, undefined> | null>(
     null,
   );
@@ -49,17 +48,22 @@ export default function Graph(): React.JSX.Element {
     const genLinks: SimulationLinkDatum<SimulationNodeDatum>[] =
       generateLinks(formattedNodes);
 
+    setLinks(genLinks);
+
     if (simulationRef.current) {
       simulationRef.current.stop();
     }
 
     const simulation = d3
       .forceSimulation(formattedNodes)
+      .force("charge", d3.forceManyBody())
+      // .force("x", d3.forceX())
+      // .force("y", d3.forceY())
       .force(
         "link",
         d3
           .forceLink(genLinks)
-          .distance(75)
+          .distance(50)
           .id((d: any) => d.id),
       )
       .force(
@@ -79,6 +83,8 @@ export default function Graph(): React.JSX.Element {
       setNodes([...simulation.nodes()]); // Update node positions on each tick
     });
 
+    console.log(flaggedWords);
+
     simulationRef.current = simulation;
 
     return () => {
@@ -87,10 +93,6 @@ export default function Graph(): React.JSX.Element {
       }
     };
   }, [flaggedWords]);
-
-  // console.log(nodes);
-
-  // TODO: Add separate useEffect for when lyrics/song changes
 
   return (
     <svg

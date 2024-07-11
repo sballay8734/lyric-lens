@@ -16,7 +16,7 @@ const WordNode = ({ node }: NodeProps) => {
 
   const circleStyle = useSpring({
     r:
-      node.occurances > 0
+      node.occurances > 0 && node.isFlagged
         ? Math.max(Math.log(node.occurances + 2) * 6, MIN_NODE_RADIUS)
         : 3,
     opacity: node.occurances > 0 ? 1 : 0,
@@ -24,7 +24,7 @@ const WordNode = ({ node }: NodeProps) => {
   });
 
   const textStyle = useSpring({
-    opacity: node.occurances > 0 ? 1 : 0,
+    opacity: node.occurances > 0 && node.isFlagged ? 1 : 0,
     fontSize: node.occurances > 0 ? Math.min(node.radius / 3, 10) : 0,
     config: { duration: 500 },
   });

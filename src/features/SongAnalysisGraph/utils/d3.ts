@@ -31,7 +31,7 @@ export function formatNodes(
       isFlagged,
       isRootWord,
       x: centerX,
-      y: wData.occurances > 0 ? centerY : centerY * 2.3,
+      y: wData.occurances > 0 && wData.isFlagged ? centerY : centerY * 2.3,
       radius: 20 + occurances * 1.2,
     };
   });
@@ -65,5 +65,11 @@ export function generateLinks(nodes: GraphNode[]): Link[] {
     }
   }
 
+  // console.log(links);
+
   return links;
 }
+
+// NEW PLAN
+// 1. Render a node for ALL words.
+// 2. useSpring to handle the transition of ALL NODES
