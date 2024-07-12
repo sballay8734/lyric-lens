@@ -1,13 +1,9 @@
-import * as d3 from "d3";
-
-import { FlaggedWords } from "../../WordManagement/redux/wordManagementSlice";
+import { FlaggedWords } from "../../WordManagement/types/wordManagementTypes";
 import { centerNode } from "../constants/graphConstants";
 import { GraphNode } from "../data/mockGraphData";
 
 export function formatNodes(
   flaggedWords: FlaggedWords,
-  width: number,
-  height: number,
   centerX: number,
   centerY: number,
 ) {

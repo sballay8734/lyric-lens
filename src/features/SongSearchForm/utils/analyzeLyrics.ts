@@ -5,17 +5,16 @@ import {
   updateWordOccurances,
 } from "../../WordManagement/redux/wordManagementSlice";
 import {
-  FlaggedFamiliesObject,
-  setLyricsHashMap,
-} from "../../FlagManagement/redux/flagManagementSlice";
-import { HashMap } from "../../Graph/types/graphTypes";
+  LyricHash,
+  WordFamiliesObj,
+} from "../../WordManagement/types/wordManagementTypes";
 
 export function analyzeLyrics(
   lyrics: string,
   dispatch: Dispatch,
-  flaggedFamilies: FlaggedFamiliesObject | null,
+  wordFamilies: WordFamiliesObj | null,
 ) {
-  if (!flaggedFamilies) return null;
+  if (!wordFamilies) return null;
 
   const formattedLyrics = lyrics
     .replace(/\[.*?\]/g, "") // removes [Verse 2: ... ] [Chorus: ... ]
@@ -29,7 +28,7 @@ export function analyzeLyrics(
   const wordArray: string[] = formattedLyrics.split(" ");
 
   // initialize hash map
-  const hashMap: HashMap = {};
+  const hashMap: LyricHash = {};
 
   // loop through lyrics
   wordArray.forEach((word) => {

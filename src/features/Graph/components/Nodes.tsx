@@ -24,12 +24,10 @@ export default function Nodes(): React.ReactElement[] {
       flaggedWords,
       windowSize.width,
       windowSize.height,
-      windowSize.windowCenterX,
-      windowSize.windowCenterY,
     );
 
     setNodes(formattedNodes);
-  }, [flaggedWords]);
+  }, [flaggedWords, windowSize.height, windowSize.width]);
 
   const totalNodes = useMemo(() => nodes.length, [nodes]);
 

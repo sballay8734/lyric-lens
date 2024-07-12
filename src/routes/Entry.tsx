@@ -12,7 +12,7 @@ function Entry() {
 
   useEffect(() => {
     console.log("SIZE CHANGED", windowSize);
-  }, [windowSize.height, windowSize.width]);
+  }, [windowSize.height, windowSize.width, windowSize]);
 
   return (
     <div className="flex h-full w-full flex-col items-center">
