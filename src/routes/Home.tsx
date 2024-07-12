@@ -3,13 +3,13 @@ import { useDispatch } from "react-redux";
 
 import { DEFAULT_FLAG_PROFILE_PRESETS } from "../constants/defaultProfiles";
 import { FLAGGABLE_WORDS_MASTER } from "../constants/flaggableWords";
+import { getFlaggedWords } from "../features/WordManagement/utils/getFlaggedWords";
+import GraphWrapper from "../features/SongAnalysisGraph/components/GraphWrapper";
+import Overlay from "../features/SongAnalysisGraph/components/Overlay";
 import {
   setFlaggedWords,
   setPreset,
-} from "../features/_NewArcitecture/redux/wordFamilyManagementSlice";
-import { getFlaggedWords } from "../features/FlagManagement/utils/getFlaggedFamilies";
-import GraphWrapper from "../features/SongAnalysisGraph/components/GraphWrapper";
-import Overlay from "../features/SongAnalysisGraph/components/Overlay";
+} from "../features/WordManagement/redux/wordManagementSlice";
 
 const FALLBACK_PRESET = DEFAULT_FLAG_PROFILE_PRESETS[0];
 

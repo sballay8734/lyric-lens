@@ -9,22 +9,22 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
 import {
   setPreset,
-  updateOccurances,
-} from "../../_NewArcitecture/redux/wordFamilyManagementSlice";
+  updateWordOccurances,
+} from "../../WordManagement/redux/wordManagementSlice";
 
 export default function ProfileSwitcher(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const [dropdownIsShown, setDropdownIsShown] = useState<boolean>(false);
 
   const currentPreset = useAppSelector(
-    (state: RootState) => state.wordFamilyManagement.activePreset,
+    (state: RootState) => state.wordManagement.activePreset,
   );
 
   function handleProfileSelection(preset: DefaultFlagPreset) {
     setDropdownIsShown(false);
 
     dispatch(setPreset(preset));
-    dispatch(updateOccurances());
+    dispatch(updateWordOccurances());
   }
 
   return (

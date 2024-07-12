@@ -4,7 +4,7 @@ import { centerNode } from "../constants/graphConstants";
 
 export default function RootNode(): React.JSX.Element {
   const analysisResult = useAppSelector(
-    (state: RootState) => state.wordFamilyManagement.analysisResult,
+    (state: RootState) => state.wordManagement.analysisResult,
   );
 
   return (

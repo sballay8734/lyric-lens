@@ -12,7 +12,7 @@ export default function Nodes(): React.ReactElement[] {
   const [nodes, setNodes] = useState<GraphNode[]>([]);
 
   const flaggedWords = useAppSelector(
-    (state: RootState) => state.wordFamilyManagement.flaggedWords,
+    (state: RootState) => state.wordManagement.flaggedWords,
   );
 
   useEffect(() => {

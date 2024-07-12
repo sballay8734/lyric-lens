@@ -873,3 +873,7 @@ export const FLAGGABLE_WORDS_MASTER: FlaggableWordsObject = {
     isRootWord: false,
   },
 };
+
+// WORDS TO ADD ****************************************************************
+// vaginal
+// vagina

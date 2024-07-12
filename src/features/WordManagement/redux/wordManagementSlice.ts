@@ -1,52 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { FlaggableWordsObject } from "../../../constants/flaggableWords";
 import {
-  SensitiveWordCategory,
-  VulgarityLevel,
-} from "../../../data/sensitiveWordMap";
-
-export type WordInFam = { word: string; wordIsFlagged: boolean };
-
-type LyricHash = {
-  [word: string]: number; // number of occurances
-};
-
-export type WordFamiliesObj = {
-  [family: string]: {
-    id: string;
-    family: string;
-    familyWords: WordInFam[]; // TODO: Eventually you will use this to allow users to select/deselect specific words in a family (they might not want to flag all of them)
-    occurances: number;
-    vulgarityLvl: VulgarityLevel;
-    category: SensitiveWordCategory[];
-    isInPreset: boolean;
-  };
-};
-
-interface FlagPreset {
-  userId?: string;
-  presetId: string;
-  presetName: string;
-  presetDescription: string;
-  flaggedWords: FlaggableWordsObject;
-}
-
-export interface FlaggedWords {
-  [word: string]: {
-    id: string;
-    vulgarityLvl: VulgarityLevel; // 0-10
-    category: SensitiveWordCategory[];
-    family: string;
-    isRootWord: boolean;
-
-    isFlagged: boolean;
-    occurances: number;
-  };
-}
+  FlagPreset,
+  LyricHash,
+  WordFamiliesObj,
+  FlaggedWords,
+} from "../types/wordManagementTypes";
 
 // Define type for slice state
-interface WordFamilyManagementState {
+interface WordManagementState {
   wordFamilies: WordFamiliesObj | null;
   flaggedWords: FlaggedWords | null;
   activePreset: FlagPreset | null;
@@ -55,7 +17,7 @@ interface WordFamilyManagementState {
 }
 
 // Define initial state
-const initialState: WordFamilyManagementState = {
+const initialState: WordManagementState = {
   wordFamilies: null,
   flaggedWords: null,
   activePreset: null,
@@ -63,8 +25,8 @@ const initialState: WordFamilyManagementState = {
   analysisResult: { result: null, totalFlaggedWords: 0 },
 };
 
-export const wordFamilyManagementSlice = createSlice({
-  name: "wordFamilyManagement",
+export const wordManagementSlice = createSlice({
+  name: "wordManagement",
   initialState,
   reducers: {
     setWordFamilies: (state, action: PayloadAction<WordFamiliesObj | null>) => {
@@ -101,7 +63,7 @@ export const wordFamilyManagementSlice = createSlice({
       }
     },
     // when song changes (setLyricsHash SHOULD BE DISPATCHED RIGHT BEFORE)
-    updateOccurances: (state) => {
+    updateWordOccurances: (state) => {
       const flaggedWords = state.flaggedWords;
       const lyricHash = state.lyricHash;
 
@@ -128,8 +90,6 @@ export const wordFamilyManagementSlice = createSlice({
 
         state.analysisResult.result = result;
         state.analysisResult.totalFlaggedWords = totalFlaggedWords;
-
-        console.log(result, totalFlaggedWords);
       }
     },
 
@@ -145,7 +105,7 @@ export const {
   setFlaggedWords,
   setPreset,
   setLyricsHash,
-  updateOccurances,
-} = wordFamilyManagementSlice.actions;
+  updateWordOccurances,
+} = wordManagementSlice.actions;
 
-export default wordFamilyManagementSlice.reducer;
+export default wordManagementSlice.reducer;

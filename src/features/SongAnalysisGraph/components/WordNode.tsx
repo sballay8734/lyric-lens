@@ -19,18 +19,18 @@ interface NodeProps {
 const WordNode = ({ node, index, totalNodes }: NodeProps) => {
   const wordIsFlagged = useAppSelector((state: RootState) => {
     return (
-      state.wordFamilyManagement.flaggedWords &&
-      state.wordFamilyManagement.flaggedWords[node.word].isFlagged
+      state.wordManagement.flaggedWords &&
+      state.wordManagement.flaggedWords[node.word].isFlagged
     );
   });
   const wordOccurs = useAppSelector((state: RootState) => {
     return (
-      state.wordFamilyManagement.flaggedWords &&
-      state.wordFamilyManagement.flaggedWords[node.word].occurances > 0
+      state.wordManagement.flaggedWords &&
+      state.wordManagement.flaggedWords[node.word].occurances > 0
     );
   });
   const analysisResult = useAppSelector(
-    (state: RootState) => state.wordFamilyManagement.analysisResult,
+    (state: RootState) => state.wordManagement.analysisResult,
   );
 
   const circleStyle = useSpring({

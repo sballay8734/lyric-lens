@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 
-import { FlaggedWords } from "../../_NewArcitecture/redux/wordFamilyManagementSlice";
+import { FlaggedWords } from "../../WordManagement/redux/wordManagementSlice";
 import { centerNode } from "../constants/graphConstants";
 import { GraphNode } from "../data/mockGraphData";
 

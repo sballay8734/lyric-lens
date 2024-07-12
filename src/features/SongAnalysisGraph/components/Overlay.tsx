@@ -1,7 +1,7 @@
 import { useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import ProfileSwitcher from "../../FlagManagement/components/ProfileSwitcher";
 import BottomBtnsWrapper from "../../ModalManagement/containers/BottomBtnsWrapper";
+import ProfileSwitcher from "../../WordManagement/components/ProfileSwitcher";
 
 export default function Overlay(): React.JSX.Element {
   const selectedSong = useAppSelector(

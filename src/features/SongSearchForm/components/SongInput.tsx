@@ -34,7 +34,7 @@ export default function SongInput(): React.JSX.Element {
     (state: RootState) => state.songSearchForm.songsLoading,
   );
   const flaggedWords = useAppSelector(
-    (state: RootState) => state.wordFamilyManagement.flaggedWords,
+    (state: RootState) => state.wordManagement.flaggedWords,
   );
 
   // !TODO: MOVE BELOW STATE TO REDUX

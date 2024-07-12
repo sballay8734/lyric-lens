@@ -5,10 +5,6 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
 import { ArtistFromApi, ArtistSimple } from "../../../types/apiObjects";
 import {
-  resetAnalysisResult,
-  setLyricsHashMap,
-} from "../../FlagManagement/redux/flagManagementSlice";
-import {
   setArtistQuery,
   setLyrics,
   setSelectedArtist,
@@ -128,14 +124,8 @@ export default function ArtistInput(): React.JSX.Element {
     // clear selected song since new artist = completely different songs
     dispatch(setSelectedSong(null));
 
-    // clear songLyricHashMap since new song is being selected
-    dispatch(setLyricsHashMap(null));
-
     // clear lyrics
     dispatch(setLyrics(null));
-
-    // clear old analysis result
-    dispatch(resetAnalysisResult());
 
     // setSelectedArtist to the new selection
     dispatch(setSelectedArtist(artist));

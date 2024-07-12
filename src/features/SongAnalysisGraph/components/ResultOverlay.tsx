@@ -3,7 +3,7 @@ import { RootState } from "../../../store/store";
 
 export default function ResultOverlay(): React.JSX.Element {
   const analysisResult = useAppSelector(
-    (state: RootState) => state.wordFamilyManagement.analysisResult,
+    (state: RootState) => state.wordManagement.analysisResult,
   );
   const selectedSong = useAppSelector(
     (state: RootState) => state.songSearchForm.selectedSong,
