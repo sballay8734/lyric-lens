@@ -10,9 +10,7 @@ import SongSearchModal from "../features/ModalManagement/components/modals/SongS
 function Entry() {
   const windowSize = useWindowSize();
 
-  useEffect(() => {
-    console.log("SIZE CHANGED", windowSize);
-  }, [windowSize.height, windowSize.width, windowSize]);
+  useEffect(() => {}, [windowSize.height, windowSize.width, windowSize]);
 
   return (
     <div className="flex h-full w-full flex-col items-center">
