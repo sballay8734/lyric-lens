@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import flagManagementReducer from "../features/FlagManagement/redux/flagManagementSlice";
 import modalManagementReducer from "../features/ModalManagement/redux/modalManagementSlice";
 import songSearchFormReducer from "../features/SongSearchForm/redux/songSearchFormSlice";
+import wordManagement from "../features/WordManagement/redux/wordManagementSlice";
 
 export const store = configureStore({
   reducer: {
     songSearchForm: songSearchFormReducer,
     modalManagement: modalManagementReducer,
-    flagManagement: flagManagementReducer,
+    wordManagement: wordManagement,
   },
 });
 

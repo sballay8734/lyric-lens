@@ -4,11 +4,6 @@ import { ArtistSimple, SongFromApi } from "../../../types/apiObjects";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export type AnalysisResult = {
-  result: "pass" | "fail";
-  totalFlaggedWords: number;
-} | null;
-
 // Define type for slice state
 interface SongSearchFormState {
   artistQuery: string;
@@ -23,8 +18,6 @@ interface SongSearchFormState {
   unFormattedLyrics: string | null;
   lyrics: string | null; // the string returned from lyric fetch & parse
   lyricsLoading: boolean; // status of fetch & parse
-
-  analysisResult: AnalysisResult | null; // true = clean, false = not clean
 }
 
 // Define initial state
@@ -41,8 +34,6 @@ const initialState: SongSearchFormState = {
   unFormattedLyrics: null,
   lyrics: null,
   lyricsLoading: false,
-
-  analysisResult: null,
 };
 
 export const songSearchFormSlice = createSlice({
@@ -80,14 +71,6 @@ export const songSearchFormSlice = createSlice({
     setLyricsLoading: (state, action: PayloadAction<boolean>) => {
       state.lyricsLoading = action.payload;
     },
-
-    // SET RESULT OF SONG ANALYSIS
-    setAnalysisResult: (
-      state,
-      action: PayloadAction<AnalysisResult | null>,
-    ) => {
-      state.analysisResult = action.payload;
-    },
   },
 });
 
@@ -100,7 +83,6 @@ export const {
   setLyricsLoading,
   setSongsLoading,
   setLyricQuery,
-  setAnalysisResult,
 } = songSearchFormSlice.actions;
 
 export default songSearchFormSlice.reducer;

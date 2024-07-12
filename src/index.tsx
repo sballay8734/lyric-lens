@@ -37,17 +37,32 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 
 // MVP TODO *******************************************************************
-// SAT July 6th
-// !TODO: Recent additions to flagManagement are sloppy and all over the place. The code works but a MASSIVE REFACTOR IS NEEDED (AS WELL AS TESTING)
+// NEXT WORK SESSION
+// TODO: NEW PLAN - All possible families should ALWAYS be rendered on the screen (only their opacity and position should change) This means you won't have to keep setting flagged words and cause re-rendering. Just change a flag (that you need to add) to true or false based on if the word is in the song.
+
+// So new flow looks like this...
+// 1. On initial load, set the flagged families to ALL possible flagged families
+// 2. When a preset is selected, JUST update the preset and maybe an "isInPreset" flag inside flagged families
+// 3. When a song is selected, set all occurances to 0, loop through the words and the preset, but only do something if the words family "isInPreset"
+
+// !TODO: Make box for words that are not in the song but are in the flagged list (this is good for user feedback)
+
+// !TODO: Node positions should NOT reset on song change or preset change.
+
+// !TODO: Smooth out animations
+
+// !TODO: Might have to check out d3 bindings and how they work
 
 // !TODO: Re-rendering is happening too much when changing preset and causing a very janky animation
 
 // !TODO: Check Kendrick Lamar's "We Cry Together" on maximum filter (One node is not connected for some reason - probably because you recently added some words wrong to the master list)
 
-// TODO: If song is clean show "Clean" instead of 0 in center node
+// TODO: Words not in song should be visible in their own area
+
+// TODO: Fix theme and colors (search dropdowns etc..)
+
 // TODO: Add loading for when artists are being fetched (inside input)
 // TODO: Fix weird padding thing when artist dropdown is loading
-// TODO: Fix theme and colors (search dropdowns etc..)
 // mTODO: Also close profile select dropdown on outside click
 // mTODO: Words above around lvl 8 probably don't even need to be shown on graph
 // mTODO: Lyric input should be an accordion
@@ -78,7 +93,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // TODO: Account creation to save preferences
 // TODO: Look into clean vs. explicit versions and how Genius handles them
 // TODO: Persist word selections for users without account (local storage)
-
 // V 1.x (Near term features) *************************************************
 
 // V 2.0 (Long term features) *************************************************
+
+// REMEMBER: Dispatches are synchronous as long as the function are pure.
+// So if you need to dispatch 2 actions with the second action depending on the state from the first action, THAT IS FINE as long as they are PURE

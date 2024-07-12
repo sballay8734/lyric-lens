@@ -7,19 +7,30 @@ import {
 
 export type GraphNode = SimulationNodeDatum & {
   id: string;
-  family: string;
-  occurances: number; // if occurances === 0 don't connect to center
+  word: string;
   vulgarityLvl: VulgarityLevel;
   category: SensitiveWordCategory[];
+  family: string;
+  isRootWord: boolean;
+
+  isFlagged: boolean;
+  occurances: number; // if occurances === 0 don't connect to center
   radius: number;
+
+  // x: number;
+  // y: number;
 };
 
 export type RootNode = SimulationNodeDatum & {
   id: string;
-  family: null;
-  occurances: null;
+  word: null;
   vulgarityLvl: null;
   category: null;
+  family: null;
+  isRootWord: null;
+
+  isFlagged: null;
+  occurances: null;
   radius: number;
 
   // you can use fx fixedX and fy fixedY from the Datum

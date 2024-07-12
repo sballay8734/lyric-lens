@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { useDispatch } from "react-redux";
 
-import { sensitiveWordsMap } from "../../../../data/sensitiveWordMap";
+import { FLAGGABLE_WORDS_MASTER } from "../../../../constants/flaggableWords";
 import { useAppSelector } from "../../../../hooks/hooks";
 import { RootState } from "../../../../store/store";
 import { hideLyricsModal } from "../../redux/modalManagementSlice";
@@ -17,13 +17,14 @@ export default function LyricsModal(): React.JSX.Element {
   const lyrics = useAppSelector(
     (state: RootState) => state.songSearchForm.lyrics,
   );
-
   const selectedSong = useAppSelector(
     (state: RootState) => state.songSearchForm.selectedSong,
   );
-
-  const flaggedFamilies = useAppSelector(
-    (state: RootState) => state.flagManagement.flaggedFamilies,
+  const flaggedWords = useAppSelector(
+    (state: RootState) => state.wordManagement.flaggedWords,
+  );
+  const lyricHash = useAppSelector(
+    (state: RootState) => state.wordManagement.lyricHash,
   );
 
   const [formattedLyrics, setFormattedLyrics] = useState<
@@ -69,28 +70,36 @@ export default function LyricsModal(): React.JSX.Element {
                     const formattedWord = word.toLowerCase();
 
                     // if word is not in global word map
-                    if (!sensitiveWordsMap.hasOwnProperty(formattedWord)) {
+                    if (!FLAGGABLE_WORDS_MASTER[formattedWord]) {
                       return <span key={wordIndex}>{word} </span>;
                     }
 
-                    // if user has flagged the words family
-                    if (
-                      flaggedFamilies &&
-                      flaggedFamilies.hasOwnProperty(
-                        sensitiveWordsMap[formattedWord].family,
-                      )
-                    ) {
+                    // mTODO: Might want to include this somehow
+                    // if word is in master list && in song, but NOT in preset
+                    // if (
+                    //   flaggedWords &&
+                    //   lyricHash &&
+                    //   FLAGGABLE_WORDS_MASTER[formattedWord] &&
+                    //   lyricHash[formattedWord] &&
+                    //   !flaggedWords[formattedWord].isFlagged
+                    // )
+                    //   return (
+                    //     <span key={wordIndex} className="text-[#d49d66]">
+                    //       {word}{" "}
+                    //     </span>
+                    //   );
+
+                    // if word is flagged && in song
+                    if (flaggedWords && flaggedWords[formattedWord].isFlagged) {
                       return (
-                        <span
-                          key={wordIndex}
-                          className="rounded-sm bg-primary-content text-secondary"
-                        >
-                          {word}{" "}
+                        <span key={wordIndex}>
+                          <span className="rounded-sm bg-primary-content px-[2px] py-[1px] text-secondary">
+                            {word}
+                          </span>
+                          <span className="bg-none"> </span>
                         </span>
                       );
                     }
-
-                    return <span key={wordIndex}>{word} </span>;
                   })}
                   <br />
                 </div>
@@ -107,7 +116,7 @@ export default function LyricsModal(): React.JSX.Element {
     if (fLyrics) {
       setFormattedLyrics(fLyrics);
     }
-  }, [lyrics]);
+  }, [lyrics, flaggedWords]);
 
   return (
     <dialog

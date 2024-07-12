@@ -33,6 +33,9 @@ export default function SongInput(): React.JSX.Element {
   const songsLoading = useAppSelector(
     (state: RootState) => state.songSearchForm.songsLoading,
   );
+  const flaggedWords = useAppSelector(
+    (state: RootState) => state.wordManagement.flaggedWords,
+  );
 
   // !TODO: MOVE BELOW STATE TO REDUX
   const [songList, setSongList] = useState<SongFromApi[]>([]);
@@ -147,7 +150,11 @@ export default function SongInput(): React.JSX.Element {
     const getLyricsQuery = `${publicUrl}${lyricsPath}`;
 
     // fetch, parse, and dispatch lyrics to redux
-    fetchAndParseLyrics(getLyricsQuery, dispatch);
+    if (flaggedWords) {
+      fetchAndParseLyrics(getLyricsQuery, dispatch, flaggedWords);
+    } else {
+      console.error("There are no flagged families!");
+    }
   }
 
   // Accessiblity (select song by pressing the enter key)
@@ -205,10 +212,10 @@ export default function SongInput(): React.JSX.Element {
   );
 
   return (
-    <div ref={dropdownRef} className="w-full relative rounded-sm">
+    <div ref={dropdownRef} className="relative w-full rounded-sm">
       {/* vv INPUT vv */}
       <label
-        className={`flex items-center gap-2 bg-base-300 px-4 py-3 rounded-sm group border-[1px] border-transparent hover:border-primary hover:bg-primary/5 transition-colors duration-200 group h-[58px] ${
+        className={`group flex h-[58px] items-center gap-2 rounded-sm border-[1px] border-transparent bg-base-300 px-4 py-3 transition-colors duration-200 hover:border-primary hover:bg-primary/5 ${
           selectedArtist === null || songsLoading
             ? "pointer-events-none opacity-30"
             : "pointer-events-auto opacity-100"
@@ -217,9 +224,9 @@ export default function SongInput(): React.JSX.Element {
         <input
           disabled={selectedArtist === null || songsLoading}
           type="text"
-          className={`grow bg-transparent outline-0 border-0 focus:outline-none focus:border-none placeholder:text-neutral-content/50 disabled:group:pointer-events-none ${
+          className={`disabled:group:pointer-events-none grow border-0 bg-transparent outline-0 placeholder:text-neutral-content/50 focus:border-none focus:outline-none ${
             selectedSong?.title
-              ? "placeholder:text-white placeholder:font-bold"
+              ? "placeholder:font-bold placeholder:text-white"
               : "placeholder:text-neutral-content/50"
           }`}
           placeholder={
@@ -236,7 +243,7 @@ export default function SongInput(): React.JSX.Element {
           value={songTitle}
         />
         <button
-          className="pl-3 py-1 rounded-r-sm border-l-2 border-primary/50 text-primary/50 group hover:text-primary hover:border-primary transition-colors duration-200"
+          className="group rounded-r-sm border-l-2 border-primary/50 py-1 pl-3 text-primary/50 transition-colors duration-200 hover:border-primary hover:text-primary"
           onClick={() => setSongDropdownShown(!songDropdownShown)}
         >
           {" "}
@@ -245,7 +252,7 @@ export default function SongInput(): React.JSX.Element {
           ) : (
             <FaCaretDown
               size={22}
-              className={`transition-colors duration-200 cursor-pointer text-inherit ${
+              className={`cursor-pointer text-inherit transition-colors duration-200 ${
                 songDropdownShown ? "rotate-180" : "rotate-0"
               } transition-transform duration-300`}
             />
@@ -254,12 +261,12 @@ export default function SongInput(): React.JSX.Element {
       </label>
       {/* vv DROPDOWN vv */}
       <ul
-        className={`dropdown-content bg-dropdownBg text-neutral-content z-10 absolute w-full h-fit max-h-[300px] bottom-0 rounded-sm top-16 overflow-y-scroll flex flex-col border-0 ${
+        className={`dropdown-content absolute bottom-0 top-16 z-10 flex h-fit max-h-[300px] w-full flex-col overflow-y-scroll rounded-sm border-0 bg-dropdownBg text-neutral-content ${
           songsToShow.length < 1 ? "p-0" : "pb-2 pt-0"
         } ${
           songDropdownShown
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
         } transition-opacity duration-200`}
       >
         {songsToShow.length > 0 &&
@@ -276,7 +283,7 @@ export default function SongInput(): React.JSX.Element {
               acc.push(
                 <li
                   key={`${song.full_title}`}
-                  className="text-lg font-bold py-2 sticky top-0 bg-dropdownBgDarker z-10"
+                  className="sticky top-0 z-10 bg-dropdownBgDarker py-2 text-lg font-bold"
                 >
                   {currentYear}
                 </li>,
@@ -293,19 +300,19 @@ export default function SongInput(): React.JSX.Element {
                 tabIndex={0}
                 onClick={() => handleSongSelect(song)}
                 onKeyDown={(e) => handleEnterKeyPress(e, song)}
-                className="text-left cursor-pointer py-2 pr-2 pl-4 border-0 hover:bg-primary/20 hover:text-white active:bg-primary/80 transition-colors duration-200 focus:bg-primary outline-0 flex justify-between items-center"
+                className="flex cursor-pointer items-center justify-between border-0 py-2 pl-4 pr-2 text-left outline-0 transition-colors duration-200 hover:bg-primary/20 hover:text-white focus:bg-primary active:bg-primary/80"
                 key={song.id}
               >
-                <div className="flex gap-1 items-center overflow-hidden flex-grow mr-2">
+                <div className="mr-2 flex flex-grow items-center gap-1 overflow-hidden">
                   <span className="shrink-0">{song.title}</span>
-                  <span className="italic text-neutral-content/50 shrink-0">
+                  <span className="shrink-0 italic text-neutral-content/50">
                     -
                   </span>
-                  <span className="italic text-neutral-content/50 text-xs align-baseline mt-[1px] overflow-hidden whitespace-nowrap text-ellipsis">
+                  <span className="mt-[1px] overflow-hidden text-ellipsis whitespace-nowrap align-baseline text-xs italic text-neutral-content/50">
                     {song.artist_names}
                   </span>
                 </div>
-                <span className="ml-auto text-xs text-right text-orange-500/50 shrink-0">
+                <span className="ml-auto shrink-0 text-right text-xs text-orange-500/50">
                   {song.release_date_components &&
                   song.release_date_components.year &&
                   song.release_date_for_display

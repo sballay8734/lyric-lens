@@ -1,6 +1,6 @@
 import { mockUser } from "../data/mockUser";
 import { sensitiveWordsMap } from "../data/sensitiveWordMap";
-import WordBtn from "../features/FlagManagement/components/WordToggleBtn";
+import WordBtn from "../features/WordManagement/components/WordToggleBtn";
 
 type Word = string;
 
@@ -29,8 +29,8 @@ export default function ManageFlags(): React.JSX.Element {
   const testUser: User = mockUser;
 
   return (
-    <div className="h-full w-full p-4 flex flex-col">
-      <div className="header flex flex-col gap-2 h-full">
+    <div className="flex h-full w-full flex-col p-4">
+      <div className="header flex h-full flex-col gap-2">
         <h1 className="text-xl font-bold">Flag Manager</h1>
         <p className="text-neutral-content/50">
           Description: Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -41,7 +41,7 @@ export default function ManageFlags(): React.JSX.Element {
         {/* THIS DIV BELOW */}
         <div className="h-full overflow-auto">
           <div className="h-full pb-20">
-            <div className="flex flex-wrap gap-2 items-center justify-center">
+            <div className="flex flex-wrap items-center justify-center gap-2">
               {Object.entries(sensitiveWordsMap).map(([word, data]) => {
                 const activePreset = testUser?.presets.find(
                   (preset) => preset.id === testPresetId,

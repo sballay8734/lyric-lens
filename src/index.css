@@ -107,6 +107,11 @@ label:active {
   align-items: flex-start !important;
 }
 
+.customScrollbar {
+  scrollbar-color: rgb(56, 56, 56) #131313;
+  scrollbar-width: thin;
+}
+
 input:focus,
 input:active {
   outline: none !important;
