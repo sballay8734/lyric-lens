@@ -10,7 +10,7 @@ import LyricsModal from "../../ModalManagement/components/modals/LyricsModal";
 export default function GraphWrapper(): React.JSX.Element {
   return (
     <div
-      className={`MainGraph group flex h-full w-full flex-col items-center justify-center bg-[#000000] transition-colors duration-200`}
+      className={`MainGraph group flex h-full w-full flex-col items-center justify-center bg-[#0e0e0e] transition-colors duration-200`}
     >
       <Graph />
       <ResultOverlay />

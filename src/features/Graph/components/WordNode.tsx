@@ -44,7 +44,7 @@ const WordNode = ({ node, index, totalNodes }: NodeProps) => {
   });
 
   const angle = (index / totalNodes) * 2 * Math.PI;
-  const circleRadius = 75;
+  const circleRadius = 80;
 
   // word circle below
   // function getYValue() {

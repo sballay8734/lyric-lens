@@ -45,6 +45,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 // 2. When a preset is selected, JUST update the preset and maybe an "isInPreset" flag inside flagged families
 // 3. When a song is selected, set all occurances to 0, loop through the words and the preset, but only do something if the words family "isInPreset"
 
+// TODO: Change background (Add stars or z items)
+
+// !TODO: add ability to change profile within the lyrics sheet
+
+// !TODO: Words should animate INTO the family when coming off the circle (so they can be individual words around the circle and should combine if they're in the song)
+
 // !TODO: Make box for words that are not in the song but are in the flagged list (this is good for user feedback)
 
 // !TODO: Node positions should NOT reset on song change or preset change.
