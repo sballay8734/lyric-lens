@@ -51,6 +51,7 @@ interface WordFamilyManagementState {
   flaggedWords: FlaggedWords | null;
   activePreset: FlagPreset | null;
   lyricHash: LyricHash | null;
+  analysisResult: { result: "pass" | "fail" | null; totalFlaggedWords: number };
 }
 
 // Define initial state
@@ -59,6 +60,7 @@ const initialState: WordFamilyManagementState = {
   flaggedWords: null,
   activePreset: null,
   lyricHash: null,
+  analysisResult: { result: null, totalFlaggedWords: 0 },
 };
 
 export const wordFamilyManagementSlice = createSlice({
@@ -81,6 +83,7 @@ export const wordFamilyManagementSlice = createSlice({
 
       const flaggedWords = state.flaggedWords;
 
+      // update "isFlagged" property in preset
       if (flaggedWords) {
         Object.entries(flaggedWords).forEach(([word, wordData]) => {
           // only set to true if it needs to be true and is false
@@ -103,16 +106,30 @@ export const wordFamilyManagementSlice = createSlice({
       const lyricHash = state.lyricHash;
 
       if (flaggedWords && lyricHash) {
+        let totalFlaggedWords = 0;
         Object.entries(flaggedWords).forEach(([word, wordData]) => {
           // if word isn't flagged, skip (ACTUALLY, you probably still want to keep track of this, just don't count it in the final count)
           // if (wordData.isFlagged === false) return
 
+          // if word is in song
           if (lyricHash[word]) {
             flaggedWords[word].occurances = lyricHash[word];
+
+            totalFlaggedWords += flaggedWords[word].isFlagged
+              ? lyricHash[word]
+              : 0;
           } else {
             flaggedWords[word].occurances = 0;
           }
         });
+
+        // set analysis result
+        const result = totalFlaggedWords === 0 ? "pass" : "fail";
+
+        state.analysisResult.result = result;
+        state.analysisResult.totalFlaggedWords = totalFlaggedWords;
+
+        console.log(result, totalFlaggedWords);
       }
     },
 

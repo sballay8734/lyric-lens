@@ -4,16 +4,32 @@ import { centerNode } from "../constants/graphConstants";
 
 export default function RootNode(): React.JSX.Element {
   const analysisResult = useAppSelector(
-    (state: RootState) => state.flagManagement.analysisResult,
+    (state: RootState) => state.wordFamilyManagement.analysisResult,
   );
 
   return (
     <g>
+      <defs>
+        <radialGradient id={`gradient-root`}>
+          <stop
+            offset="0%"
+            stopColor={
+              analysisResult?.result === "pass" ? "#82cb81" : "#ff8585"
+            }
+          />
+          <stop
+            offset="100%"
+            stopColor={
+              analysisResult?.result === "pass" ? "#34773f" : "#8f0000"
+            }
+          />
+        </radialGradient>
+      </defs>
       <circle
         cx={centerNode.fx!}
         cy={centerNode.fy!}
         r={centerNode.radius}
-        fill={`url(#gradient-root)` || "red"}
+        fill={`url(#gradient-root)`}
         stroke={analysisResult?.result === "pass" ? "#167e31" : "#7e1616"}
         strokeWidth={4}
       />

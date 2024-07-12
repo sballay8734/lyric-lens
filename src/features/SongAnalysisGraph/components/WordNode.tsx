@@ -29,12 +29,13 @@ const WordNode = ({ node, index, totalNodes }: NodeProps) => {
       state.wordFamilyManagement.flaggedWords[node.word].occurances > 0
     );
   });
-
-  // console.log(node.word, wordIsFlagged, wordOccurs);
+  const analysisResult = useAppSelector(
+    (state: RootState) => state.wordFamilyManagement.analysisResult,
+  );
 
   const circleStyle = useSpring({
     r: wordOccurs && wordIsFlagged ? 15 : 3,
-    opacity: wordOccurs ? 1 : 0.5,
+    opacity: wordOccurs ? 1 : 0.3,
     config: { duration: 500 },
   });
 
@@ -44,93 +45,83 @@ const WordNode = ({ node, index, totalNodes }: NodeProps) => {
     config: { duration: 300 },
   });
 
-  const circleRadius = 75;
   const angle = (index / totalNodes) * 2 * Math.PI;
-  const xValue = getXValue();
-  const yValue = getYValue();
+  const circleRadius = 75;
 
+  // word circle below
+  // function getYValue() {
+  //   if (wordIsFlagged && wordOccurs) {
+  //     return Math.sin(angle) * (circleRadius * 1.5) + centerY;
+  //   }
+  //   return Math.sin(angle) * circleRadius + 2.3 * centerY;
+  // }
+
+  // function getXValue() {
+  //   if (wordIsFlagged && wordOccurs) {
+  //     return Math.cos(angle) * (circleRadius * 1.5) + centerX;
+  //   }
+  //   return Math.cos(angle) * circleRadius + centerX;
+  // }
+
+  // word circle around root node
   function getYValue() {
-    // if node is flagged AND in song
     if (wordIsFlagged && wordOccurs) {
       return Math.sin(angle) * (circleRadius * 1.5) + centerY;
     }
-    // if node is flagged AND NOT in song
-    if (wordIsFlagged && !wordOccurs) {
-      return Math.sin(angle) * circleRadius + 2.3 * centerY;
-    }
-
-    // if node is NOT flagged but IS in song
-    if (!wordIsFlagged && wordOccurs) {
-      return Math.sin(angle) * circleRadius + 2.3 * centerY;
-    }
-
-    // if node is NOT flagged and NOT in song
-    if (!wordIsFlagged && !wordOccurs) {
-      return Math.sin(angle) * circleRadius + 2.3 * centerY;
-    }
+    return Math.sin(angle) * circleRadius + centerY;
   }
 
   function getXValue() {
-    // if node is flagged AND in song
     if (wordIsFlagged && wordOccurs) {
       return Math.cos(angle) * (circleRadius * 1.5) + centerX;
     }
-    // if node is flagged AND NOT in song
-    if (wordIsFlagged && !wordOccurs) {
-      return Math.cos(angle) * circleRadius + centerX;
-    }
-
-    // if node is NOT flagged but IS in song
-    if (!wordIsFlagged && wordOccurs) {
-      return Math.cos(angle) * circleRadius + centerX;
-    }
-
-    // if node is NOT flagged and NOT in song
-    if (!wordIsFlagged && !wordOccurs) {
-      return Math.cos(angle) * circleRadius + centerX;
-    }
+    return Math.cos(angle) * circleRadius + centerX;
   }
 
   const position = useSpring({
-    y: yValue,
+    x: getXValue(),
+    y: getYValue(),
     config: { tension: 170, friction: 26 },
   });
 
-  if (node.id === "root") return;
+  if (node.id === "root") return null;
 
   return (
-    <animated.g transform={position.y!.to((y) => `translate(${xValue}, ${y})`)}>
+    <animated.g style={position}>
       <defs>
         <radialGradient id={`gradient-${node.id}`}>
           <stop
             offset="0%"
             stopColor={
-              (node.vulgarityLvl &&
-                vulgarityToColorMap[node.vulgarityLvl].startColor) ||
-              "#9e0142"
+              node.vulgarityLvl
+                ? vulgarityToColorMap[node.vulgarityLvl].startColor
+                : "#9e0142"
             }
           />
           <stop
             offset="100%"
             stopColor={
-              (node.vulgarityLvl &&
-                vulgarityToColorMap[node.vulgarityLvl].endColor) ||
-              "#3c0019"
+              node.vulgarityLvl
+                ? vulgarityToColorMap[node.vulgarityLvl].endColor
+                : "#3c0019"
             }
           />
         </radialGradient>
       </defs>
       <animated.circle
-        {...circleStyle}
+        style={circleStyle}
         cx={0}
         cy={0}
         fill={
-          wordOccurs && wordIsFlagged ? `url(#gradient-${node.id})` : "tomato"
+          wordOccurs && wordIsFlagged && analysisResult.result === "fail"
+            ? `url(#gradient-${node.id})`
+            : analysisResult.result === "pass"
+              ? "#32a852"
+              : "tomato"
         }
-        opacity={wordOccurs ? 1 : 0.7}
       />
       <animated.text
-        {...textStyle}
+        style={textStyle}
         x={0}
         y={0}
         textAnchor="middle"
@@ -145,6 +136,6 @@ const WordNode = ({ node, index, totalNodes }: NodeProps) => {
 
 export default React.memo(WordNode);
 
-// !TODO: FIX X ANIMATION
+// TODO: Transition fill
 
 // !TODO: WORDS NO LONGER HIGHLIGHT IN LYRICS SHEET

@@ -28,22 +28,6 @@ export default function Graph(): React.JSX.Element {
       width="100%"
       height="100%"
     >
-      <defs>
-        <radialGradient id={`gradient-root`}>
-          <stop
-            offset="0%"
-            stopColor={
-              analysisResult?.result === "pass" ? "#82cb81" : "#ff8585"
-            }
-          />
-          <stop
-            offset="100%"
-            stopColor={
-              analysisResult?.result === "pass" ? "#34773f" : "#8f0000"
-            }
-          />
-        </radialGradient>
-      </defs>
       {/* Links */}
       {/* {nodes.map((node: GraphNode) => {
         const nodeRadius =
