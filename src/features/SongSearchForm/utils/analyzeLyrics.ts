@@ -8,7 +8,7 @@ import {
   FlaggedFamiliesObject,
   setLyricsHashMap,
 } from "../../FlagManagement/redux/flagManagementSlice";
-import { HashMap } from "../../SongAnalysisGraph/types/graphTypes";
+import { HashMap } from "../../Graph/types/graphTypes";
 
 export function analyzeLyrics(
   lyrics: string,
