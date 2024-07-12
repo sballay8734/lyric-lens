@@ -1,13 +1,13 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
 import { analyzeLyrics } from "./analyzeLyrics";
-import { FlaggedFamiliesObject } from "../../FlagManagement/redux/flagManagementSlice";
+import { WordFamiliesObj } from "../../WordManagement/types/wordManagementTypes";
 import { setLyrics, setLyricsLoading } from "../redux/songSearchFormSlice";
 
 export async function fetchAndParseLyrics(
   url: string,
   dispatch: Dispatch,
-  flaggedFamilies: FlaggedFamiliesObject,
+  wordFamilies: WordFamiliesObj,
 ) {
   const res = await fetch(url);
   const html = await res.text();
@@ -55,7 +55,7 @@ export async function fetchAndParseLyrics(
     dispatch(setLyrics(fullLyrics));
     dispatch(setLyricsLoading(false));
 
-    analyzeLyrics(fullLyrics, dispatch, flaggedFamilies);
+    analyzeLyrics(fullLyrics, dispatch, wordFamilies);
   } else {
     // mTODO: Handle errors here (when RTK Query is added)
     dispatch(setLyricsLoading(false));

@@ -21,12 +21,6 @@ export const defaultGradient = { startColor: "#9e0142", endColor: "#3c0019" };
 export const MAX_NODE_RADIUS = 50;
 export const MIN_NODE_RADIUS = 25;
 
-// window dimensions
-export const width = window.innerWidth;
-export const height = window.innerHeight;
-export const centerX = width / 2;
-export const centerY = height / 4.5;
-
 // Center node obj
 export const centerNode: RootNode = {
   id: "root",
@@ -39,21 +33,4 @@ export const centerNode: RootNode = {
   isFlagged: null,
   occurances: null,
   radius: 60, // TODO: should get bigger with more curse words
-  fx: centerX,
-  fy: centerY,
-};
-
-const rectWidth = 300;
-const rectHeight = 200;
-
-export const rectGroup = {
-  id: "rect",
-  x: centerX - rectWidth / 2,
-  y: (height * 2) / 4.5,
-  width: 300,
-  height: 200,
-  rx: 5,
-  fill: "#141414",
-  stroke: "#212121",
-  strokeWidth: 2,
 };

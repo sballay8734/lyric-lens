@@ -47,7 +47,7 @@ export const wordManagementSlice = createSlice({
 
       // update "isFlagged" property in preset
       if (flaggedWords) {
-        Object.entries(flaggedWords).forEach(([word, wordData]) => {
+        Object.entries(flaggedWords).forEach(([word, _]) => {
           // only set to true if it needs to be true and is false
           if (preset.flaggedWords[word] && !flaggedWords[word].isFlagged) {
             flaggedWords[word].isFlagged = true;
@@ -69,7 +69,7 @@ export const wordManagementSlice = createSlice({
 
       if (flaggedWords && lyricHash) {
         let totalFlaggedWords = 0;
-        Object.entries(flaggedWords).forEach(([word, wordData]) => {
+        Object.entries(flaggedWords).forEach(([word, _]) => {
           // if word isn't flagged, skip (ACTUALLY, you probably still want to keep track of this, just don't count it in the final count)
           // if (wordData.isFlagged === false) return
 

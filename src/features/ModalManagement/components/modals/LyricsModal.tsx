@@ -23,9 +23,9 @@ export default function LyricsModal(): React.JSX.Element {
   const flaggedWords = useAppSelector(
     (state: RootState) => state.wordManagement.flaggedWords,
   );
-  const lyricHash = useAppSelector(
-    (state: RootState) => state.wordManagement.lyricHash,
-  );
+  // const lyricHash = useAppSelector(
+  //   (state: RootState) => state.wordManagement.lyricHash,
+  // );
 
   const [formattedLyrics, setFormattedLyrics] = useState<
     React.JSX.Element[] | null

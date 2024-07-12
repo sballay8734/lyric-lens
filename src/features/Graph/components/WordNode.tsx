@@ -3,12 +3,9 @@ import React from "react";
 
 import { useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../store/store";
-import {
-  centerX,
-  centerY,
-  vulgarityToColorMap,
-} from "../constants/graphConstants";
+import { vulgarityToColorMap } from "../constants/graphConstants";
 import { GraphNode } from "../data/mockGraphData";
+import { useWindowSize } from "../hooks/graphHooks";
 
 interface NodeProps {
   node: GraphNode;
@@ -17,6 +14,7 @@ interface NodeProps {
 }
 
 const WordNode = ({ node, index, totalNodes }: NodeProps) => {
+  const windowSize = useWindowSize();
   const wordIsFlagged = useAppSelector((state: RootState) => {
     return (
       state.wordManagement.flaggedWords &&
@@ -66,16 +64,18 @@ const WordNode = ({ node, index, totalNodes }: NodeProps) => {
   // word circle around root node
   function getYValue() {
     if (wordIsFlagged && wordOccurs) {
-      return Math.sin(angle) * (circleRadius * 1.5) + centerY;
+      return (
+        Math.sin(angle) * (circleRadius * 1.5) + windowSize.rootNodeCenterY
+      );
     }
-    return Math.sin(angle) * circleRadius + centerY;
+    return Math.sin(angle) * circleRadius + windowSize.rootNodeCenterY;
   }
 
   function getXValue() {
     if (wordIsFlagged && wordOccurs) {
-      return Math.cos(angle) * (circleRadius * 1.5) + centerX;
+      return Math.cos(angle) * (circleRadius * 1.5) + windowSize.windowCenterX;
     }
-    return Math.cos(angle) * circleRadius + centerX;
+    return Math.cos(angle) * circleRadius + windowSize.windowCenterX;
   }
 
   const position = useSpring({
