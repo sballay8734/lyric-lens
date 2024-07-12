@@ -10,8 +10,6 @@ export default function RootNode(): React.JSX.Element {
     (state: RootState) => state.wordManagement.analysisResult,
   );
 
-  console.log(windowSize);
-
   return (
     <g>
       <defs>
